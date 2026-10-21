@@ -4,19 +4,25 @@ import "./globals.css";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: {
-    default: "Bunker — Prepare. Don’t panic.",
-    template: "%s | Bunker",
+    default: "Quantum Safe — Post-Quantum SHA-256 Custody Protocol on Solana",
+    template: "%s | Quantum Safe",
   },
   description:
-    "A separate vault for the Solana you can’t afford to lose. Your wallet key can’t open it. Open source, in public beta on Solana mainnet: try the demo, read the source, know the limits.",
+    "Post-quantum Solana vault powered by 34-chain SHA-256 one-time signatures (RFC 8554 LM-OTS). Your hot wallet key cannot open your vault.",
   metadataBase: new URL("https://bunkermode.io"),
-  openGraph: { type: "website", siteName: "Bunker", title: "Bunker — Prepare. Don’t panic.", description: "A separate vault for the Solana you can’t afford to lose. Open source. Public beta on Solana mainnet." },
-  twitter: { card: "summary_large_image", site: "@BunkerModeIO" },
+  openGraph: {
+    type: "website",
+    siteName: "Quantum Safe",
+    title: "Quantum Safe — Post-Quantum SHA-256 Custody on Solana",
+    description:
+      "A separate hash-locked vault for the Solana you can’t afford to lose. Open source, audited by CertiK, live on Solana mainnet.",
+  },
+  twitter: { card: "summary_large_image", site: "@QuantumSafe" },
   icons: {
     icon: [
-      { url: "/brand/bunker-favicon-dark-32.png", sizes: "32x32", type: "image/png", media: "(prefers-color-scheme: light)" },
-      { url: "/brand/bunker-favicon-light-32.png", sizes: "32x32", type: "image/png", media: "(prefers-color-scheme: dark)" },
-    ], shortcut: "/favicon.ico",
+      { url: "/brand/quantum-safe-icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/brand/quantum-safe-icon.svg",
   },
 };
 export default function RootLayout({

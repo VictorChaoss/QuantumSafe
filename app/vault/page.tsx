@@ -1,6 +1,6 @@
 import { Header, Footer } from "@/components/bunker/shell";
 import VaultApp from "@/components/bunker/v3/vault-app";
-export const metadata = { title: "Your Bunker" };
+export const metadata = { title: "Your Quantum Safe" };
 export default function Page() {
   return (
     <>
@@ -10,7 +10,7 @@ export default function Page() {
         <span />
         <i />
         <span />
-        <b>ENTERING BUNKER</b>
+        <b>ENTERING QUANTUM SAFE</b>
       </div>
       <div className="vault-room" aria-hidden="true" />
       <VaultApp />

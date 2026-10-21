@@ -1,4 +1,4 @@
-<p align="center"><img src="public/brand/bunker-logo-horizontal-stone.svg" width="420" alt="Quantum Safe" /></p>
+<p align="center"><img src="public/brand/quantum-safe-logo-horizontal.svg" width="460" alt="Quantum Safe" /></p>
 
 # Quantum Safe
 

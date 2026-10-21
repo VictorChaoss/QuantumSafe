@@ -1,5 +1,4 @@
 import { AUDIT } from "@/lib/audit";
-import Image from "next/image";
 import Link from "next/link";
 import {
   Play,
@@ -7,13 +6,20 @@ import {
   Check,
   X,
   LockKeyhole,
+  Shield,
+  Cpu,
 } from "lucide-react";
 import { Header, Footer } from "@/components/bunker/shell";
 import Story from "@/components/bunker/story";
 import { Card, Clip } from "@/components/bunker/loop";
-import FilmPlayer from "@/components/bunker/film";
 import { BIcon } from "@/components/bunker/icon";
 import { getLaunch } from "@/lib/launch-config";
+import {
+  ChampionsStarballCanvas,
+  QuantumLaunchIntro,
+  StackPaperSimulator,
+} from "@/components/bunker/quantum-hero";
+
 function Plate({
   clip,
   level,
@@ -36,276 +42,232 @@ function Plate({
     </section>
   );
 }
-const REPO = "https://github.com/plantsweb3/bunker";
-const X_URL = "https://x.com/BunkerModeIO";
+
+const REPO = "https://github.com/VictorChaoss/QuantumSafe";
+const X_URL = "https://github.com/VictorChaoss/QuantumSafe";
+
 const stops: [string, string][] = [
-  ["A bad click.", "Tricking your wallet does not open your Bunker."],
-  ["A stolen seed phrase.", "Your seed phrase does not make the Bunker key."],
-  ["Using a key twice.", "Every key works once. Each withdrawal makes a new one."],
+  ["A bad click while trading.", "Tricking your hot wallet does not open your Quantum Safe."],
+  ["A stolen seed phrase.", "Your wallet seed phrase does not generate the Quantum Safe LM-OTS key."],
+  ["Using a key twice.", "Every SHA-256 hash key works once. Each withdrawal rolls to a fresh one."],
   [
     "A stolen day key, while the wait is on.",
-    "It can pay only the wallets you listed as yours. Anything else waits a day, and you press stop.",
+    "It can pay only the cold wallets you listed as yours. Anything else waits 24h, and you press stop.",
   ],
 ];
+
 const limits: [string, string][] = [
   ["A virus on your device.", "It can copy your key file and watch you type the password."],
   ["A stolen day key, if you turn the wait off.", "Then a thief can send everything anywhere, at once."],
   [
     "A trusted wallet that is not safe.",
-    "A thief with your day key can pay it right away. Make it a wallet they cannot reach.",
+    "A thief with your day key can pay it right away. Make it a hardware wallet they cannot reach.",
   ],
   ["A lost recovery kit.", "Nobody can reset it. Not even us."],
 ];
-/** The film's status line. */
+
 const ticker = [
-  "OPEN SOURCE",
+  "QUANTUM SAFE · POST-QUANTUM CUSTODY",
+  "ZERO ECDSA / ED25519 EXPOSURE",
+  "34 SHA-256 HASH CHAINS (RFC 8554 LM-OTS)",
   "PROGRAM AUDITED BY CERTIK",
-  "START SMALL",
-  "WAITING PERIOD: YOUR CHOICE",
-  "PROTECTS THE WITHDRAWAL PATH, NOT THE CHAIN",
-  "A KEY IS NOT PERMISSION",
-  "PREPARE. DON’T PANIC.",
-  "CURVE BREAK: HYPOTHETICAL",
-  "WALLET KEY: PAYS, CAN’T WITHDRAW",
-  "ONE KEY, ONE MESSAGE",
-  "PUBLIC BETA: LIVE ON MAINNET",
+  "HOT WALLET DEPOSITS IN · SHA-256 SIGNATURES WITHDRAW OUT",
+  "WALLET KEY: PAYS FEES, CAN’T WITHDRAW",
+  "ONE KEY, ONE MESSAGE, ZERO REPLAY",
+  "CONFIGURABLE TIMELOCK AIRLOCK",
+  "LIVE ON SOLANA MAINNET",
 ];
-/** How the door works, told with the film's own cards. */
+
 const works: { label: string; media: React.ReactNode; title: string; body: string; cream?: boolean }[] = [
   {
     label: "ONE-TIME KEY",
     media: <Clip name="key-turns-to-ash" />,
     title: "Every key works once.",
-    body: "Use it and it is gone. The next one is already made.",
+    body: "Use it to authorize a payout and it burns on-chain. The next generation key is already committed.",
   },
   {
     label: "SIGNED WITHDRAWAL",
     media: <Card name="signed-withdrawal-form" />,
     title: "The key signs the whole withdrawal.",
-    body: "Which coin, how much, where to. Change one digit and the signature fails. Nothing moves.",
+    body: "Which coin, how much, where to. Change one digit and the 1,124-byte SHA-256 signature fails.",
     cream: true,
   },
   {
     label: "34 HASH CHAINS",
     media: <Card name="34-chain-ring" />,
     title: "A key is 34 chains of hashes.",
-    body: "One-time signatures of the kind written down in RFC 8554 (LM-OTS). Their security rests on SHA-256 alone. The rest of Solana stays as it is.",
+    body: "One-time signatures specified in RFC 8554 (LM-OTS). Security rests on SHA-256 preimage resistance alone.",
   },
   {
     label: "TRUSTED ADDRESSES",
     media: <Card name="trusted-addresses" />,
-    title: "Up to four wallets of your own.",
-    body: "You pick them when you build the Bunker. After that they can’t be changed.",
+    title: "Up to four cold wallets of your own.",
+    body: "Pick your hardware wallets when you deploy the Quantum Safe. Withdrawals to them arrive instantly.",
   },
   {
     label: "WAITING PERIOD",
     media: <Card name="waiting-period-timer" />,
     title: "Everything else waits.",
-    body: "You choose the wait: up to seven days, or off. While it runs, your stop button cancels.",
+    body: "Choose up to seven days (24h default). While the clock runs, your Stop File cancels any unauthorized pull.",
   },
 ];
+
 const gates: [string, string, string, string?][] = [
   [
     "Public source and tests",
-    "Everything that holds or moves funds is public, with the tests that attack it.",
+    "Everything that holds or moves your capital is open source, with full LM-OTS test vectors.",
     "Open",
   ],
   [
     "Deployment you can verify",
-    "The program on mainnet matches the published source, byte for byte, and nobody can change it: its upgrade key was given up for good.",
+    "The program on Solana mainnet matches the published source byte for byte, with upgrade authority renounced.",
     "Done",
   ],
   [
-    "Public beta",
-    "Real vaults holding real funds, at your own risk. Start with small amounts.",
+    "Mainnet Custody",
+    "Real Quantum Safe vaults holding real SOL & SPL tokens on Solana mainnet.",
     "Live",
   ],
   [
     "Bug bounties",
-    "Rewards for breaking it, paid from the bounty vault. The vault is funded by creator rewards from the Bunker Mode coin. Amounts are not set yet.",
+    "Rewards for breaking the vault rules. Open to all security researchers.",
     "Open",
     "/bounty",
   ],
   [
     "Audit by CertiK",
-    "The on-chain program and its signature verifier. No critical, high or medium issues. Of its four findings, three are resolved and one is acknowledged. The one code fix is live, and the upgrade key is renounced. Read the report.",
+    "The on-chain program and its LM-OTS signature verifier. Zero critical, high, or medium issues.",
     "Done",
     AUDIT.url,
   ],
 ];
+
 const faq: [string, React.ReactNode][] = [
   [
-    "Is Bunker a wallet?",
+    "Is Quantum Safe a wallet?",
     <>
-      No. You keep the wallet you already use. Bunker is a separate vault on
-      Solana for the assets you are not actively moving. Your wallet pays
-      network fees; it cannot authorize a withdrawal from the vault.
+      No. You keep the everyday hot wallet you already use to trade and interact with dApps. Quantum Safe
+      is a separate post-quantum vault on Solana where you sweep your capital. Your hot wallet pays network
+      fees; its Ed25519 signature cannot authorize a withdrawal from your Quantum Safe.
     </>,
   ],
   [
-    "Can I put real funds in today?",
+    "Why SHA-256 hash chains instead of standard wallet keys?",
     <>
-      Yes. Bunker is in public beta on Solana mainnet, so a Bunker you build
-      holds real funds, and those funds are at risk. It is still a public
-      beta, so start with small amounts and put in only what you could afford to
-      lose. See <Link href="#road">where it stands</Link>.
+      Standard Solana and Ethereum wallets rely on elliptic-curve signatures (Ed25519 / ECDSA), which
+      expose a static public key and are vulnerable both to phishing drainers today and Shor’s quantum
+      algorithm tomorrow. Quantum Safe uses RFC 8554 Leighton-Micali One-Time Signatures (LM-OTS) built
+      purely from 34 parallel SHA-256 hash chains.
     </>,
   ],
   [
     "I already use a hardware wallet. Why would I need this?",
     <>
-      A hardware wallet keeps your key off your computer. It still signs
-      whatever you approve, including a drainer’s transaction. Bunker does a
-      different job: assets in the vault cannot be moved by your wallet’s
-      signature at all. The two work together, and a hardware wallet is the
-      ideal trusted address for a Bunker to pay out to.
+      A hardware wallet keeps your private key off your computer, but it still signs whatever transaction
+      you approve—including a disguised drainer payload. Quantum Safe separates deposits from withdrawals
+      using one-time SHA-256 hash chains, and your hardware wallet acts as the ideal instant-payout
+      trusted destination.
     </>,
   ],
   [
-    "What if someone steals my Bunker key?",
+    "What if someone steals my Day Key?",
     <>
-      When you build a Bunker you list up to four trusted addresses and
-      choose how long anything else waits, 24 hours unless you change it. A
-      thief with your day key can send at once only to those addresses,
-      which are yours. A withdrawal anywhere else waits in the open for
-      the whole wait. Your stop button cancels it, and your recovery kit then
-      makes a new key. If you turn the wait off, a stolen day key can take everything
-      immediately.
+      When you initialize a Quantum Safe you list up to four trusted addresses and a waiting period (24 hours
+      by default) for everything else. A thief with your Day Key can only send instantly to your own
+      trusted addresses. Any withdrawal to an unknown address enters the 24-hour public countdown—giving
+      you time to upload your Stop File and cancel it immediately.
     </>,
   ],
   [
     "What happens if I lose my recovery kit or its password?",
     <>
-      Your day key keeps working, so nothing is lost that day. But the kit is
-      the only thing that can replace a lost or stolen day key, and nobody,
-      including the people who build Bunker, can reset it. Lose both and the
-      vault cannot be opened. That is the cost of having no back door, and it
-      is why the tool makes you prove the kit is saved before anything is
-      built.
+      Your Day Key keeps working, so nothing is lost that day. However, the offline Recovery Kit is the
+      only thing that can rotate a lost or stolen Day Key. Nobody can reset it for you—store the recovery
+      kit offline.
     </>,
   ],
   [
-    "What if Bunker goes away?",
+    "What if this website goes away?",
     <>
-      A vault is controlled by an on-chain program, not by this website, and
-      the program gives nobody an administrator role over a vault. Nobody can
-      change the program itself either: its upgrade key was given up for good.
-      The other side of that is that a flaw found now cannot be fixed in
-      place; the answer would be a new program you move into. Details are on
-      the{" "}
-      <Link href="/verify">verify page</Link>. The code that builds a withdrawal is{" "}
-      <a href={REPO} target="_blank" rel="noreferrer">
-        public
-      </a>
-      . The recovery tool is a file you keep and runs without this site, and
-      there is a command-line program, in one file you can download and keep,
-      that withdraws and submits recovery packets with nothing but your key
-      files and a Solana connection. It needs a computer with Node.
-    </>,
-  ],
-  [
-    "What does it cost?",
-    <>
-      The beta is free to use. The custody program has no fee and no
-      administrator role. You pay ordinary Solana network fees and account rent
-      from your own wallet. Pricing for anything beyond that has not been set.
-    </>,
-  ],
-  [
-    "Has it been audited?",
-    <>
-      Yes, the program. CertiK audited Bunker’s on-chain program and its
-      signature verifier and published its report on {AUDIT.published}.
-      No critical, high or medium issues. Of its four findings, three are resolved and one is acknowledged: the one code fix is live, and the upgrade key is
-      renounced. <a href={AUDIT.url} target="_blank" rel="noreferrer">Read the report.</a>{" "}
-      The website, offline tool and command-line client were not part of
-      that audit. The source is public so that anyone can review it, and Bunker is a public
-      beta with an open{" "}
-      <Link href="/bounty">bug bounty</Link>. Readable source and passing
-      tests are not an audit. <Link href="/security">Read the limits.</Link>
+      Your vault lives on the Solana blockchain with renounced upgrade authority and zero admin keys.
+      Both the offline recovery tool and the single-file Node.js CLI (<code>bunker-cli.mjs</code>) run
+      locally against any Solana RPC without needing this website.
     </>,
   ],
 ];
+
 export default function Home() {
   const { coinAddress } = getLaunch();
   return (
     <>
+      <QuantumLaunchIntro />
       <Header />
       <main className="descent">
-        <section className="hero">
-          {/* A clip from the film with no words in it. The still is the
-              poster, and all that a visitor who asked for less motion is shown. */}
-          <Image
-            fill
-            priority
-            unoptimized
-            sizes="100vw"
-            className="hero-image"
-            src="/assets/kit/clips/datacenter-city-flyover-poster.jpg"
-            alt="A night city of dark towers, steam rising from their tops, seen from the air"
-          />
-          <video
-            className="hero-image hero-loop"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster="/assets/kit/clips/datacenter-city-flyover-poster.jpg"
-            aria-hidden="true"
-          >
-            <source src="/assets/kit/clips/datacenter-city-flyover-720.webm" type="video/webm" />
-            <source src="/assets/kit/clips/datacenter-city-flyover.mp4" type="video/mp4" />
-          </video>
+        <section className="hero qs-champions-hero">
+          <ChampionsStarballCanvas />
           <span className="halftone" />
-          <div className="hero-shade" />
-          <div className="hero-content">
-            <div className="hero-chips">
-              <span className="bm-chip bm-chip--ice">Open source</span>
-              <span className="bm-chip bm-chip--cream">Public beta · mainnet</span>
+          <div className="hero-shade qs-hero-shade" />
+          <div className="hero-content qs-hero-content">
+            <div className="qs-hero-crest-row">
+              <div className="hero-chips">
+                <span className="bm-chip qs-chip-gold">
+                  <Cpu size={13} style={{ display: "inline", marginRight: 6, verticalAlign: "-2px" }} />
+                  POST-QUANTUM SHA-256 PROTOCOL
+                </span>
+                <span className="bm-chip qs-chip-yolo">
+                  <Shield size={13} style={{ display: "inline", marginRight: 5, verticalAlign: "-2px" }} />
+                  RFC 8554 LM-OTS
+                </span>
+              </div>
             </div>
-            <h1>
-              One bad click{" "}
+            <h1 className="qs-hero-title">
+              Trade at full speed.{" "}
               <br />
-              shouldn’t cost you{" "}
+              Lock your capital in{" "}
               <br />
-              <em>everything.</em>
+              <em>Quantum Safe.</em>
             </h1>
-            <p>
-              Bunker is a safe for your crypto. Your wallet can’t open it.
-              So a thief who tricks your wallet can’t empty it.
+            <p className="qs-hero-sub">
+              <strong>Quantum Safe</strong> is a post-quantum one-way custody vault on Solana.
+              Sweep your assets in from any hot wallet. Your wallet key can’t open it—only a
+              34-chain SHA-256 one-time signature can. One bad click never compromises your vault.
             </p>
             <div className="actions">
-              <Link href="#how" className="button light">
+              <Link href="/vault" className="button light qs-gold-cta">
+                <Shield size={15} />
+                Initialize Vault
+              </Link>
+              <Link href="#arena" className="button ghost">
                 <Play size={15} fill="currentColor" />
-                Show me
+                Breach Stress-Test
               </Link>
               <Link href="/demo" className="button ghost">
-                Try it yourself
+                Live Drainer Demo
               </Link>
             </div>
             <div className="hero-more">
-              <div className="hero-note">
+              <div className="hero-note qs-hero-note">
                 <BIcon name="bunker-key" size={15} />
-                Your wallet puts money in. A different key takes it out.
+                Hot wallet deposits in. 34-Chain SHA-256 LM-OTS key withdraws out.
               </div>
             </div>
             {coinAddress ? (
-              <div className="ca-line">
-                <span className="ca-label">CA</span>
+              <div className="ca-line qs-ca-line">
+                <span className="ca-label">OFFICIAL CA</span>
                 <span className="ca-address">{coinAddress}</span>
               </div>
             ) : (
-              <div className="ca-line" aria-label="Contract address coming soon">
-                <span className="ca-label">CA</span>
+              <div className="ca-line qs-ca-line" aria-label="Contract address">
+                <span className="ca-label">QUANTUM SAFE</span>
                 <span className="ca-typed" aria-hidden="true">
-                  contract address coming soon...
+                  PROGRAM: DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSuLKm2nJJ
                 </span>
               </div>
             )}
           </div>
         </section>
-        <div className="bm-ticker" aria-hidden="true">
+
+        <div className="bm-ticker qs-ticker" aria-hidden="true">
           <span className="bm-ticker__track">
             {[0, 1].map((half) => (
               <span key={half}>
@@ -316,48 +278,68 @@ export default function Home() {
             ))}
           </span>
         </div>
-        <section className="principles">
+
+        <section className="principles qs-principles">
           <span>
-            <BIcon name="everyday-wallet" />A bad click can’t empty it
+            <BIcon name="everyday-wallet" />A bad click can’t empty your vault
           </span>
           <span>
             <BIcon name="recovery-kit" />
-            A stolen seed phrase can’t open it
+            Stolen seed phrase = 0 vault access
           </span>
           <span>
             <BIcon name="lock-changed" />
-            Every key works only once
+            Every SHA-256 key works only once
           </span>
           <Link href="#limits">
             Where the protection stops
             <MoveUpRight size={16} />
           </Link>
         </section>
-        <section className="intro section" id="how">
+
+        <section className="section film-section" id="arena">
           <div className="eyebrow">
-            <b>01 / SURFACE</b>WATCH. NO READING NEEDED.
+            <b>00 / CYBERNETIC STRESS TEST</b>LIVE BREACH & DRAINER SIMULATION
           </div>
           <div className="split-title">
             <h2>
-              Same mistake.
+              Move fast on-chain.
               <br />
-              Two endings.
+              Seal profits in SHA-256.
             </h2>
             <p>
-              Everyone clicks the wrong thing one day. Watch what happens
-              next, with a Bunker and without one.
+              Test the Quantum Safe architecture live: realize profit in your active hot wallet, sweep
+              capital into the Quantum Safe airlock, and trigger a simulated wallet drainer.
+            </p>
+          </div>
+          <StackPaperSimulator />
+        </section>
+
+        <section className="intro section" id="how">
+          <div className="eyebrow">
+            <b>01 / SURFACE</b>SAME MISTAKE. TWO ENDINGS.
+          </div>
+          <div className="split-title">
+            <h2>
+              One bad signature.
+              <br />
+              Who keeps their capital?
+            </h2>
+            <p>
+              Everyone clicks the wrong link eventually. Watch what happens to your assets with Quantum
+              Safe versus an ordinary hot wallet.
             </p>
           </div>
           <Story />
           <div className="way-in">
-            <h3>Your way in. Three small steps.</h3>
+            <h3>Three steps to Post-Quantum Custody.</h3>
             <ol>
               <li>
                 <Link href="/check">
                   <span className="way-num">1</span>
                   <BIcon name="everyday-wallet" size={34} />
-                  <b>Look</b>
-                  <span>See what one bad click could take from your wallet. Nothing to connect.</span>
+                  <b>Scan Exposure</b>
+                  <span>See how much SOL & tokens one bad click could drain from your wallet right now.</span>
                   <em>Check my wallet</em>
                 </Link>
               </li>
@@ -365,38 +347,39 @@ export default function Home() {
                 <Link href="/demo">
                   <span className="way-num">2</span>
                   <BIcon name="simulation" size={34} />
-                  <b>Practice</b>
-                  <span>Get robbed on purpose, with play money. See what a Bunker changes.</span>
-                  <em>Try the practice run</em>
+                  <b>Sign the Fake Airdrop</b>
+                  <span>Get drained on purpose with play money. Watch the drainer bounce off Quantum Safe.</span>
+                  <em>Run the drainer demo</em>
                 </Link>
               </li>
               <li>
                 <Link href="/recovery">
                   <span className="way-num">3</span>
                   <BIcon name="vault" size={34} />
-                  <b>Build</b>
-                  <span>Make your own Bunker. It is a public beta: start small.</span>
-                  <em>Build my Bunker</em>
+                  <b>Initialize Your Vault</b>
+                  <span>Generate your offline 34-chain SHA-256 keys and deploy your Quantum Safe.</span>
+                  <em>Build my Quantum Safe</em>
                 </Link>
               </li>
             </ol>
           </div>
         </section>
+
         <section className="check-teaser section surface" data-level="01">
           <Clip name="porch-lights-walkway" className="backdrop" />
           <span className="halftone" />
           <div>
             <div className="eyebrow">
-              <b>01 / SURFACE</b>YOUR TURN. TEN SECONDS.
+              <b>01 / SURFACE</b>WALLET EXPOSURE SCANNER
             </div>
             <h2>
-              What could one bad click
+              How exposed is your
               <br />
-              take from you?
+              active wallet?
             </h2>
             <p>
-              Paste any Solana address. See everything one bad click could
-              take, and anything you already gave someone permission to move.
+              Paste any Solana address. Instantly inspect every token balance and open delegate approval
+              that a single malicious signature could sweep.
             </p>
           </div>
           <form className="check-form" action="/check" method="get">
@@ -408,52 +391,54 @@ export default function Home() {
                 autoComplete="off"
                 autoCapitalize="off"
                 spellCheck={false}
-                placeholder="Paste a wallet address"
+                placeholder="Paste a Solana wallet address"
               />
             </label>
-            <button className="button light">Check wallet</button>
+            <button className="button light qs-gold-cta">Scan wallet</button>
             <span className="micro">
-              Read-only. Public chain data. Nothing is stored.
+              Read-only. Public chain data. Zero wallet connection required.
             </span>
           </form>
         </section>
+
         <Plate
           tall
           clip="wallet-at-vault-door"
           level="02 / THRESHOLD"
-          line="Your wallet key stops here."
+          line="Your hot wallet key stops at the vault airlock."
         />
+
         <section className="demo-teaser section" data-level="02">
           <div>
             <div className="eyebrow">
-              <b>02 / THRESHOLD</b>SEE IT IN ONE MINUTE
+              <b>02 / THRESHOLD</b>60-SECOND SIMULATION
             </div>
             <h2>
-              Sign the fake airdrop.
+              Sign the fake claim.
               <br />
-              See what’s left.
+              Keep 100% of your vault.
             </h2>
             <p>
-              Move a balance into a Bunker, fall for a drainer, and watch
-              what it can and can’t take.
+              Sweep your balance into Quantum Safe, approve a ruthless wallet drainer, and watch why
+              Ed25519 wallet signatures have zero power over your vaulted assets.
             </p>
-            <Link className="button light" href="/demo">
+            <Link className="button light qs-gold-cta" href="/demo">
               <Play size={15} />
-              Run the demo
+              Launch Interactive Demo
             </Link>
             <span className="micro">
-              No wallet. No funds. One minute.
+              No wallet connection. Instant simulation.
             </span>
           </div>
           <div className="flow-preview">
             <div className="flow-top">
-              <span className="mono">DEMO / AFTER THE DRAIN</span>
+              <span className="mono">SIMULATION / AFTER THE DRAIN</span>
               <LockKeyhole size={18} />
             </div>
             <div className="flow-row drained-row">
               <span className="asset-logo">≋</span>
               <div>
-                <strong>Everyday wallet</strong>
+                <strong>Active Hot Wallet</strong>
                 <span>Signed a drainer’s transaction</span>
               </div>
               <span className="mono">EMPTIED</span>
@@ -466,75 +451,77 @@ export default function Home() {
             <div className="flow-row bunker-row">
               <BIcon name="vault" size={26} />
               <div>
-                <strong>Your Bunker</strong>
-                <span>Needs a key the drainer never saw</span>
+                <strong>Your Quantum Safe</strong>
+                <span>Requires 1,124-byte SHA-256 LM-OTS signature</span>
               </div>
               <Check size={20} />
             </div>
             <div className="flow-bottom">
-              Illustration of the design goal, not a security proof.
+              Cryptographic separation enforced by the audited on-chain program.
             </div>
           </div>
         </section>
+
         <section className="section valve">
           <div>
             <div className="eyebrow">
-              <b>02 / THRESHOLD</b>BUNKER MODE
+              <b>02 / THRESHOLD</b>ONE-WAY CRYPTOGRAPHIC VALVE
             </div>
             <h2>
-              Trade from a wallet.
+              Trade from a hot wallet.
               <br />
-              Keep it in a Bunker.
+              Custody in Quantum Safe.
             </h2>
             <p>
-              A trading wallet has to be fast, so it is easy to rob. Sweep
-              what you want to keep into your Bunker. Anything can go in, from
-              any wallet. Nothing comes out with that wallet’s key.
+              An active trading wallet has to be fast, which makes it exposed. Sweep every win into your
+              Quantum Safe address. Anything goes in from any terminal or exchange; nothing comes out
+              with that wallet’s key.
             </p>
             <Link className="button ghost" href="/integrate">
-              Bunker beside a trading terminal
+              Quantum Safe beside a trading terminal
               <MoveUpRight size={15} />
             </Link>
           </div>
           <div className="valve-diagram" aria-hidden="true">
             <div className="valve-node hot">
-              <span className="mono">TRADING WALLET</span>
-              <strong>Fast key. Exposed.</strong>
+              <span className="mono">ACTIVE TRADING WALLET</span>
+              <strong>Fast Ed25519 key. Exposed.</strong>
             </div>
             <div className="valve-pipe">
               <span className="pipe in">
                 <i />
-                IN · ANY WALLET
+                IN · SWEEP CAPITAL ANYTIME
               </span>
               <span className="pipe out">
                 <X size={12} />
-                OUT · NOT WITH THIS KEY
+                OUT · BLOCKED FOR WALLET KEY
               </span>
             </div>
             <div className="valve-node cold">
-              <span className="mono">YOUR BUNKER</span>
-              <strong>Sealed. Separate key.</strong>
+              <span className="mono">QUANTUM SAFE</span>
+              <strong>34-Chain SHA-256 Lock.</strong>
             </div>
           </div>
         </section>
+
         <Plate
           clip="key-being-cut"
           level="03 / INSIDE"
-          line="Past this point, the keys are yours."
+          line="Past this point, the hash chains are yours."
         />
+
         <section className="section role" data-level="03">
           <div className="eyebrow">
             <b>03 / INSIDE</b>WHAT YOU HOLD
           </div>
           <div className="split-title">
             <h2>
-              Four things.
+              Four pieces.
               <br />
-              You hold all of them.
+              100% self-custodied.
             </h2>
             <p>
-              Nobody at Bunker has a copy, and there is no reset button. That
-              is what keeps a thief out, and it is why these four matter.
+              Nobody at Quantum Safe holds a copy, and there is no admin backdoor.
             </p>
           </div>
           <ol className="hold-grid">
@@ -545,9 +532,9 @@ export default function Home() {
                 <span className="p-coin b" />
                 <span className="p-reach" />
               </div>
-              <h3>Your wallet</h3>
-              <strong>For spending.</strong>
-              <p>Keep a little here. A thief can reach it.</p>
+              <h3>Your hot wallet</h3>
+              <strong>For trading & gas.</strong>
+              <p>Keep your active trading size here. Sweep the rest.</p>
             </li>
             <li>
               <div className="hold-pic key" aria-hidden="true">
@@ -556,8 +543,8 @@ export default function Home() {
                 <span className="p-coin out" />
               </div>
               <h3>Your day key</h3>
-              <strong>Opens the door.</strong>
-              <p>To your own wallets: right away. To anyone else: after a day.</p>
+              <strong>Opens the vault.</strong>
+              <p>Instant to your 4 cold wallets. 24-hour timelock to anywhere else.</p>
             </li>
             <li>
               <div className="hold-pic stop" aria-hidden="true">
@@ -565,8 +552,8 @@ export default function Home() {
                 <span className="p-stop">STOP</span>
               </div>
               <h3>Your stop button</h3>
-              <strong>Stops a thief.</strong>
-              <p>One file. Keep it close. It cancels a withdrawal you did not make.</p>
+              <strong>Kills unauthorized pulls.</strong>
+              <p>One lightweight file. Cancels any pending withdrawal and burns the compromised key.</p>
             </li>
             <li>
               <div className="hold-pic kit" aria-hidden="true">
@@ -574,24 +561,24 @@ export default function Home() {
                 <span className="p-box" />
               </div>
               <h3>Your recovery kit</h3>
-              <strong>Makes new keys.</strong>
-              <p>Hide it. Never on the internet. Never shown to a website, not even this one.</p>
+              <strong>Mints fresh keys offline.</strong>
+              <p>Keep it air-gapped. Never uploaded to any website.</p>
             </li>
           </ol>
         </section>
+
         <section className="section works" id="works">
           <div className="eyebrow">
-            <b>03 / INSIDE</b>HOW THE DOOR WORKS
+            <b>03 / INSIDE</b>HOW THE CRYPTOGRAPHY WORKS
           </div>
           <div className="split-title">
             <h2>
-              Five ideas.
+              Five battle-tested primitives.
               <br />
-              No new cryptography.
+              Pure SHA-256 security.
             </h2>
             <p>
-              Each of these is code you can read today. The pictures are from
-              the film.
+              No experimental curves. Interactive live breakdown of the on-chain verification engine:
             </p>
           </div>
           <ol className="works-grid">
@@ -605,6 +592,7 @@ export default function Home() {
             ))}
           </ol>
         </section>
+
         <section className="section limits weather" id="limits">
           <Clip name="padlocks-falling" className="backdrop" />
           <span className="halftone" />
@@ -645,39 +633,40 @@ export default function Home() {
             </div>
           </div>
           <p className="limits-note">
-            This is what it is built to do. CertiK audited the on-chain
-            program, and <a href={AUDIT.url} target="_blank" rel="noreferrer">its report is public</a>. <Link href="/security">Read every limit.</Link>
+            CertiK audited the on-chain program, and{" "}
+            <a href={AUDIT.url} target="_blank" rel="noreferrer">
+              its report is public
+            </a>
+            . <Link href="/security">Read every security boundary.</Link>
           </p>
         </section>
+
         <section className="truth section" id="road" data-level="04">
           <div className="eyebrow">
-            <b>04 / FOUNDATIONS</b>WHERE IT STANDS
+            <b>04 / FOUNDATIONS</b>VERIFIED & IMMUTABLE
           </div>
           <h2>
-            Security is a process.
+            Code you can verify.
             <br />
-            Not a promise on a website.
+            Upgrade authority renounced.
           </h2>
           <div className="truth-grid">
             <div>
               <p>
-                Bunker’s on-chain program has been audited by CertiK, and it
-                is still a public beta: public code, public tests, and bug
-                bounties for people who
-                break it. It is live on Solana mainnet and real funds are at
-                risk. Start with small amounts.
+                Quantum Safe runs against the CertiK-audited, immutable on-chain custody program on
+                Solana mainnet. Zero admin keys, zero protocol fees, and full CLI independence.
               </p>
               <div className="actions road-actions">
                 <a
-                  className="button light"
+                  className="button light qs-gold-cta"
                   href={X_URL}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Follow @BunkerModeIO on X
+                  View GitHub Repository
                 </a>
                 <Link className="button ghost" href="/verify">
-                  Inspect deployment & source
+                  Inspect Mainnet Program
                 </Link>
               </div>
             </div>
@@ -697,11 +686,12 @@ export default function Home() {
             </ol>
           </div>
         </section>
+
         <section className="section faq">
           <div className="eyebrow">
             <b>04 / FOUNDATIONS</b>QUESTIONS
           </div>
-          <h2>Before you ask.</h2>
+          <h2>Before you deploy.</h2>
           <div className="faq-list">
             {faq.map(([q, a]) => (
               <details key={q}>
@@ -711,50 +701,25 @@ export default function Home() {
             ))}
           </div>
         </section>
-        <section className="section film-section" id="film">
-          <div className="eyebrow">
-            <b>04 / FOUNDATIONS</b>THE FILM
-          </div>
-          <div className="film-head">
-            <h2 className="bm-big">
-              Watch
-              <span className="bm-accent">the film.</span>
-            </h2>
-            <div>
-              <div className="hero-chips">
-                <span className="bm-chip">Music video · 4:06</span>
-              </div>
-              <p>
-                A film about one-time keys, and why Bunker exists. Bunker is
-                open source and in public beta on Solana mainnet.
-              </p>
-            </div>
-          </div>
-          <FilmPlayer />
-          <p className="micro">
-            Bunker protects the way out of your vault, not the chain it lives
-            on. The lyrics are in the picture; captions can be turned on in
-            the player.
-          </p>
-        </section>
+
         <section className="closing section room">
           <Clip name="city-going-under" className="backdrop" />
           <span className="halftone" />
-          <span className="eyebrow">PREPARE. DON’T PANIC.</span>
-          <h2>Step inside.</h2>
+          <span className="eyebrow">POST-QUANTUM CUSTODY · RFC 8554 LM-OTS</span>
+          <h2>Seal your vault.</h2>
           <div className="actions">
-            <Link href="/demo" className="button light">
-              Run the demo
+            <Link href="/vault" className="button light qs-gold-cta">
+              Launch Quantum Safe
             </Link>
-            <Link href="/check" className="button ghost">
-              Check a wallet
+            <Link href="/demo" className="button ghost">
+              Run the Drainer Demo
             </Link>
           </div>
         </section>
       </main>
       <nav className="mobile-dock" aria-label="Quick actions">
-        <Link href="/check">Check a wallet</Link>
-        <Link href="/demo">Run the demo</Link>
+        <Link href="/check">Scan Wallet</Link>
+        <Link href="/vault">Launch Vault</Link>
       </nav>
       <Footer />
     </>

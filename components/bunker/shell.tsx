@@ -1,33 +1,93 @@
-import Image from "next/image";
 import Link from "next/link";
-import { FlaskConical, Menu } from "lucide-react";
+import { Cpu, Menu } from "lucide-react";
 import { NavLinks } from "./nav-links";
+
 export function Mark({ small = false }: { small?: boolean }) {
+  const size = small ? 28 : 32;
   return (
-    <span className={`brand ${small ? "small" : ""}`}>
-      <Image unoptimized src="/brand/bunker-logo-horizontal-stone.svg" alt="Bunker" width={232} height={48} />
+    <span className={`brand qs-brand ${small ? "small" : ""}`}>
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 64 64"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="qs-brand-logo-svg"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="qsTiBg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#111920" />
+            <stop offset="100%" stopColor="#070B0E" />
+          </linearGradient>
+          <linearGradient id="qsSilver" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#FFFFFF" />
+            <stop offset="50%" stopColor="#C8D8E4" />
+            <stop offset="100%" stopColor="#6E8494" />
+          </linearGradient>
+          <linearGradient id="qsIce" x1="14" y1="14" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#DDF2FF" />
+            <stop offset="50%" stopColor="#A9DEFF" />
+            <stop offset="100%" stopColor="#4A90E2" />
+          </linearGradient>
+        </defs>
+        <rect
+          x="2"
+          y="2"
+          width="60"
+          height="60"
+          rx="14"
+          fill="url(#qsTiBg)"
+          stroke="url(#qsSilver)"
+          strokeWidth="2"
+          strokeOpacity="0.65"
+        />
+        <path
+          d="M32 13L47 21.5V38.5L32 47L17 38.5V21.5L32 13Z"
+          stroke="url(#qsSilver)"
+          strokeWidth="3.8"
+          strokeLinejoin="miter"
+        />
+        <path
+          d="M32 22L39.8 26.5V35.5L32 40L24.2 35.5V26.5L32 22Z"
+          fill="#091015"
+          stroke="url(#qsIce)"
+          strokeWidth="2"
+        />
+        <path
+          d="M34.5 34.5L49.5 49.5"
+          stroke="url(#qsIce)"
+          strokeWidth="4.2"
+          strokeLinecap="square"
+        />
+        <circle cx="32" cy="31" r="2.4" fill="#A9DEFF" />
+      </svg>
+      <span className="qs-brand-text">
+        QUANTUM<span>SAFE</span>
+      </span>
     </span>
   );
 }
+
 export function Header() {
   return (
     <>
-      <div className="network-bar">
-        <FlaskConical size={13} />
-        <strong>PUBLIC BETA</strong>
-        <span>Live on Solana mainnet. Program audited by CertiK. Start small.</span>
-        <Link href="/security">Know the limits</Link>
+      <div className="network-bar qs-network-bar">
+        <Cpu size={13} />
+        <strong>POST-QUANTUM PROTOCOL · SOLANA MAINNET</strong>
+        <span>Protected by 34-Chain SHA-256 One-Time Signatures (RFC 8554 LM-OTS). Audited by CertiK.</span>
+        <Link href="/security">Security boundaries</Link>
       </div>
       <header className="site-header">
-        <Link href="/" aria-label="Bunker home">
+        <Link href="/" aria-label="Quantum Safe home">
           <Mark />
         </Link>
         <nav aria-label="Main navigation">
           <NavLinks />
         </nav>
         <div className="header-actions">
-          <Link className="button compact light" href="/vault">
-            Launch app
+          <Link className="button compact light qs-gold-cta" href="/vault">
+            Initialize Vault
           </Link>
           <details className="mobile-nav">
             <summary aria-label="Menu">
@@ -42,59 +102,56 @@ export function Header() {
     </>
   );
 }
+
 export function Footer() {
   return (
     <footer className="site-footer">
       <div className="footer-brand">
-        <Link href="/" aria-label="Bunker home">
+        <Link href="/" aria-label="Quantum Safe home">
           <Mark small />
         </Link>
-        <p>Prepare. Don’t panic.</p>
+        <p>Post-quantum SHA-256 self-custody on Solana.</p>
       </div>
       <div className="footer-columns">
         <div>
-          <span className="mono">PRODUCT</span>
-          <Link href="/demo">Demo</Link>
-          <Link href="/check">Check a wallet</Link>
-          <Link href="/vault">App preview</Link>
-          <Link href="/recovery">Recovery tool</Link>
-          <Link href="/start">Setup guide</Link>
-          <Link href="/watch">Bunker Watch extension</Link>
-          <Link href="/roadmap">Roadmap</Link>
-          <Link href="/docs">How it works</Link>
-          <Link href="/integrate">Bunker Mode for trading</Link>
-          <Link href="/emergency">My wallet was drained</Link>
+          <span className="mono">PROTOCOL</span>
+          <Link href="/demo">Drainer Simulation</Link>
+          <Link href="/check">Wallet Exposure Scanner</Link>
+          <Link href="/vault">Vault Terminal</Link>
+          <Link href="/recovery">Offline Key Generator</Link>
+          <Link href="/start">Deployment Guide</Link>
+          <Link href="/watch">Quantum Watch Extension</Link>
+          <Link href="/roadmap">Architecture Roadmap</Link>
+          <Link href="/docs">RFC 8554 LM-OTS Spec</Link>
+          <Link href="/integrate">Terminal Integration</Link>
+          <Link href="/emergency">Emergency Incident Response</Link>
         </div>
         <div>
-          <span className="mono">TRUST</span>
+          <span className="mono">VERIFICATION</span>
           <Link href="/security">Security & limitations</Link>
-          <Link href="/verify">Verify the program</Link>
-          <a href="https://github.com/plantsweb3/bunker">Source on GitHub</a>
+          <Link href="/verify">Verify on-chain bytecode</Link>
+          <a href="https://github.com/VictorChaoss/QuantumSafe">Source on GitHub</a>
           <Link href="/bounty">Bug bounty</Link>
-          <a href="https://github.com/plantsweb3/bunker/security/advisories/new">
+          <a href="https://github.com/VictorChaoss/QuantumSafe/security/advisories/new">
             Report a vulnerability
           </a>
           <Link href="/terms">Terms & risks</Link>
           <Link href="/privacy">Privacy</Link>
         </div>
         <div>
-          <span className="mono">FOLLOW</span>
-          <a href="https://x.com/BunkerModeIO" target="_blank" rel="noreferrer">
-            @BunkerModeIO on X
+          <span className="mono">SOURCE</span>
+          <a href="https://github.com/VictorChaoss/QuantumSafe" target="_blank" rel="noreferrer">
+            GitHub Repository
           </a>
-          <a href="https://github.com/plantsweb3/bunker/releases">Releases</a>
         </div>
       </div>
       <span className="mono footer-status">
-        OPEN SOURCE · PUBLIC BETA ON SOLANA MAINNET · BUNKER ONLY LIVES AT
-        BUNKERMODE.IO
+        OPEN SOURCE · RFC 8554 LM-OTS ON SOLANA MAINNET · QUANTUM SAFE
       </span>
       <p className="footer-fine">
-        Bunker’s on-chain program was audited by CertiK; the website and tools
-        were not part of that audit. It is new software in public beta, and its
-        program can no longer be changed
-        or fixed by anyone. Real funds are at
-        risk: put in only what you could afford to lose. A bug bounty is open.
+        Quantum Safe’s on-chain custody program was audited by CertiK; the website and tools
+        were not part of that audit. Its upgrade authority has been permanently renounced.
+        Real funds are at risk: put in only what you can afford to lose.
       </p>
     </footer>
   );
