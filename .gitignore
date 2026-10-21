@@ -1,0 +1,74 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/.vinext/
+/out/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+next-env.d.ts
+/dist/
+/.wrangler/
+# Checkout-local execution profile and tool state; never publish them.
+/.sites-runtime/
+/.agents/
+/.codex/
+/outputs/
+/work/
+
+/target/
+/test-results/
+/playwright-report/
+*.tsbuildinfo
+*-keypair.json
+*.recovery.json
+.env*
+!.env.example
+/.local-validator/
+/public/source/
+
+# Explicit exported recovery filenames must never enter source or Git.
+bunker-devnet-*.json
+bunker-test-*.json
+bunker-RECOVERY-KIT-*.json
+bunker-day-key-*.json
+bunker-cancel-file-*.json
+bunker-recovery-packet-*.json
+bunker-creation-request-*.json
+bunker-network-card-*.json
+id.json
+*.key
+
+# standalone in-process VM tests
+/programs/bunker3-svm-tests/target/
+# Written by the dev server for coding assistants; not source.
+AGENTS.md
