@@ -4,7 +4,7 @@
  * straight to one of the vault's token accounts by some other wallet does not
  * reference that address and will not appear here; its balance still shows.
  *
- * A transaction is named after a Bunker instruction only when that
+ * A transaction is named after a Quantum Safe instruction only when that
  * instruction acts on THIS vault, whether it was sent directly or made by
  * another program on the sender's behalf. */
 import { Connection, PublicKey } from "@solana/web3.js";
@@ -156,7 +156,7 @@ export function describeTransaction(
   };
 }
 export const ACTIVITY_LABEL: Record<ActivityKind, string> = {
-  built: "Bunker built",
+  built: "Quantum Safe built",
   deposit: "Deposit",
   announced: "Withdrawal announced",
   sent: "Withdrawal sent",

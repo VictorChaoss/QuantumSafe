@@ -1,7 +1,7 @@
 import { Connection, PublicKey } from "@solana/web3.js";
 import { alertsFromEnv, sameSecret, telegramSend } from "@/lib/alerts/config";
 import { runWatch } from "@/lib/alerts/watch";
-import { getConfig, getRpcUrl } from "@/lib/bunker-config";
+import { getConfig, getRpcUrl } from "@/lib/qsafe-config";
 import { explorer } from "@/sdk/client";
 export const maxDuration = 55;
 /** Called by the scheduler once a minute (see vercel.json). */

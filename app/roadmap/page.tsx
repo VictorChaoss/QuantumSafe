@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Header, Footer } from "@/components/bunker/shell";
-import FilmPlayer from "@/components/bunker/film";
-import Loop from "@/components/bunker/loop";
+import { Header, Footer } from "@/components/qsafe/shell";
+import FilmPlayer from "@/components/qsafe/film";
+import Loop from "@/components/qsafe/loop";
 
 const POSTER = "/assets/film/while-they-read-poster.jpg";
 export const metadata: Metadata = {
   title: "Roadmap",
   description:
-    "The plan for Bunker, as five doors. Gates, not dates: each step waits for the one before. Public beta.",
+    "The plan for Quantum Safe, as five doors. Gates, not dates: each step waits for the one before. Public beta.",
   openGraph: {
-    title: "Bunker roadmap: gates, not dates",
+    title: "Quantum Safe roadmap: gates, not dates",
     description: "Five doors. Each step waits for the one before. Public beta.",
     images: [{ url: POSTER, width: 1280, height: 720, alt: "Door 01 of the plan: a steel door standing open on a lit room." }],
   },
@@ -22,7 +22,7 @@ const doors: { file: string; name: string; chip: string; line: string }[] = [
   { file: "door-02-signer-drawn", name: "Signer, drawn", chip: "Design only", line: "Designed. Not built, not shipped." },
   { file: "door-03-the-report", name: "The report", chip: "Published", line: "Out in the open. Every finding resolved or acknowledged, and the one fix is live." },
   { file: "door-04-signer-built", name: "Signer, built", chip: "After the red ink", line: "Only on the code the audit covered, plus its fixes." },
-  { file: "door-05-build-on-bunker", name: "Build on Bunker", chip: "Next", line: "Phone alerts, integrations, a cancel-file helper. Each reviewed first." },
+  { file: "door-05-build-on-qsafe", name: "Build on Quantum Safe", chip: "Next", line: "Phone alerts, integrations, a cancel-file helper. Each reviewed first." },
 ];
 function Door({ n }: { n: number }) {
   const door = doors[n];
@@ -47,7 +47,7 @@ function Door({ n }: { n: number }) {
         </h2>
         <span className={`bm-chip ${n === 0 ? "bm-chip--ice" : "bm-chip--cream"}`}>{door.chip}</span>
         <p>{door.line}</p>
-        {n === 0 && <span className="door-open">Open Bunker Watch →</span>}
+        {n === 0 && <span className="door-open">Open Quantum Safe Watch →</span>}
       </div>
     </>
   );

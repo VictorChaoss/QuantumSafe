@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { PublicKey } from "@solana/web3.js";
-import { DEVNET_GENESIS } from "../../lib/bunker-config";
+import { DEVNET_GENESIS } from "../../lib/qsafe-config";
 import { MAX_WATCHED, NEVER_ASKS } from "../../extension/src/config";
 import { CREAM, ICE } from "../../extension/src/notify";
 import { endpoint } from "../../extension/src/rpc";
@@ -18,7 +18,7 @@ async function pass(kv: store.KV, connection: Parameters<typeof runPass>[1], wal
 }
 const destination = new PublicKey(id(6)).toBase58();
 
-describe("Bunker Watch: one pass", () => {
+describe("Quantum Safe Watch: one pass", () => {
   it("announces a withdrawal once, turns the badge cream, and then says nothing", async () => {
     const kv = store.memoryStore();
     const c = chain();
@@ -34,7 +34,7 @@ describe("Bunker Watch: one pass", () => {
     expect(announced.notices).toHaveLength(1);
     expect(announced.notices[0]).toMatchObject({ kind: "announced", urgent: true, title: "Withdrawal announced" });
     expect(announced.notices[0].message).toBe(
-      `A withdrawal was announced from Bunker ${c.address().slice(0, 4)}…${c.address().slice(-4)}. 10 SOL to ${destination}. Opens in 23h 41m. ` +
+      `A withdrawal was announced from Quantum Safe ${c.address().slice(0, 4)}…${c.address().slice(-4)}. 10 SOL to ${destination}. Opens in 23h 41m. ` +
         `If this was not you, cancel it now with your cancel file or recovery kit. ${NEVER_ASKS}`,
     );
     expect(announced.badge).toEqual({ text: "24h", color: CREAM });
@@ -46,7 +46,7 @@ describe("Bunker Watch: one pass", () => {
     const [view] = await store.views(kv);
     expect(view.pending).toMatchObject({ amount: "10000000000", trusted: false });
   });
-  it("says when a waiting withdrawal goes to one of the Bunker's trusted addresses", async () => {
+  it("says when a waiting withdrawal goes to one of the Quantum Safe's trusted addresses", async () => {
     const kv = store.memoryStore();
     const c = chain();
     await addVault(kv, c.connection, c.address());
@@ -55,7 +55,7 @@ describe("Bunker Watch: one pass", () => {
     await pass(kv, c.connection);
     expect((await store.views(kv))[0].pending?.trusted).toBe(true);
   });
-  it("uses the alert service's own wording for everything else, and always says what Bunker never asks for", async () => {
+  it("uses the alert service's own wording for everything else, and always says what Quantum Safe never asks for", async () => {
     const kv = store.memoryStore();
     const c = chain();
     await addVault(kv, c.connection, c.address());
@@ -65,7 +65,7 @@ describe("Bunker Watch: one pass", () => {
     expect(notices[0]).toMatchObject({ kind: "deposit", urgent: false });
     expect(notices[0].title).toContain("deposit received");
     expect(notices[0].message).toContain("+2 SOL");
-    expect(notices[0].message).toContain("Bunker will never ask for your recovery kit");
+    expect(notices[0].message).toContain("Quantum Safe will never ask for your recovery kit");
     for (const text of [notices[0].title, notices[0].message]) expect(text).not.toContain("—");
   });
   it("shows what was already waiting when watching starts, without announcing it", async () => {
@@ -78,7 +78,7 @@ describe("Bunker Watch: one pass", () => {
   });
 });
 
-describe("Bunker Watch: what it refuses", () => {
+describe("Quantum Safe Watch: what it refuses", () => {
   it("refuses an RPC whose genesis is not mainnet, and stores nothing", async () => {
     const kv = store.memoryStore();
     const elsewhere = chain([id(7)], DEVNET_GENESIS);
@@ -104,10 +104,10 @@ describe("Bunker Watch: what it refuses", () => {
   it("cannot add an address that is not a vault of the mainnet program", async () => {
     const kv = store.memoryStore();
     const c = chain();
-    // No account at all, an account of another program, and a Bunker account at the wrong address.
-    await expect(addVault(kv, c.connection, new PublicKey(id(8)).toBase58())).rejects.toThrow("No Bunker found");
+    // No account at all, an account of another program, and a Quantum Safe account at the wrong address.
+    await expect(addVault(kv, c.connection, new PublicKey(id(8)).toBase58())).rejects.toThrow("No Quantum Safe found");
     c.of().owner = new PublicKey(id(12));
-    await expect(addVault(kv, c.connection, c.address())).rejects.toThrow("No Bunker found");
+    await expect(addVault(kv, c.connection, c.address())).rejects.toThrow("No Quantum Safe found");
     await expect(addVault(kv, c.connection, "not an address")).rejects.toThrow("not a Solana address");
     const moved = chain([id(7), id(8)]);
     const real = moved.connection as unknown as { getAccountInfo(k: PublicKey): Promise<unknown> };
@@ -133,7 +133,7 @@ describe("Bunker Watch: what it refuses", () => {
   });
 });
 
-describe("Bunker Watch: an alert that has been decided on is not lost", () => {
+describe("Quantum Safe Watch: an alert that has been decided on is not lost", () => {
   it("queues the alert in the same write as the reading, so stopping in between loses nothing", async () => {
     const kv = store.memoryStore();
     const c = chain();
@@ -168,7 +168,7 @@ describe("Bunker Watch: an alert that has been decided on is not lost", () => {
   });
 });
 
-describe("Bunker Watch: when the network is unwell", () => {
+describe("Quantum Safe Watch: when the network is unwell", () => {
   it("says so, once, when it has not been able to look for five minutes, and stops saying so when it can", async () => {
     const kv = store.memoryStore();
     const c = chain();
@@ -248,7 +248,7 @@ describe("Bunker Watch: when the network is unwell", () => {
     expect(back.notices.map((n) => n.kind)).toContain("announced");
     expect(await store.status(kv)).toMatchObject({ problem: null, refusals: 0, retryAt: 0, failingSince: null });
   });
-  it("keeps the last good reading and says so when one Bunker cannot be read", async () => {
+  it("keeps the last good reading and says so when one Quantum Safe cannot be read", async () => {
     const kv = store.memoryStore();
     const c = chain([id(7), id(8)]);
     await addVault(kv, c.connection, c.address(0));
@@ -258,7 +258,7 @@ describe("Bunker Watch: when the network is unwell", () => {
     const result = await pass(kv, c.connection);
     expect(result.notices.map((n) => n.vault)).toEqual([c.address(0)]);
     const [, broken] = await store.views(kv);
-    expect(broken.problem).toContain("no Bunker at this address");
+    expect(broken.problem).toContain("no Quantum Safe at this address");
     expect(broken.lamports).toBe("12400000000");
   });
 });

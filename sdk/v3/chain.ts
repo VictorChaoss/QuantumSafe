@@ -24,7 +24,7 @@ export async function fetchVault(
     connection.getMinimumBalanceForRentExemption(VAULT_SIZE),
   ]);
   if (!info || !info.owner.equals(program))
-    throw new Error("No Bunker found at that address under this program");
+    throw new Error("No Quantum Safe found at that address under this program");
   const state = parseVault(info.data);
   if (!vaultAddress(program, state.vaultId).equals(address))
     throw new Error("Vault address does not match its stored identity");

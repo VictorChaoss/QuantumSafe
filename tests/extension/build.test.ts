@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 const build = () => execFileSync(process.execPath, ["scripts/build-extension.mjs"], { encoding: "utf8" });
-const zip = () => readFileSync("public/source/bunker-watch.zip");
+const zip = () => readFileSync("public/source/qsafe-watch.zip");
 /** The names in a zip, read from its central directory. */
 function names(archive: Buffer) {
   const found: string[] = [];
@@ -17,7 +17,7 @@ function names(archive: Buffer) {
   return found;
 }
 
-describe("Bunker Watch: the published build", () => {
+describe("Quantum Safe Watch: the published build", () => {
   it("is the same zip, byte for byte, when built twice", () => {
     build();
     const first = zip();
@@ -31,10 +31,10 @@ describe("Bunker Watch: the published build", () => {
     // Each file's own hash is published too, for checking a copy a store has repackaged.
     expect(record.files.map((f: { path: string }) => f.path)).toEqual(names(first));
     for (const f of record.files)
-      expect(f.sha256).toBe(createHash("sha256").update(readFileSync(`dist/bunker-watch/${f.path}`)).digest("hex"));
+      expect(f.sha256).toBe(createHash("sha256").update(readFileSync(`dist/qsafe-watch/${f.path}`)).digest("hex"));
   }, 60_000);
   it("asks the browser for storage, alarms and notifications, and nothing else", () => {
-    const manifest = JSON.parse(readFileSync("dist/bunker-watch/manifest.json", "utf8"));
+    const manifest = JSON.parse(readFileSync("dist/qsafe-watch/manifest.json", "utf8"));
     expect(manifest.manifest_version).toBe(3);
     expect(manifest.permissions).toEqual(["storage", "alarms", "notifications"]);
     // The default endpoint; any other is asked for one origin at a time, when the user sets it.
@@ -56,22 +56,22 @@ describe("Bunker Watch: the published build", () => {
     expect(files).toEqual(
       expect.arrayContaining(["manifest.json", "background.js", "popup.js", "popup.html", "popup.css", "icons/128.png", "fonts/inter-OFL.txt", "fonts/jetbrainsmono-OFL.txt", "fonts/spacegrotesk-OFL.txt"]),
     );
-    const html = readFileSync("dist/bunker-watch/popup.html", "utf8");
+    const html = readFileSync("dist/qsafe-watch/popup.html", "utf8");
     expect(html).not.toMatch(/https?:\/\//);
     expect(html).not.toMatch(/<script(?![^>]*src="popup\.js")/);
-    const css = readFileSync("dist/bunker-watch/popup.css", "utf8");
+    const css = readFileSync("dist/qsafe-watch/popup.css", "utf8");
     expect(css).not.toMatch(/url\(["']?https?:/);
     // The colours are the site's, taken from its one token file.
     expect(css).toContain("--bm-ice: #A9DEFF");
   });
   it("can be given no network but mainnet, and has no key handling in it", () => {
     for (const file of ["background.js", "popup.js"]) {
-      const code = readFileSync(`dist/bunker-watch/${file}`, "utf8");
-      expect(code).not.toContain("__BUNKER_WATCH_TEST__");
+      const code = readFileSync(`dist/qsafe-watch/${file}`, "utf8");
+      expect(code).not.toContain("__QSAFE_WATCH_TEST__");
       expect(code).toContain("DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSuLKm2nJJ");
       expect(code).toContain("5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d");
       // None of the code that opens key files, signs or keeps the signing journal is in the build.
-      for (const secret of ["decryptDayKey", "decryptArchival", "authorizeAnnouncement", "signAnnouncement", "BUNKER-KDF", "scrypt"])
+      for (const secret of ["decryptDayKey", "decryptArchival", "authorizeAnnouncement", "signAnnouncement", "QSAFE-KDF", "scrypt"])
         expect(code.includes(secret), `${file} contains ${secret}`).toBe(false);
     }
   });

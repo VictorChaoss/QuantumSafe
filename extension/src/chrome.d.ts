@@ -1,4 +1,4 @@
-// The few browser-extension APIs Bunker Watch uses, declared by hand so the
+// The few browser-extension APIs Quantum Safe Watch uses, declared by hand so the
 // build needs no extra package. Anything not listed here is not used.
 declare namespace chrome {
   namespace storage {

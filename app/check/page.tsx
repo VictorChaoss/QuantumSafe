@@ -1,6 +1,6 @@
-import { Header, Footer } from "@/components/bunker/shell";
-import ExposureCheck from "@/components/bunker/exposure-check";
-import { WalletProvider } from "@/components/bunker/wallet";
+import { Header, Footer } from "@/components/qsafe/shell";
+import ExposureCheck from "@/components/qsafe/exposure-check";
+import { WalletProvider } from "@/components/qsafe/wallet";
 export const metadata = {
   title: "Check a wallet",
   description:

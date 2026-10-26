@@ -1,6 +1,6 @@
 import { AUDIT } from "@/lib/audit";
 import Link from "next/link";
-import { DocumentLayout } from "@/components/bunker/document-layout";
+import { DocumentLayout } from "@/components/qsafe/document-layout";
 export const metadata = { title: "Security & limitations" };
 export default function Page() {
   return (
@@ -12,7 +12,7 @@ export default function Page() {
       <div className="document-callout">
         <h2>Public beta. Program audited. Permanent.</h2>
         <p>
-          Bunker runs on Solana mainnet and holds real funds. The
+          Quantum Safe runs on Solana mainnet and holds real funds. The
           implementation has automated tests, and CertiK audited the on-chain
           program and its signature verifier:{" "}
           <a href={AUDIT.url} target="_blank" rel="noreferrer">read the report</a>.
@@ -31,7 +31,7 @@ export default function Page() {
           src="/assets/diagrams/drainer-boundary.svg"
           width={1280}
           height={720}
-          alt="Diagram: with your wallet key an attacker can spend what is in that wallet, pay fees and send assets into a vault; without the Bunker key there is no valid withdrawal authorization. If the device itself is compromised, both keys may be at risk. Labelled as a simulation."
+          alt="Diagram: with your wallet key an attacker can spend what is in that wallet, pay fees and send assets into a vault; without the Quantum Safe key there is no valid withdrawal authorization. If the device itself is compromised, both keys may be at risk. Labelled as a simulation."
         />
       </figure>
       <section>
@@ -58,7 +58,7 @@ export default function Page() {
             withdraw from the vault.
           </li>
           <li>
-            <strong>Your day key.</strong> Can announce withdrawals. A Bunker
+            <strong>Your day key.</strong> Can announce withdrawals. A Quantum Safe
             is built with up to four trusted addresses and a waiting period
             for everything else. If the day key is stolen, the thief can send
             at once only to those trusted addresses, which are yours; a
@@ -68,7 +68,7 @@ export default function Page() {
           </li>
           <li>
             <strong>Your recovery kit.</strong> Can replace every key. Whoever
-            holds it and its password controls the Bunker. It is opened only
+            holds it and its password controls the Quantum Safe. It is opened only
             in an offline tool, never on this website.
           </li>
         </ul>
@@ -91,7 +91,7 @@ export default function Page() {
           private key must reproduce its signature.
         </p>
         <p>
-          Bunker uses that one-time scheme on its own, with each signature
+          Quantum Safe uses that one-time scheme on its own, with each signature
           naming the key that replaces it, not inside the LMS system the RFC
           mainly describes. That use, and two choices it involves, have not
           been examined by an outside cryptographer. Its security rests on SHA-256;
@@ -100,7 +100,7 @@ export default function Page() {
         </p>
       </section>
       <section>
-        <h2>What Bunker does not protect</h2>
+        <h2>What Quantum Safe does not protect</h2>
         <ul>
           <li>
             <strong>A compromised browser or device.</strong> Malware, malicious
@@ -187,7 +187,7 @@ export default function Page() {
         <p>
           Report vulnerabilities privately through{" "}
           <a
-            href="https://github.com/plantsweb3/bunker/security/advisories/new"
+            href="https://github.com/VictorChaoss/QuantumSafe/security/advisories/new"
             target="_blank"
             rel="noreferrer"
           >

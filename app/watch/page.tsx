@@ -1,26 +1,26 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { DocumentLayout } from "@/components/bunker/document-layout";
-import ExtensionBuild from "@/components/bunker/extension-build";
+import { DocumentLayout } from "@/components/qsafe/document-layout";
+import ExtensionBuild from "@/components/qsafe/extension-build";
 import store from "@/extension/store.json";
 
 /** The one official listing. Built from the checked-in item ID, the same one /verify shows. */
 const storeUrl = store.chromeWebStoreItemId
-  ? `https://chromewebstore.google.com/detail/bunker-watch/${store.chromeWebStoreItemId}`
+  ? `https://chromewebstore.google.com/detail/qsafe-watch/${store.chromeWebStoreItemId}`
   : null;
 
 export const metadata: Metadata = {
-  title: "Bunker Watch",
+  title: "Quantum Safe Watch",
   description:
-    "A browser extension that shows a desktop alert when a withdrawal is announced from your Bunker. Read-only: holds no keys. Public beta.",
+    "A browser extension that shows a desktop alert when a withdrawal is announced from your Quantum Safe. Read-only: holds no keys. Public beta.",
 };
 /** The extension's popup in its four states: file, what the picture shows, and the line under it. */
 const shots: [string, string, string][] = [
   [
     "1-all-quiet",
-    "The Bunker Watch popup with the heading All quiet, 2 Bunkers watched, and a card for each Bunker showing its SOL balance and that no withdrawal is waiting.",
-    "All quiet. Each Bunker you watch, its balance, and when it was last read.",
+    "The Quantum Safe Watch popup with the heading All quiet, 2 Qsafes watched, and a card for each Quantum Safe showing its SOL balance and that no withdrawal is waiting.",
+    "All quiet. Each Quantum Safe you watch, its balance, and when it was last read.",
   ],
   [
     "2-withdrawal-announced",
@@ -41,15 +41,15 @@ const shots: [string, string, string][] = [
 export default function Watch() {
   return (
     <DocumentLayout
-      eyebrow="BUNKER WATCH · PUBLIC BETA · READ-ONLY"
+      eyebrow="QSAFE WATCH · PUBLIC BETA · READ-ONLY"
       title="Know when a withdrawal is announced."
-      description="A browser extension that watches your Bunker and tells you when something changes. It reads. It cannot move anything."
+      description="A browser extension that watches your Quantum Safe and tells you when something changes. It reads. It cannot move anything."
     >
       <div className="document-callout">
         <h2>Read-only. Holds no keys.</h2>
         <p>
-          Bunker Watch never sees a day key, a recovery kit or a password,
-          and it has no way to send a transaction. Bunker never asks for
+          Quantum Safe Watch never sees a day key, a recovery kit or a password,
+          and it has no way to send a transaction. Quantum Safe never asks for
           your recovery kit or its password, here or anywhere else.
         </p>
       </div>
@@ -88,8 +88,8 @@ export default function Watch() {
         <h2>What it does</h2>
         <ul>
           <li>
-            You paste the address of a Bunker. It checks that the address is
-            a Bunker of the published program, and watches up to five.
+            You paste the address of a Quantum Safe. It checks that the address is
+            a Quantum Safe of the published program, and watches up to five.
           </li>
           <li>
             Once a minute it reads each one and compares it with what it saw
@@ -103,7 +103,7 @@ export default function Watch() {
           </li>
           <li>
             It also tells you when SOL arrives, when a withdrawal leaves, and
-            when a Bunker’s keys are replaced.
+            when a Quantum Safe’s keys are replaced.
           </li>
           <li>
             It can run the same <Link href="/check">wallet check</Link> as
@@ -116,7 +116,7 @@ export default function Watch() {
         <p>
           A withdrawal to an address you did not list as trusted waits before
           it can leave, and you can cancel it while it waits. That only helps
-          if you find out in time. Bunker Watch does the finding out on your
+          if you find out in time. Quantum Safe Watch does the finding out on your
           own computer, with no server of ours in between.
         </p>
         <p>
@@ -133,7 +133,7 @@ export default function Watch() {
           <li>Alerts are best effort and can be late or missing. Silence is not proof that nothing happened. If it cannot read the network for five minutes, its badge shows “!” and it tells you once.</li>
           <li>It believes its RPC endpoint. An endpoint that lies can show it anything.</li>
           <li>It reports SOL arriving, not token deposits.</li>
-          <li>It protects nothing by itself. Bunker protects the withdrawal path, not the chain, and this only tells you what happened on that path.</li>
+          <li>It protects nothing by itself. Quantum Safe protects the withdrawal path, not the chain, and this only tells you what happened on that path.</li>
         </ul>
       </section>
       <section>
@@ -156,7 +156,7 @@ export default function Watch() {
         <h2>The build this site serves</h2>
         <ExtensionBuild />
         <p>
-          The zip is built from the <a href="https://github.com/plantsweb3/bunker/tree/main/extension">public source</a>{" "}
+          The zip is built from the <a href="https://github.com/VictorChaoss/QuantumSafe/tree/main/extension">public source</a>{" "}
           and comes out the same, byte for byte, on any machine:{" "}
           <code>npm ci && npm run extension:build</code>, then compare the
           SHA-256. A store repackages what it is given, so an installed copy
@@ -175,7 +175,7 @@ export default function Watch() {
             Chromium browser and turn on Developer mode.
           </li>
           <li>Choose “Load unpacked” and pick that folder.</li>
-          <li>Open Bunker Watch from the toolbar and paste your Bunker’s address.</li>
+          <li>Open Quantum Safe Watch from the toolbar and paste your Quantum Safe’s address.</li>
         </ol>
         <p>
           A hand-loaded extension does not update itself. Check this page for

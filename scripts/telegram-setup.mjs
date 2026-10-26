@@ -1,5 +1,5 @@
 // One-time: points the Telegram bot at this site's webhook.
-//   TELEGRAM_BOT_TOKEN=... TELEGRAM_WEBHOOK_SECRET=... node scripts/telegram-setup.mjs https://bunkermode.io
+//   TELEGRAM_BOT_TOKEN=... TELEGRAM_WEBHOOK_SECRET=... node scripts/telegram-setup.mjs https://qsafemode.io
 // Reads secrets from the environment only; prints neither.
 const [site] = process.argv.slice(2);
 const { TELEGRAM_BOT_TOKEN: token, TELEGRAM_WEBHOOK_SECRET: secret } = process.env;
@@ -27,7 +27,7 @@ await call("setWebhook", {
 });
 await call("setMyCommands", {
   commands: [
-    { command: "list", description: "Bunkers you are watching" },
+    { command: "list", description: "Qsafes you are watching" },
     { command: "stop", description: "Stop all alerts" },
   ],
 });

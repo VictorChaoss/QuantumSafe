@@ -8,7 +8,7 @@ Suggested in two phases.
 
 - [PROTOCOL.md](PROTOCOL.md) in full, and its seventeen questions put to reviewers.
 - [INTERNAL-REVIEW.md](INTERNAL-REVIEW.md): the findings of the project's own review and how each was resolved.
-- The LM-OTS implementations (`crates/bunker-lmots`, `sdk/lmots.ts`) against RFC 8554 section 4, and the three choices this use makes: one-time keys chained outside an LMS tree (with `q = 0`, as the RFC requires there), an identifier derived from the vault, and a derived randomizer selected to bound verification cost (CRYPTOGRAPHY.md).
+- The LM-OTS implementations (`crates/qsafe-lmots`, `sdk/lmots.ts`) against RFC 8554 section 4, and the three choices this use makes: one-time keys chained outside an LMS tree (with `q = 0`, as the RFC requires there), an identifier derived from the vault, and a derived randomizer selected to bound verification cost (CRYPTOGRAPHY.md).
 - Whether one fixed, re-emitted recovery signature per epoch is acceptable for that scheme.
 - The HKDF derivation and its context binding.
 - Whether a zero waiting period should be permitted, and as the default.
@@ -16,7 +16,7 @@ Suggested in two phases.
 
 ## Phase 2: implementation, on a frozen tag
 
-- `programs/bunker3`: owner, PDA and alias validation; SOL rent; classic SPL mint, owner, delegate and close-authority checks; CPI; error paths; arithmetic and time boundaries.
+- `programs/qsafe3`: owner, PDA and alias validation; SOL rent; classic SPL mint, owner, delegate and close-authority checks; CPI; error paths; arithmetic and time boundaries.
 - Fuzzing of instruction lengths, account counts, partial proofs, duplicate accounts and adversarial token states.
 - Spent markers and their per-vault scope, the vault-identity hash, rollback of failed transactions, root-reinstallation rejection, and interference between vaults.
 - Exact correspondence of `sdk/v3` and the program, with independent vectors.

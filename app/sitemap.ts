@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-const BASE = "https://bunkermode.io";
+const BASE = "https://qsafemode.io";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     "",

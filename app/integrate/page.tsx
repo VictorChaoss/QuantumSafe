@@ -1,23 +1,23 @@
 import Link from "next/link";
-import { DocumentLayout } from "@/components/bunker/document-layout";
+import { DocumentLayout } from "@/components/qsafe/document-layout";
 export const metadata = {
-  title: "Bunker Mode for trading",
+  title: "Quantum Safe Mode for trading",
   description:
-    "Trade from a hot wallet, keep the rest in a Bunker. How a Bunker sits beside a trading terminal, and what terminal and wallet developers need to support it.",
+    "Trade from a hot wallet, keep the rest in a Quantum Safe. How a Quantum Safe sits beside a trading terminal, and what terminal and wallet developers need to support it.",
 };
 export default function Page() {
   return (
     <DocumentLayout
-      eyebrow="BUNKER MODE"
-      title="Trade from a wallet. Keep it in a Bunker."
-      description="A trading wallet has to be fast, so its key lives somewhere exposed. A Bunker is where the money goes when it is no longer in play."
+      eyebrow="QSAFE MODE"
+      title="Trade from a wallet. Keep it in a Quantum Safe."
+      description="A trading wallet has to be fast, so its key lives somewhere exposed. A Quantum Safe is where the money goes when it is no longer in play."
     >
       <div className="document-callout">
         <h2>Public beta. Program audited.</h2>
         <p>
-          This page describes how Bunker sits beside a trading setup. The
+          This page describes how Quantum Safe sits beside a trading setup. The
           program is live on Solana mainnet and was audited by CertiK. Send
-          assets only to a Bunker you built yourself, never to an address
+          assets only to a Quantum Safe you built yourself, never to an address
           someone gives you.
         </p>
       </div>
@@ -26,14 +26,14 @@ export default function Page() {
         <p>
           Trading terminals, bots and browser wallets hold keys that sign
           quickly and often. That is what makes them useful and what makes
-          them the wallets that get drained. A Bunker is a second place with a
+          them the wallets that get drained. A Quantum Safe is a second place with a
           different rule: anything can be sent <em>in</em> by any wallet, and
-          nothing comes <em>out</em> without the Bunker key, which the trading
+          nothing comes <em>out</em> without the Quantum Safe key, which the trading
           wallet never has.
         </p>
         <p>
           So the habit is simple. Trade from the hot wallet. When you take
-          profit, send it to the Bunker. If the trading wallet is drained
+          profit, send it to the Quantum Safe. If the trading wallet is drained
           tomorrow, what you swept yesterday is not in it.
         </p>
       </section>
@@ -41,7 +41,7 @@ export default function Page() {
         <h2>How it fits a trading setup</h2>
         <ul>
           <li>
-            <strong>Your Bunker has an ordinary Solana address.</strong> Save it
+            <strong>Your Quantum Safe has an ordinary Solana address.</strong> Save it
             as a withdrawal or transfer destination in your terminal, exchange
             or wallet.
           </li>
@@ -49,19 +49,19 @@ export default function Page() {
             <strong>SOL can be sent to it directly</strong> from anywhere.
           </li>
           <li>
-            <strong>Tokens need the Bunker’s token account.</strong> A Bunker
+            <strong>Tokens need the Quantum Safe’s token account.</strong> A Quantum Safe
             address is a program address, and some wallets and terminals
             refuse to send tokens to one. Until they support it, deposit
-            tokens through the Bunker app, which creates the right account.
+            tokens through the Quantum Safe app, which creates the right account.
             Only SOL and classic SPL tokens are supported.
           </li>
           <li>
             <strong>Getting money back out is deliberate.</strong> A
-            withdrawal needs your Bunker key, never the trading wallet’s. The
+            withdrawal needs your Quantum Safe key, never the trading wallet’s. The
             protocol sends at once to addresses you listed as trusted when
-            you built the Bunker, and makes anything else wait so you have
+            you built the Quantum Safe, and makes anything else wait so you have
             time to cancel it. A
-            Bunker is for what you are holding, not for what you need in the
+            Quantum Safe is for what you are holding, not for what you need in the
             next trade.
           </li>
         </ul>
@@ -86,14 +86,14 @@ export default function Page() {
       <section>
         <h2>For terminal and wallet developers</h2>
         <p>
-          Supporting a user’s Bunker needs very little, because deposits are
+          Supporting a user’s Quantum Safe needs very little, because deposits are
           plain transfers and the program has no deposit instruction.
         </p>
         <ul>
           <li>
-            <strong>Send to Bunker.</strong> Let users save a Bunker address
+            <strong>Send to Quantum Safe.</strong> Let users save a Quantum Safe address
             and send SOL with a System transfer. For classic SPL tokens,
-            create the associated token account with the Bunker address as an
+            create the associated token account with the Quantum Safe address as an
             off-curve owner, then transfer. Do not block the destination for
             being a program address.
           </li>
@@ -112,7 +112,7 @@ export default function Page() {
         <p>
           The account layouts are specified in the{" "}
           <a
-            href="https://github.com/plantsweb3/bunker/blob/main/docs/PROTOCOL.md"
+            href="https://github.com/VictorChaoss/QuantumSafe/blob/main/docs/PROTOCOL.md"
             target="_blank"
             rel="noreferrer"
           >
@@ -125,17 +125,17 @@ export default function Page() {
       <section>
         <h2>Planned, not built</h2>
         <p>
-          A deposit link any wallet can open, a “Send to Bunker” action that
+          A deposit link any wallet can open, a “Send to Quantum Safe” action that
           terminals and wallets can render as a button, and a public
-          read-only status lookup for a Bunker address. None of these exist
+          read-only status lookup for a Quantum Safe address. None of these exist
           yet. If you
           build a terminal or a wallet and want to shape them, reach out on{" "}
-          <a href="https://x.com/BunkerModeIO" target="_blank" rel="noreferrer">
+          <a href="https://x.com/QsafeModeIO" target="_blank" rel="noreferrer">
             X
           </a>{" "}
           or open a{" "}
           <a
-            href="https://github.com/plantsweb3/bunker/issues"
+            href="https://github.com/VictorChaoss/QuantumSafe/issues"
             target="_blank"
             rel="noreferrer"
           >
@@ -144,7 +144,7 @@ export default function Page() {
           .
         </p>
         <p>
-          <Link href="/security">What Bunker does and does not stop.</Link>
+          <Link href="/security">What Quantum Safe does and does not stop.</Link>
         </p>
       </section>
     </DocumentLayout>

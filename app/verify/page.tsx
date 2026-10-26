@@ -1,8 +1,8 @@
 import { AUDIT } from "@/lib/audit";
 import Link from "next/link";
-import { DocumentLayout } from "@/components/bunker/document-layout";
-import Verification from "@/components/bunker/verification";
-import ExtensionBuild from "@/components/bunker/extension-build";
+import { DocumentLayout } from "@/components/qsafe/document-layout";
+import Verification from "@/components/qsafe/verification";
+import ExtensionBuild from "@/components/qsafe/extension-build";
 export const metadata = { title: "Verification & review" };
 export default function Page() {
   return (
@@ -22,7 +22,7 @@ export default function Page() {
         </p>
         <div className="actions">
           <a
-            href="https://github.com/plantsweb3/bunker"
+            href="https://github.com/VictorChaoss/QuantumSafe"
               className="button light"
           >
             Download source
@@ -101,7 +101,7 @@ export default function Page() {
           >
             Solana verified-build workflow
           </a>
-          : <code>solana-verify build --library-name bunker3</code> at that
+          : <code>solana-verify build --library-name qsafe3</code> at that
           commit, then <code>solana-verify get-program-hash</code> for the
           program address. Read the program-data account for the upgrade
           authority. An Explorer link alone establishes neither source
@@ -111,7 +111,7 @@ export default function Page() {
       <section id="extension">
         <h2>The browser extension</h2>
         <p>
-          <Link href="/watch">Bunker Watch</Link> is read-only and holds no
+          <Link href="/watch">Quantum Safe Watch</Link> is read-only and holds no
           keys. This is the build this site serves. Compare the hash before
           you load it, and treat any store listing not named here as someone
           else’s.

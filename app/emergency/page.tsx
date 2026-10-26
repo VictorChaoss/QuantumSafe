@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { DocumentLayout } from "@/components/bunker/document-layout";
+import { DocumentLayout } from "@/components/qsafe/document-layout";
 export const metadata = {
   title: "My wallet was drained",
   description:
@@ -10,13 +10,13 @@ export default function Page() {
     <DocumentLayout
       eyebrow="PREPARE. DON’T PANIC."
       title="My wallet was drained."
-      description="What to do in the first hour, in order. This applies whether or not you use Bunker."
+      description="What to do in the first hour, in order. This applies whether or not you use Quantum Safe."
     >
       <div className="document-callout">
         <h2>First: nobody can reverse it for a fee.</h2>
         <p>
           People will message you offering to recover your funds. They are the
-          second scam. No one from Bunker, a wallet, or an exchange will ask
+          second scam. No one from Quantum Safe, a wallet, or an exchange will ask
           for a seed phrase, a recovery kit, or an upfront payment.
         </p>
       </div>
@@ -102,22 +102,22 @@ export default function Page() {
         </p>
       </section>
       <section>
-        <h2>If you have a Bunker</h2>
+        <h2>If you have a Quantum Safe</h2>
         <p>
-          A Bunker is built so that the drained wallet’s key cannot authorize
+          A Quantum Safe is built so that the drained wallet’s key cannot authorize
           a withdrawal from it. What to do next depends on where your day key
           was.
         </p>
         <p>
           <strong>If the day key was never on the compromised device,</strong>{" "}
-          you have time. From a clean device, open your Bunker and withdraw to
+          you have time. From a clean device, open your Quantum Safe and withdraw to
           the <em>new</em> wallet, never back to the drained one. Any wallet
           can pay the network fee.
         </p>
         <p>
           <strong>If the day key or its password was on that device,</strong>{" "}
           act now. Whoever has them can announce a withdrawal, and if your
-          Bunker has no waiting period it leaves at once. The fastest stop is
+          Quantum Safe has no waiting period it leaves at once. The fastest stop is
           your cancel file: from any device, upload it on the{" "}
           <Link href="/recovery">recovery page</Link>. That kills the stolen
           day key and cancels a withdrawal that is still waiting, and it does
@@ -128,7 +128,7 @@ export default function Page() {
           everything immediately instead.
         </p>
         <p>
-          Bunker is a public beta.{" "}
+          Quantum Safe is a public beta.{" "}
           <Link href="/security">Read what it does and does not stop.</Link>
         </p>
       </section>

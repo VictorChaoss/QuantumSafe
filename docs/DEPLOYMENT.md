@@ -2,13 +2,13 @@
 
 ## Public website
 
-The public project is `bunker` on Vercel, connected to `plantsweb3/bunker`, with the canonical domain **https://bunkermode.io**. The `www` hostname redirects to the apex. GitHub is the source of record; `main` is the production branch. `vercel.json` builds the source-download archive and native Next.js application. Use Node 22 and the committed npm lockfile.
+The public project is `qsafe` on Vercel, connected to `VictorChaoss/QuantumSafe`, with the canonical domain **https://qsafemode.io**. The `www` hostname redirects to the apex. GitHub is the source of record; `main` is the production branch. `vercel.json` builds the source-download archive and native Next.js application. Use Node 22 and the committed npm lockfile.
 
-The public release uses Solana mainnet and the one program address in `lib/bunker-config.ts`. No deployment signer, wallet secret, or seed is required to build or publish it. Do not set any `BUNKER_TEST_*`, `BUNKER_LOCAL_GENESIS`, or `BUNKER_ENABLE_TEST_CUSTODY` variables in Vercel production. No environment variable can point the site, the offline tool or the command-line client at a different mainnet program.
+The public release uses Solana mainnet and the one program address in `lib/qsafe-config.ts`. No deployment signer, wallet secret, or seed is required to build or publish it. Do not set any `QSAFE_TEST_*`, `QSAFE_LOCAL_GENESIS`, or `QSAFE_ENABLE_TEST_CUSTODY` variables in Vercel production. No environment variable can point the site, the offline tool or the command-line client at a different mainnet program.
 
 Set `SOLANA_RPC_URL` as a **sensitive, server-only** Vercel production environment variable; reads and submitted transactions both go through it. Never prefix it with `NEXT_PUBLIC_`. The default is Solana's public mainnet RPC, which may be unavailable or rate limited. Redeploy after changing environment variables. Do not paste provider keys into issues, commits, or browser code.
 
-The RPC route uses a fixed configured endpoint, a method allowlist, origin checks, streaming byte limits, deadlines, and pinned genesis verification before any write. Origin checks are not authentication. The route forwards any well-formed transaction for simulation or sending, not only Bunker’s: it limits each client to 40 a minute, which blunts misuse of the provider quota and does not prevent it. Before allocating a paid RPC quota, configure provider spending limits and an edge rate limit for `/api/rpc`; an in-memory limiter on a serverless instance is not a global quota. The frontend contains no analytics or third-party scripts. A per-request nonce authorizes scripts through Content Security Policy. Inline styles remain permitted for UI components.
+The RPC route uses a fixed configured endpoint, a method allowlist, origin checks, streaming byte limits, deadlines, and pinned genesis verification before any write. Origin checks are not authentication. The route forwards any well-formed transaction for simulation or sending, not only Quantum Safe’s: it limits each client to 40 a minute, which blunts misuse of the provider quota and does not prevent it. Before allocating a paid RPC quota, configure provider spending limits and an edge rate limit for `/api/rpc`; an in-memory limiter on a serverless instance is not a global quota. The frontend contains no analytics or third-party scripts. A per-request nonce authorizes scripts through Content Security Policy. Inline styles remain permitted for UI components.
 
 ## Telegram alerts (optional)
 
@@ -42,19 +42,19 @@ Roll back the website through the Vercel deployment dashboard to a previously ch
 
 ## Isolated program testing
 
-The local validator loads `target/deploy/bunker3.so` at a fixed **test-only** address and needs no program private key. `scripts/setup-local.ts` checks the program is present and pins the local genesis hash before creating the ignored `.env.local`. Restart the local app after changing that file; remove it to restore the mainnet read-only configuration. Use a new `BUNKER_LOCAL_LEDGER` directory after rebuilding the program: an existing ledger keeps its old binary.
+The local validator loads `target/deploy/qsafe3.so` at a fixed **test-only** address and needs no program private key. `scripts/setup-local.ts` checks the program is present and pins the local genesis hash before creating the ignored `.env.local`. Restart the local app after changing that file; remove it to restore the mainnet read-only configuration. Use a new `QSAFE_LOCAL_LEDGER` directory after rebuilding the program: an existing ledger keeps its old binary.
 
-Before any test deployment elsewhere, run the workspace Rust tests, regenerate and compare `fixtures/bunker-v3.json`, build the program, run the VM suite, the chain cycles and the browser custody cases, and record the binary's SHA-256. There is no devnet deployment and no tooling for one in this repository. Adding an environment setting that changes the mainnet program is prohibited.
+Before any test deployment elsewhere, run the workspace Rust tests, regenerate and compare `fixtures/qsafe-v3.json`, build the program, run the VM suite, the chain cycles and the browser custody cases, and record the binary's SHA-256. There is no devnet deployment and no tooling for one in this repository. Adding an environment setting that changes the mainnet program is prohibited.
 
 ## The mainnet program
 
-Deployed 2026-10-09 as a public beta, before any audit. CertiK then audited the program and its signature verifier at commit `f6a37ce` and published its report on 2026-10-20 (https://skynet.certik.com/projects/bunker-mode). Upgraded 2026-10-19 to commit `9bb0856`: the program code of commit `f6a37ce` plus one change, which refuses a withdrawal announcement the vault cannot pay (refusal code 126). That change is the fix for the audit's one code finding.
+Deployed 2026-10-09 as a public beta, before any audit. CertiK then audited the program and its signature verifier at commit `f6a37ce` and published its report on 2026-10-20 (https://skynet.certik.com/projects/qsafe). Upgraded 2026-10-19 to commit `9bb0856`: the program code of commit `f6a37ce` plus one change, which refuses a withdrawal announcement the vault cannot pay (refusal code 126). That change is the fix for the audit's one code finding.
 
 | | |
 |---|---|
 | Program | `DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSuLKm2nJJ` |
 | Program data | `Ga1huSvpvaKFg7jiZnRoL89154MbypVdgBQ516UkCV1k` |
-| Built from | commit `9bb08566514b7107f5d226cbf8e591da22092786`, `solana-verify build --library-name bunker3` (solana-verify 0.5.2, Solana 4.3.0) |
+| Built from | commit `9bb08566514b7107f5d226cbf8e591da22092786`, `solana-verify build --library-name qsafe3` (solana-verify 0.5.2, Solana 4.3.0) |
 | Executable hash | `161e6b4caac746dc35115910c2b4d50fe319b97d5a3a4ec39f9b6350adf14518` |
 | Upgrade transaction | `2MS6LVHbKJ99S7TnbC1qzbeB8hN9i62vDeEuf2wK7D5jikov5wkgkKW4eey7wAgEiVQTnFGJQVTHnFSLBAWk9hTr` (2026-10-19) |
 | First deployment | `2A9ztQPhJCG5VUCf3NwJG9gG8d6nek4rJbtMieuRDEZWVPDSU2VaX6Fzmhmc3hEYMKDsF6MJhEoDizVjpGCWTEhj` (2026-10-09, commit `2182e5f`, executable hash `a7f39161…f08f7`) |

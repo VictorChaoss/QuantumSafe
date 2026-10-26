@@ -1,7 +1,7 @@
 import { Connection, PublicKey } from "@solana/web3.js";
 import { writeFile } from "node:fs/promises";
 const c = new Connection("http://127.0.0.1:19099");
-// Fixed TEST-ONLY address; the same one fixtures/bunker-v3.json uses.
+// Fixed TEST-ONLY address; the same one fixtures/qsafe-v3.json uses.
 const program = "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn";
 const genesis = await c.getGenesisHash();
 if (
@@ -12,10 +12,10 @@ if (
 )
   throw new Error("Expected an isolated local validator");
 if (!(await c.getAccountInfo(new PublicKey(program)))?.executable)
-  throw new Error("Local Bunker program missing");
+  throw new Error("Local Quantum Safe program missing");
 await writeFile(
   ".env.local",
-  `BUNKER_ENABLE_TEST_CUSTODY=true\nBUNKER_TEST_NETWORK=localnet\nBUNKER_TEST_RPC_URL=http://127.0.0.1:19099\nBUNKER_TEST_PROGRAM_ID=${program}\nBUNKER_LOCAL_GENESIS=${genesis}\n`,
+  `QSAFE_ENABLE_TEST_CUSTODY=true\nQSAFE_TEST_NETWORK=localnet\nQSAFE_TEST_RPC_URL=http://127.0.0.1:19099\nQSAFE_TEST_PROGRAM_ID=${program}\nQSAFE_LOCAL_GENESIS=${genesis}\n`,
   { mode: 0o600, flag: "wx" },
 );
 console.log(

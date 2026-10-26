@@ -37,8 +37,8 @@ describe("Vault activity", () => {
     // Recovery in the same transaction as anything else is still a recovery.
     expect(kind(tx([5, 2]))).toBe("recovered");
   });
-  it("ignores Bunker instructions that act on a different vault", () => {
-    // Someone recovers a Bunker of their own in a transaction that merely
+  it("ignores Quantum Safe instructions that act on a different vault", () => {
+    // Someone recovers a Quantum Safe of their own in a transaction that merely
     // mentions this one: this vault's log must not show new keys.
     for (const op of [0, 2, 3, 4, 5]) {
       const t = tx([op], [5_000_000, 5_000_001]);
@@ -46,7 +46,7 @@ describe("Vault activity", () => {
       expect(kind(t), `opcode ${op}`).toBe("deposit");
     }
   });
-  it("sees Bunker instructions made through another program", () => {
+  it("sees Quantum Safe instructions made through another program", () => {
     // Base58 "3" is the single byte 0x02 (announce); "4" is 0x03 (execute).
     const wrapped = tx(["system"], [5_000_000, 4_000_000], {
       innerInstructions: [

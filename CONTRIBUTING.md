@@ -1,6 +1,6 @@
 # Contributing
 
-Bunker is an open-source project in public beta on Solana mainnet. It holds real funds. CertiK audited the on-chain program and its signature verifier (report published 2026-10-20); nothing else here has been independently reviewed.
+Quantum Safe is an open-source project in public beta on Solana mainnet. It holds real funds. CertiK audited the on-chain program and its signature verifier (report published 2026-10-20); nothing else here has been independently reviewed.
 
 ## Security issues
 
@@ -24,7 +24,7 @@ Every change must keep these true:
 npm run typecheck && npm run lint && npm test
 cargo test --workspace --locked
 npm run program:build
-(cd programs/bunker3-svm-tests && cargo test --locked)
+(cd programs/qsafe3-svm-tests && cargo test --locked)
 ```
 
 [docs/TESTING.md](docs/TESTING.md) describes the suites that need a local validator.

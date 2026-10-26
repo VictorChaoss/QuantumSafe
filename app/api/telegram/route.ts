@@ -2,7 +2,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { alertsFromEnv, sameSecret, telegramSend } from "@/lib/alerts/config";
 import { handleUpdate } from "@/lib/alerts/commands";
 import { boundedText } from "@/lib/bounded-body";
-import { getConfig, getRpcUrl } from "@/lib/bunker-config";
+import { getConfig, getRpcUrl } from "@/lib/qsafe-config";
 /** Telegram calls this for every message sent to the bot. */
 export async function POST(request: Request) {
   const alerts = alertsFromEnv();

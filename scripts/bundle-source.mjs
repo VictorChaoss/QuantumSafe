@@ -32,7 +32,7 @@ const SKIP_FILES = [/^\.DS_Store$/, /\.log$/, /\.tmp$/, /\.tmp\./, /\.tsbuildinf
 // Must never be published. Finding one inside a published directory is an error.
 const FORBIDDEN = [
   /^\.env(?!\.example$)/, /keypair.*\.json$/i, /^id\.json$/, /\.pem$/, /\.key$/, /\.p12$/, /\.pfx$/,
-  /^id_(rsa|ed25519|ecdsa)/, /\.recovery\.json$/, /^bunker-(?:devnet|test)-.+\.json$/,
+  /^id_(rsa|ed25519|ecdsa)/, /\.recovery\.json$/, /^qsafe-(?:devnet|test)-.+\.json$/,
   /RECOVERY-KIT/i, /day-key/i,
 ];
 const files = [];
@@ -65,7 +65,7 @@ if (process.argv.includes('--list')) {
     manifest.files.push({ path, sha256: createHash('sha256').update(await readFile(path)).digest('hex') });
   await mkdir('public/source', { recursive: true });
   await writeFile('public/source/source-manifest.json', JSON.stringify(manifest, null, 2) + '\n');
-  const r = spawnSync('tar', ['-czf', 'public/source/bunker-source.tar.gz', '--no-recursion', '-T', '-'], {
+  const r = spawnSync('tar', ['-czf', 'public/source/qsafe-source.tar.gz', '--no-recursion', '-T', '-'], {
     env: { ...process.env, COPYFILE_DISABLE: '1' },
     input: files.join('\n') + '\n',
     stdio: ['pipe', 'inherit', 'inherit'],

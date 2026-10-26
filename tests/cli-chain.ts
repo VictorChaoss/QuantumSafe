@@ -17,7 +17,7 @@ import {
   describe,
   journalPath,
   openDayKey,
-  readBunker,
+  readQsafe,
   release,
   resume,
   review,
@@ -31,10 +31,10 @@ const c = new Connection(RPC, "confirmed");
 const genesis = await c.getGenesisHash();
 if (["5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d", "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG"].includes(genesis))
   throw new Error("This test only runs against an isolated local validator");
-if (!(await c.getAccountInfo(PROGRAM))?.executable) throw new Error("Build bunker3.so and start scripts/local-validator.sh");
+if (!(await c.getAccountInfo(PROGRAM))?.executable) throw new Error("Build qsafe3.so and start scripts/local-validator.sh");
 const payer = Keypair.generate();
 await c.confirmTransaction(await c.requestAirdrop(payer.publicKey, 50_000_000_000));
-const dir = mkdtempSync(join(tmpdir(), "bunker-cli-test-"));
+const dir = mkdtempSync(join(tmpdir(), "qsafe-cli-test-"));
 const password = "command line day key password";
 const check = (condition: boolean, what: string) => {
   if (!condition) throw new Error(`FAILED: ${what}`);
@@ -94,8 +94,8 @@ try {
   const day = await openDayKey(path0, password);
   const s = sessionFor(day, RPC, payer, quiet);
   const to = Keypair.generate().publicKey;
-  check(describe(a.vault.toBase58(), await readBunker(s, a.vault)).some((l) => l.includes("Pending: none")), "status");
-  await rejects(() => review(s, day, { to: a.vault.toBase58(), amount: "1" }), "outside this Bunker", "withdraw to the Bunker itself");
+  check(describe(a.vault.toBase58(), await readQsafe(s, a.vault)).some((l) => l.includes("Pending: none")), "status");
+  await rejects(() => review(s, day, { to: a.vault.toBase58(), amount: "1" }), "outside this Quantum Safe", "withdraw to the Quantum Safe itself");
   await rejects(() => review(s, day, { to: PROGRAM.toBase58(), amount: "1" }), "not a wallet", "withdraw to a program");
   await rejects(() => review(s, day, { to: to.toBase58(), amount: "99" }), "At most", "more than the balance");
   const first = await review(s, day, { to: to.toBase58(), amount: "0.5" });
@@ -103,7 +103,7 @@ try {
   check((await c.getBalance(to)) === 500_000_000, "recipient received 0.5 SOL");
   check(existsSync(journalPath(path0)) && !existsSync(`${journalPath(path0)}.lock`), "journal written, lock released");
   check(!readFileSync(journalPath(path0), "utf8").includes(day.seed), "journal holds no seed");
-  // Signing the same review again is refused: the Bunker has moved on.
+  // Signing the same review again is refused: the Quantum Safe has moved on.
   await rejects(() => withdraw(s, day, path0, first), "changed after this withdrawal was reviewed", "stale review");
   check((await c.getBalance(to)) === 500_000_000, "not paid twice");
   check((await resume(s, day, path0)) === "Nothing is waiting to be finished.", "nothing to resume");
@@ -146,10 +146,10 @@ try {
   const pathT = await t.save(0n);
   const dayT = await openDayKey(pathT, password);
   const sT = sessionFor(dayT, RPC, payer, quiet);
-  check(describe(t.vault.toBase58(), await readBunker(sT, t.vault)).some((l) => l.includes(`Trusted address (no wait): ${safe.toBase58()}`)), "status lists trusted addresses");
+  check(describe(t.vault.toBase58(), await readQsafe(sT, t.vault)).some((l) => l.includes(`Trusted address (no wait): ${safe.toBase58()}`)), "status lists trusted addresses");
   const toSafe = await review(sT, dayT, { to: safe.toBase58(), amount: "1" });
   check(toSafe.lines.some((l) => l.includes("trusted address: it leaves immediately")), "review says a trusted address does not wait");
-  check((await withdraw(sT, dayT, pathT, toSafe)).startsWith("Sent."), "trusted address is paid at once on a waiting Bunker");
+  check((await withdraw(sT, dayT, pathT, toSafe)).startsWith("Sent."), "trusted address is paid at once on a waiting Quantum Safe");
   check((await c.getBalance(safe)) === 1_000_000_000, "trusted address received it");
   const toOther = await review(sT, dayT, { to: thief.toBase58(), amount: "1" });
   check(toOther.lines.some((l) => l.includes("after 86400 seconds of waiting")), "review says anyone else waits");
@@ -159,9 +159,9 @@ try {
   // ── The program a user actually runs, with its prompts ───────────────────
   const feeWallet = join(dir, "fee-wallet.json");
   writeFileSync(feeWallet, JSON.stringify(Array.from(payer.secretKey)));
-  // BUNKER_CLI names the single-file build to test instead of the source.
-  const built = process.env.BUNKER_CLI;
-  const [bin, entry] = built ? ["node", [built]] : ["npx", ["tsx", "tools/cli/bunker.ts"]];
+  // QSAFE_CLI names the single-file build to test instead of the source.
+  const built = process.env.QSAFE_CLI;
+  const [bin, entry] = built ? ["node", [built]] : ["npx", ["tsx", "tools/cli/qsafe.ts"]];
   const run = (args: string[], input: string) =>
     spawnSync(bin, [...entry, ...args], { input, encoding: "utf8", timeout: 90_000 });
   const help = run(["help"], "");

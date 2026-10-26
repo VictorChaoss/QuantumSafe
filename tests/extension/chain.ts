@@ -1,7 +1,7 @@
 // A stand-in chain for the extension's tests: it serves vault accounts, the
 // clock and a genesis hash, and counts what was asked of it.
 import { PublicKey } from "@solana/web3.js";
-import { MAINNET_GENESIS, MAINNET_PROGRAM_ID } from "../../lib/bunker-config";
+import { MAINNET_GENESIS, MAINNET_PROGRAM_ID } from "../../lib/qsafe-config";
 import { vaultAddress, VAULT_SIZE } from "../../sdk/v3/protocol";
 
 export const PROGRAM = new PublicKey(MAINNET_PROGRAM_ID);
@@ -21,7 +21,7 @@ export type Sim = {
 export function vaultData(vaultId: Uint8Array, v: Sim) {
   const d = new Uint8Array(VAULT_SIZE);
   const view = new DataView(d.buffer);
-  d.set(new TextEncoder().encode("BUNKER03"));
+  d.set(new TextEncoder().encode("QSAFE03"));
   d.set(vaultId, 8);
   d.set(id(2), 40);
   d.set(id(3), 72);

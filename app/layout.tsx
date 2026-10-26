@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   },
   description:
     "Post-quantum Solana vault powered by 34-chain SHA-256 one-time signatures (RFC 8554 LM-OTS). Your hot wallet key cannot open your vault.",
-  metadataBase: new URL("https://bunkermode.io"),
+  metadataBase: new URL("https://qsafemode.io"),
   openGraph: {
     type: "website",
     siteName: "Quantum Safe",

@@ -29,24 +29,24 @@ The program must be built in the pinned container, not on a developer machine: a
 
 ```sh
 cargo install solana-verify --locked --version 0.5.2
-git clone https://github.com/plantsweb3/bunker && cd bunker && git checkout v1.0.0
-solana-verify build --library-name bunker3
-solana-verify get-executable-hash target/deploy/bunker3.so
+git clone https://github.com/VictorChaoss/QuantumSafe && cd qsafe && git checkout v1.0.0
+solana-verify build --library-name qsafe3
+solana-verify get-executable-hash target/deploy/qsafe3.so
 ```
 
 `solana-verify` builds inside a container image fixed by digest for the Solana version named in the root `Cargo.toml` (`[workspace.metadata.cli]`). Do this on two machines, by two people if there are two. The hashes must be equal, and equal to the hash the `verified-build` job in CI printed for the tag's commit. That job already builds every commit twice, from two separate checkouts, and fails if the two differ.
 
-The `program-vm` job's binary is a different build (same source, tools installed directly on the runner) and has a different hash. It is the one the tests run against; the container build is the one that is deployed. Before deploying, run the VM suite against the container build as well: copy it to `target/deploy/bunker3.so` and run `cargo test --locked` in `programs/bunker3-svm-tests`.
+The `program-vm` job's binary is a different build (same source, tools installed directly on the runner) and has a different hash. It is the one the tests run against; the container build is the one that is deployed. Before deploying, run the VM suite against the container build as well: copy it to `target/deploy/qsafe3.so` and run `cargo test --locked` in `programs/qsafe3-svm-tests`.
 
 Published: the hash, and how to reproduce it (these three lines).
 
 ## 3. Deploy, immutable
 
-The deployer wallet is a fresh hardware-wallet account funded for this purpose. It gains no authority over any Bunker and is not reused.
+The deployer wallet is a fresh hardware-wallet account funded for this purpose. It gains no authority over any Quantum Safe and is not reused.
 
 ```sh
 solana-keygen grind --starts-with BNKR:1          # optional: a recognisable program address
-solana program deploy target/deploy/bunker3.so \
+solana program deploy target/deploy/qsafe3.so \
   --program-id <program-keypair.json> \
   --url mainnet-beta --keypair usb://ledger --final
 ```
@@ -61,9 +61,9 @@ Published: the program address and the deployment transaction.
 
 ```sh
 npm run check:deployment -- --rpc https://api.mainnet-beta.solana.com \
-  --program <address> --binary target/deploy/bunker3.so
+  --program <address> --binary target/deploy/qsafe3.so
 solana-verify verify-from-repo -u https://api.mainnet-beta.solana.com --program-id <address> \
-  https://github.com/plantsweb3/bunker --commit-hash <tag commit> --library-name bunker3
+  https://github.com/VictorChaoss/QuantumSafe --commit-hash <tag commit> --library-name qsafe3
 ```
 
 The first reads the program from the network and must report that the code matches the binary and that upgrades are impossible; it exits non-zero otherwise (`tests/deployment-chain.ts` exercises it against real deployments on a local validator, upgradeable and final). The second rebuilds from the repository and compares with the chain. Ask at least one person outside the project to run both and say so publicly.
@@ -74,7 +74,7 @@ Published: both outputs.
 
 This is a source change, reviewed like any other, in one pull request:
 
-- the program address and mainnet genesis hash in the offline tool (it refuses mainnet until it has a pinned program address) and in `lib/bunker-config.ts`;
+- the program address and mainnet genesis hash in the offline tool (it refuses mainnet until it has a pinned program address) and in `lib/qsafe-config.ts`;
 - the release gate that keeps mainnet custody off. There is deliberately no environment variable for this;
 - `/api/verify` and the site's status wording: audited by whom, report link, program address, binary hash, immutability transaction. Remove "unaudited" only where a report now covers the thing described.
 
@@ -82,8 +82,8 @@ Rebuild the offline tool and the command-line client from the merged commit and 
 
 ## 6. First funds
 
-1. The project's own funds first: build a Bunker, deposit a small amount, withdraw to a trusted address, withdraw to an untrusted address and wait, cancel one by recovery, recover with the kit. On mainnet, with the released tool and site, on a phone and a computer.
-2. Then a cap. State publicly a maximum the project recommends per Bunker for the first period, and say when it will be revisited.
+1. The project's own funds first: build a Quantum Safe, deposit a small amount, withdraw to a trusted address, withdraw to an untrusted address and wait, cancel one by recovery, recover with the kit. On mainnet, with the released tool and site, on a phone and a computer.
+2. Then a cap. State publicly a maximum the project recommends per Quantum Safe for the first period, and say when it will be revisited.
 3. Alerts on. Watch the program's accounts for anything the tests did not predict.
 
 ## 7. If something is wrong after launch

@@ -1,7 +1,7 @@
-import { DocumentLayout } from "@/components/bunker/document-layout";
+import { DocumentLayout } from "@/components/qsafe/document-layout";
 export const metadata = {
   title: "Privacy",
-  description: "What bunkermode.io collects, what leaves your browser, and what it stores.",
+  description: "What qsafemode.io collects, what leaves your browser, and what it stores.",
 };
 export default function Page() {
   return (
@@ -20,7 +20,7 @@ export default function Page() {
           </li>
           <li>No cookies are set by this site.</li>
           <li>
-            Passwords and Bunker keys are never sent to a server. A day key
+            Passwords and Quantum Safe keys are never sent to a server. A day key
             is handled in your browser; a recovery kit is handled only in the
             offline tool and never by this site.
           </li>
@@ -48,14 +48,14 @@ export default function Page() {
         </ul>
       </section>
       <section id="extension">
-        <h2>The Bunker Watch browser extension</h2>
+        <h2>The Quantum Safe Watch browser extension</h2>
         <p>
-          Bunker Watch collects nothing and sends nothing to us. It has no
+          Quantum Safe Watch collects nothing and sends nothing to us. It has no
           account, no analytics and no server of ours behind it.
         </p>
         <ul>
           <li>
-            <strong>What it keeps, in your browser only:</strong> the Bunker
+            <strong>What it keeps, in your browser only:</strong> the Quantum Safe
             addresses you choose to watch, the last public state it read for
             each, a short list of recent alerts, and the RPC address if you
             set your own. Removing the extension removes all of it.
@@ -76,7 +76,7 @@ export default function Page() {
       <section>
         <h2>What is stored on your device</h2>
         <p>
-          When you open a Bunker on this site, the app keeps a record in this
+          When you open a Quantum Safe on this site, the app keeps a record in this
           browser’s local storage of which one-time keys it
           has used and of a signed withdrawal that has not been announced yet,
           so that an interrupted one can be resumed. If you choose passkey
@@ -88,8 +88,8 @@ export default function Page() {
       <section>
         <h2>Telegram alerts</h2>
         <p>
-          Alerts are optional. If you turn them on for a Bunker, the site
-          stores your Telegram chat ID and the address of each Bunker you
+          Alerts are optional. If you turn them on for a Quantum Safe, the site
+          stores your Telegram chat ID and the address of each Quantum Safe you
           watch, so it can message you when something happens there. It stores
           no keys and no wallet address. Telegram, which delivers the
           messages, knows the same. Send <code>/stop</code> to the bot and the
@@ -112,12 +112,12 @@ export default function Page() {
           anything it describes changes, including any alert service that
           needs a contact address. The site’s source is public, so each claim
           here can be checked against the code. Questions:{" "}
-          <a href="https://x.com/BunkerModeIO" target="_blank" rel="noreferrer">
-            @BunkerModeIO
+          <a href="https://x.com/QsafeModeIO" target="_blank" rel="noreferrer">
+            @QsafeModeIO
           </a>{" "}
           or a{" "}
           <a
-            href="https://github.com/plantsweb3/bunker/issues"
+            href="https://github.com/VictorChaoss/QuantumSafe/issues"
             target="_blank"
             rel="noreferrer"
           >

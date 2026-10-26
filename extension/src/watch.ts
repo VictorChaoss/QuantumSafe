@@ -1,4 +1,4 @@
-/** One pass of Bunker Watch, and adding a Bunker to the list.
+/** One pass of Quantum Safe Watch, and adding a Quantum Safe to the list.
  *
  * The comparing is not done here. `snapshotOf` and `diff` are the alert
  * service's own, from lib/alerts/watch.ts, unchanged: an alert comes from
@@ -35,7 +35,7 @@ async function viewOf(address: string, state: VaultState, snapshot: Snapshot, no
     checkedAt: now.toString(),
   };
 }
-/** Checks that `address` is a Bunker of the pinned program on the pinned
+/** Checks that `address` is a Quantum Safe of the pinned program on the pinned
  * network, then starts watching it. A waiting withdrawal that is already
  * there when watching starts is shown, not announced. */
 export async function addVault(kv: store.KV, connection: Reads, raw: string, wallClock = Date.now()): Promise<store.View> {
@@ -43,7 +43,7 @@ export async function addVault(kv: store.KV, connection: Reads, raw: string, wal
   try {
     address = new PublicKey(raw.trim());
   } catch {
-    throw new Error("That is not a Solana address. Paste the Bunker's full address.");
+    throw new Error("That is not a Solana address. Paste the Quantum Safe's full address.");
   }
   await assertGenesis(connection);
   // Refuses anything that is not owned by the program, or whose address is
@@ -64,7 +64,7 @@ export type PassResult = {
   skipped?: "nothing watched" | "waiting to retry";
 };
 const MINUTE = 60_000;
-/** Reads every watched Bunker once. Alerts go to the outbox; see `store.outbox`. */
+/** Reads every watched Quantum Safe once. Alerts go to the outbox; see `store.outbox`. */
 export async function runPass(kv: store.KV, connection: Reads, wallClock = Date.now()): Promise<PassResult> {
   const list = await store.watched(kv);
   const before = await store.status(kv);
@@ -112,8 +112,8 @@ export async function runPass(kv: store.KV, connection: Reads, wallClock = Date.
       e instanceof WrongNetwork
         ? e.message
         : refusals
-          ? "The RPC endpoint asked for fewer requests. Bunker Watch is waiting before it asks again."
-          : "The network could not be read. Bunker Watch will try again in a minute.",
+          ? "The RPC endpoint asked for fewer requests. Quantum Safe Watch is waiting before it asks again."
+          : "The network could not be read. Quantum Safe Watch will try again in a minute.",
       refusals,
     );
     return done();
@@ -130,19 +130,19 @@ export async function runPass(kv: store.KV, connection: Reads, wallClock = Date.
     const address = list[i];
     try {
       const info = infos[i];
-      if (!info || !info.owner.equals(program())) throw new Error("There is no Bunker at this address any more.");
+      if (!info || !info.owner.equals(program())) throw new Error("There is no Quantum Safe at this address any more.");
       const state = parseVault(info.data);
       if (!vaultAddress(program(), state.vaultId).equals(new PublicKey(address)))
-        throw new Error("The account at this address is not the Bunker it claims to be.");
+        throw new Error("The account at this address is not the Quantum Safe it claims to be.");
       const current = snapshotOf(state, BigInt(info.lamports));
       const prior = previous[i];
       const notices = (prior ? diff(prior, current, now) : []).map((event) => noticeOf(address, event, now));
       await store.saveRead(kv, address, current, await viewOf(address, state, current, now), notices, now.toString());
     } catch (e) {
-      await store.markProblem(kv, address, e instanceof Error ? e.message : "This Bunker could not be read.").catch(() => undefined);
+      await store.markProblem(kv, address, e instanceof Error ? e.message : "This Quantum Safe could not be read.").catch(() => undefined);
     }
   }
-  // A Bunker the owner stopped watching while this pass was reading it.
+  // A Quantum Safe the owner stopped watching while this pass was reading it.
   await store.forget(kv, list).catch(() => undefined);
   await store.setStatus(kv, {
     passAt: wallClock,

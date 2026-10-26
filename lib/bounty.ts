@@ -1,14 +1,14 @@
 /** The bug bounty's terms, in one place. Change a payout here and nowhere
  * else. "TBD" means not set yet; the page prints it as written. */
-export const REPORT_URL = "https://github.com/plantsweb3/bunker/security/advisories/new";
+export const REPORT_URL = "https://github.com/VictorChaoss/QuantumSafe/security/advisories/new";
 export type Tier = { name: "Critical" | "High" | "Medium" | "Low"; payout: string; means: string; examples: string[] };
 export const TIERS: Tier[] = [
   {
     name: "Critical",
     payout: "TBD",
-    means: "Funds leave a Bunker without its owner’s keys, or its rules are bypassed.",
+    means: "Funds leave a Quantum Safe without its owner’s keys, or its rules are bypassed.",
     examples: [
-      "Withdraw from a Bunker you don’t control.",
+      "Withdraw from a Quantum Safe you don’t control.",
       "Reuse or forge a one-time-key signature.",
       "Bypass the trusted addresses or the waiting period.",
       "Read a recovery kit’s secret out of the offline tool.",
@@ -17,20 +17,20 @@ export const TIERS: Tier[] = [
   {
     name: "High",
     payout: "TBD",
-    means: "An owner loses control of a Bunker, or signs something they did not see.",
+    means: "An owner loses control of a Quantum Safe, or signs something they did not see.",
     examples: [
-      "Lock a Bunker’s funds so its owner can never withdraw them.",
+      "Lock a Quantum Safe’s funds so its owner can never withdraw them.",
       "Make the site, the offline tool or the command-line client sign something other than what it showed.",
-      "Take a day key or its password out of the site, for example by running your own script on bunkermode.io.",
+      "Take a day key or its password out of the site, for example by running your own script on qsafemode.io.",
       "Cancel or block someone else’s withdrawal or recovery.",
     ],
   },
   {
     name: "Medium",
     payout: "TBD",
-    means: "A Bunker is disrupted or misreported, and no funds move.",
+    means: "A Quantum Safe is disrupted or misreported, and no funds move.",
     examples: [
-      "Stop one Bunker from working for a while.",
+      "Stop one Quantum Safe from working for a while.",
       "Make an alert miss a withdrawal, or report one that did not happen.",
       "Show a wrong balance or a wrong state that could lead an owner to a bad decision.",
     ],

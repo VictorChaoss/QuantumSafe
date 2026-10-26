@@ -1,54 +1,54 @@
-# Chrome Web Store listing for Bunker Watch
+# Chrome Web Store listing for Quantum Safe Watch
 
 Everything the store's forms ask for, written out so that what is submitted is what was reviewed here. The pictures in this folder are drawn by `npm run extension:listing` from the built extension; their numbers are made up and labelled SIMULATION.
 
-The listing is published as item `hdolgpohfdllibcmceaenliegnedeafn`: https://chromewebstore.google.com/detail/bunker-watch/hdolgpohfdllibcmceaenliegnedeafn. `extension/store.json` holds that ID, and `/watch` and `/verify` link to it.
+The listing is published as item `hdolgpohfdllibcmceaenliegnedeafn`: https://chromewebstore.google.com/detail/qsafe-watch/hdolgpohfdllibcmceaenliegnedeafn. `extension/store.json` holds that ID, and `/watch` and `/verify` link to it.
 
 ## What to upload
 
-`public/source/bunker-watch.zip` built from the commit on `main` that the site is serving (`npm ci && npm run extension:build`). Its SHA-256 must equal the one on https://bunkermode.io/verify before it is uploaded.
+`public/source/qsafe-watch.zip` built from the commit on `main` that the site is serving (`npm ci && npm run extension:build`). Its SHA-256 must equal the one on https://qsafemode.io/verify before it is uploaded.
 
 ## Store listing
 
-**Name:** Bunker Watch
+**Name:** Quantum Safe Watch
 
 **Summary** (132 characters at most):
-Get a desktop alert when a withdrawal is announced from your Bunker. Read-only: holds no keys.
+Get a desktop alert when a withdrawal is announced from your Quantum Safe. Read-only: holds no keys.
 
 **Category:** Privacy & Security. **Language:** English.
 
 **Description:**
 
-Get a desktop alert when a withdrawal is announced from your Bunker. Read-only: holds no keys.
+Get a desktop alert when a withdrawal is announced from your Quantum Safe. Read-only: holds no keys.
 
 PUBLIC BETA · READ-ONLY
 
-Bunker is an open-source vault for Solana. A withdrawal to an address you did not list as trusted waits before it can leave, and you can cancel it while it waits. That only helps if you find out in time. Bunker Watch does the finding out, in your own browser.
+Quantum Safe is an open-source vault for Solana. A withdrawal to an address you did not list as trusted waits before it can leave, and you can cancel it while it waits. That only helps if you find out in time. Quantum Safe Watch does the finding out, in your own browser.
 
 What it does
-- Watches up to five Bunkers. You paste an address; it checks that the address is a Bunker.
+- Watches up to five Qsafes. You paste an address; it checks that the address is a Quantum Safe.
 - Reads each one once a minute and compares it with the minute before.
 - When a withdrawal is announced: a desktop notification with the amount and the whole destination address, the hours left on the toolbar badge, and a countdown in the popup.
-- Also tells you when SOL arrives, when a withdrawal leaves, and when a Bunker's keys are replaced.
+- Also tells you when SOL arrives, when a withdrawal leaves, and when a Quantum Safe's keys are replaced.
 - Checks any wallet: what one signature could move, and who can already move it.
 
 What it does not do
-- It holds no keys and cannot send a transaction. It never asks for a key, a seed phrase, a recovery kit or a password. Bunker never does.
-- It does not withdraw, cancel or recover. For those it links to bunkermode.io.
+- It holds no keys and cannot send a transaction. It never asks for a key, a seed phrase, a recovery kit or a password. Quantum Safe never does.
+- It does not withdraw, cancel or recover. For those it links to qsafemode.io.
 - It runs only while your browser is running.
 - Alerts are best effort and can be late or missing. Silence is not proof that nothing happened. If it cannot read the network for five minutes, it tells you.
 - It believes the Solana RPC endpoint it talks to.
 
 Open source and verifiable
-Source: https://github.com/plantsweb3/bunker (the extension is in /extension)
-The published build and its SHA-256: https://bunkermode.io/verify
-How it works and its limits: https://bunkermode.io/watch
+Source: https://github.com/VictorChaoss/QuantumSafe (the extension is in /extension)
+The published build and its SHA-256: https://qsafemode.io/verify
+How it works and its limits: https://qsafemode.io/watch
 
-Bunker protects the withdrawal path, not the chain. Its on-chain program is being audited by CertiK.
+Quantum Safe protects the withdrawal path, not the chain. Its on-chain program is being audited by CertiK.
 
 **Pictures:** `screenshot-1-all-quiet.png` to `screenshot-4-read-only.png` (1280 x 800), `promo-small-440x280.png`, `promo-marquee-1400x560.png`. Store icon: `store-icon-128.png` (96 x 96 of artwork inside 128 x 128, on a dark tile so it shows on the store's white page).
 
-**Official URL:** bunkermode.io (verify the domain in the developer dashboard). **Homepage URL:** https://bunkermode.io/watch. **Support URL:** https://github.com/plantsweb3/bunker/issues
+**Official URL:** qsafemode.io (verify the domain in the developer dashboard). **Homepage URL:** https://qsafemode.io/watch. **Support URL:** https://github.com/VictorChaoss/QuantumSafe/issues
 
 ## Privacy practices tab
 
@@ -69,7 +69,7 @@ Watch the public state of Solana vault accounts the user chooses and notify the 
 
 **Data usage:** the extension does not collect or transmit any of the listed categories of user data. It has no server. The addresses a user watches are sent only to the Solana RPC endpoint the user uses, as queries for public account data. Tick all three certifications (no sale, no unrelated use, no creditworthiness use).
 
-**Privacy policy URL:** https://bunkermode.io/privacy#extension
+**Privacy policy URL:** https://qsafemode.io/privacy#extension
 
 ## Distribution
 

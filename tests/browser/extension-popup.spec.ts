@@ -1,4 +1,4 @@
-// The Bunker Watch popup, drawn from stored readings. The browser-extension
+// The Quantum Safe Watch popup, drawn from stored readings. The browser-extension
 // APIs are replaced by a stand-in and the RPC endpoint by canned answers, so
 // these cases show what the popup does with what the background pass stored,
 // and that it asks the network for nothing but the RPC.
@@ -7,7 +7,7 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 
-const POPUP = `file://${resolve("dist/bunker-watch/popup.html")}`;
+const POPUP = `file://${resolve("dist/qsafe-watch/popup.html")}`;
 const RPC = "https://api.mainnet-beta.solana.com/";
 const MAINNET = "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d";
 const A = "36VASLSKLFD2KokjXG7V28veZvXEsyHRKefLonPaAKzv";
@@ -37,7 +37,7 @@ const waiting = {
 // it is built here only when it is missing, since the two browser projects
 // run side by side and must not both write it.
 test.beforeAll(() => {
-  if (!existsSync("dist/bunker-watch/popup.html"))
+  if (!existsSync("dist/qsafe-watch/popup.html"))
     execFileSync(process.execPath, ["scripts/build-extension.mjs"], { stdio: "ignore" });
 });
 
@@ -94,7 +94,7 @@ const quiet = {
 
 test("first run: nothing watched, and it says what it is", async ({ page }, info) => {
   const seen = await open(page, {});
-  await expect(page.getByRole("heading")).toHaveText("Nothing watched.Add your Bunker.");
+  await expect(page.getByRole("heading")).toHaveText("Nothing watched.Add your Quantum Safe.");
   await expect(page.getByText("It holds no keys and cannot move anything.", { exact: false })).toBeVisible();
   await expect(page.getByText("Silence is not proof", { exact: false })).toBeVisible();
   await page.screenshot({ path: info.outputPath("watch-empty.png") });
@@ -102,13 +102,13 @@ test("first run: nothing watched, and it says what it is", async ({ page }, info
 });
 test("watching, all quiet", async ({ page }, info) => {
   const seen = await open(page, quiet);
-  await expect(page.getByRole("heading")).toHaveText("All quiet.2 Bunkers watched.");
-  const first = page.locator(`[data-bunker="${A}"]`);
-  await expect(first).toContainText("Bunker 36VA…AKzv");
+  await expect(page.getByRole("heading")).toHaveText("All quiet.2 Qsafes watched.");
+  const first = page.locator(`[data-qsafe="${A}"]`);
+  await expect(first).toContainText("Quantum Safe 36VA…AKzv");
   await expect(first).toContainText("12.4");
   await expect(first).toContainText("epoch 1 · next 11");
   await expect(first).toContainText("No withdrawal waiting");
-  await expect(page.locator(`[data-bunker="${B}"]`)).toContainText("epoch 2 · next 4");
+  await expect(page.locator(`[data-qsafe="${B}"]`)).toContainText("epoch 2 · next 4");
   await page.screenshot({ path: info.outputPath("watch-quiet.png") });
   expect(seen).toEqual({ errors: [], requests: [] });
 });
@@ -122,14 +122,14 @@ test("a withdrawal was announced: the cream card, and what to do", async ({ page
   await expect(card).toContainText("3EKkiwNLWqoUbzFkPrmKbtUB4EweE6f4STzevYUmezeL");
   await expect(card).toContainText("Not a trusted address · it waits");
   await expect(card.locator("[data-countdown]")).toContainText(/^23:41:0\d/);
-  await expect(page.getByRole("link", { name: "What to do now →" })).toHaveAttribute("href", "https://bunkermode.io/emergency");
-  await expect(page.getByText("Bunker never asks for your recovery kit or its password.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "What to do now →" })).toHaveAttribute("href", "https://qsafemode.io/emergency");
+  await expect(page.getByText("Quantum Safe never asks for your recovery kit or its password.")).toBeVisible();
   await page.screenshot({ path: info.outputPath("watch-announced.png") });
   // Nothing on the page is red: urgency is in the words and the layout.
   expect(await page.evaluate(() => [...document.querySelectorAll("*")].some((e) => /rgb\((2[0-9]{2}), ([0-9]{1,2}), ([0-9]{1,2})\)/.test(getComputedStyle(e).color + getComputedStyle(e).backgroundColor)))).toBe(false);
   // Saying it was you puts the list back, with the withdrawal still shown as waiting.
   await page.getByRole("button", { name: "It was me" }).click();
-  await expect(page.getByRole("heading")).toHaveText("Withdrawal waiting.2 Bunkers watched.");
+  await expect(page.getByRole("heading")).toHaveText("Withdrawal waiting.2 Qsafes watched.");
   await expect(card).toBeVisible();
   expect(seen).toEqual({ errors: [], requests: [] });
 });

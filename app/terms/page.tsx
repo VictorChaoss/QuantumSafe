@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { DocumentLayout } from "@/components/bunker/document-layout";
+import { DocumentLayout } from "@/components/qsafe/document-layout";
 export const metadata = {
   title: "Terms & risks",
-  description: "The terms for using the Bunker public beta and the risks you accept by using it.",
+  description: "The terms for using the Quantum Safe public beta and the risks you accept by using it.",
 };
 export default function Page() {
   return (
@@ -14,7 +14,7 @@ export default function Page() {
       <div className="document-callout">
         <h2>This is beta software.</h2>
         <p>
-          Bunker runs on Solana mainnet and holds real funds. Its on-chain
+          Quantum Safe runs on Solana mainnet and holds real funds. Its on-chain
           program was audited by CertiK; the website and tools were not part
           of that audit, and no audit is a guarantee. Anything you do with this software or its
           source code is at your own risk. Put in only what you could afford
@@ -22,9 +22,9 @@ export default function Page() {
         </p>
       </div>
       <section>
-        <h2>What Bunker is</h2>
+        <h2>What Quantum Safe is</h2>
         <p>
-          Bunker is open-source software: a website, a browser signing
+          Quantum Safe is open-source software: a website, a browser signing
           library and a Solana program. It is not a bank, broker, exchange,
           custodian or wallet provider. Nobody operating this site holds your
           keys, and the program gives nobody a way to move, freeze or return
@@ -87,7 +87,7 @@ export default function Page() {
           connection, or to test against funds or accounts that are not yours.
           Security research is welcome through{" "}
           <a
-            href="https://github.com/plantsweb3/bunker/security/advisories/new"
+            href="https://github.com/VictorChaoss/QuantumSafe/security/advisories/new"
             target="_blank"
             rel="noreferrer"
           >
@@ -100,8 +100,8 @@ export default function Page() {
       <section>
         <h2>Only one official site</h2>
         <p>
-          Bunker lives at bunkermode.io and its source at
-          github.com/plantsweb3/bunker. Any other site, app, account or token
+          Quantum Safe lives at qsafemode.io and its source at
+          github.com/VictorChaoss/QuantumSafe. Any other site, app, account or token
           using the name is not covered by anything written here unless it is
           linked from this site.
         </p>

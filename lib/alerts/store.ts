@@ -1,6 +1,6 @@
 /** Where alert subscriptions and snapshots live. The production store talks to
  * an Upstash-compatible Redis REST endpoint with plain fetch; nothing here is
- * secret: a Telegram chat id, the Bunker addresses it watches, and the public
+ * secret: a Telegram chat id, the Quantum Safe addresses it watches, and the public
  * state of each as last reported.
  *
  * Subscriptions change only from the Telegram webhook, which is registered
@@ -27,16 +27,16 @@ export interface WatchStore {
 }
 export type Subscribed = "ok" | "chat-limit" | "vault-limit" | "full";
 export const MAX_VAULTS_PER_CHAT = 5;
-/** Anyone can watch any Bunker. This bounds how many messages one event sends. */
+/** Anyone can watch any Quantum Safe. This bounds how many messages one event sends. */
 export const MAX_CHATS_PER_VAULT = 20;
 export const MAX_WATCHED_VAULTS = 5000;
 const K = {
-  vaults: "bunker:watch:vaults",
-  subs: (vault: string) => `bunker:watch:subs:${vault}`,
-  chat: (chat: string) => `bunker:watch:chat:${chat}`,
-  snapshot: (vault: string) => `bunker:watch:state:${vault}`,
-  turn: "bunker:watch:turn",
-  lock: "bunker:watch:lock",
+  vaults: "qsafe:watch:vaults",
+  subs: (vault: string) => `qsafe:watch:subs:${vault}`,
+  chat: (chat: string) => `qsafe:watch:chat:${chat}`,
+  snapshot: (vault: string) => `qsafe:watch:state:${vault}`,
+  turn: "qsafe:watch:turn",
+  lock: "qsafe:watch:lock",
 };
 /** For tests and local runs. */
 export class MemoryStore implements WatchStore {

@@ -14,8 +14,8 @@ import { sha256 } from "@noble/hashes/sha256";
 import { z } from "zod";
 import { hex, unhex } from "../bytes";
 import { DayKey, validateDayKey } from "./kit";
-const PRF_SALT = sha256(new TextEncoder().encode("BUNKER3_PASSKEY_PRF_V1"));
-const KEY_INFO = new TextEncoder().encode("BUNKER3_PASSKEY_AES_V1");
+const PRF_SALT = sha256(new TextEncoder().encode("QSAFE3_PASSKEY_PRF_V1"));
+const KEY_INFO = new TextEncoder().encode("QSAFE3_PASSKEY_AES_V1");
 const record = z
   .object({
     version: z.literal(1),
@@ -29,8 +29,8 @@ const record = z
 export type PasskeyRecord = z.infer<typeof record>;
 type Scope = { genesis: string; program: string };
 type VaultScope = Scope & { vault: string };
-const prefix = (s: Scope) => `bunker3-passkey:${s.genesis}:${s.program}`;
-/** One slot per vault: saving a passkey for one Bunker never replaces another's. */
+const prefix = (s: Scope) => `qsafe3-passkey:${s.genesis}:${s.program}`;
+/** One slot per vault: saving a passkey for one Quantum Safe never replaces another's. */
 const slot = (s: VaultScope) => `${prefix(s)}:${s.vault}`;
 type Prf = { prf?: { enabled?: boolean; results?: { first?: BufferSource } } };
 const bytes = (b: BufferSource) =>
@@ -95,7 +95,7 @@ async function aesKey(prfOutput: Uint8Array) {
   ]);
 }
 const aad = (r: Pick<PasskeyRecord, "credentialId" | "vault" | "epoch">) =>
-  new TextEncoder().encode(`BUNKER3_PASSKEY_V1:${r.credentialId}:${r.vault}:${r.epoch}`);
+  new TextEncoder().encode(`QSAFE3_PASSKEY_V1:${r.credentialId}:${r.vault}:${r.epoch}`);
 async function assertion(credentialId: Uint8Array): Promise<Uint8Array> {
   const got = (await navigator.credentials.get({
     publicKey: {
@@ -116,11 +116,11 @@ export async function savePasskey(day: DayKey): Promise<PasskeyRecord> {
   const created = (await navigator.credentials.create({
     publicKey: {
       challenge: crypto.getRandomValues(new Uint8Array(32)),
-      rp: { name: "Bunker", id: location.hostname },
+      rp: { name: "Quantum Safe", id: location.hostname },
       user: {
         id: crypto.getRandomValues(new Uint8Array(16)),
-        name: `Bunker ${day.vault.slice(0, 8)}`,
-        displayName: `Bunker ${day.vault.slice(0, 8)}`,
+        name: `Quantum Safe ${day.vault.slice(0, 8)}`,
+        displayName: `Quantum Safe ${day.vault.slice(0, 8)}`,
       },
       pubKeyCredParams: [
         { type: "public-key", alg: -7 },
@@ -179,7 +179,7 @@ export async function openPasskey(s: Scope, r: PasskeyRecord): Promise<DayKey> {
     );
     const day = validateDayKey(JSON.parse(new TextDecoder().decode(plain)));
     if (day.vault !== r.vault || day.epoch !== r.epoch || day.genesis !== s.genesis || day.program !== s.program)
-      throw new Error("Saved passkey data does not match its Bunker");
+      throw new Error("Saved passkey data does not match its Quantum Safe");
     return day;
   } catch (e) {
     if (e instanceof Error && e.message.startsWith("Saved passkey")) throw e;

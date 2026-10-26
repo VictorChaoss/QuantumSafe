@@ -1,6 +1,6 @@
-// Checks a deployed Bunker program against a build, from public data alone.
+// Checks a deployed Quantum Safe program against a build, from public data alone.
 //
-//   npm run check:deployment -- --rpc URL --program ADDRESS --binary target/deploy/bunker3.so
+//   npm run check:deployment -- --rpc URL --program ADDRESS --binary target/deploy/qsafe3.so
 //
 // It reads the program from the network and reports three things:
 //   1. the code on-chain is byte for byte the given binary;

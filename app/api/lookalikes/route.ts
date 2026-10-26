@@ -1,5 +1,5 @@
 import { boundedText } from "@/lib/bounded-body";
-import { getConfig, getRpcUrl } from "@/lib/bunker-config";
+import { getConfig, getRpcUrl } from "@/lib/qsafe-config";
 import { findLookalikes, movementOf, type JsonTransaction, type Movement } from "@/lib/poisoning";
 import { clientOf, rateLimiter } from "@/lib/rate-limit";
 

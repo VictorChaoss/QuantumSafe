@@ -1,4 +1,4 @@
-Pictures for Bunker Watch from the watch kit go here. None exist yet.
+Pictures for Quantum Safe Watch from the watch kit go here. None exist yet.
 
 The popup looks for these names and shows nothing where a file is missing:
 

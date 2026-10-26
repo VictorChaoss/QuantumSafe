@@ -1,4 +1,4 @@
-/** The network connection. Bunker Watch talks to one RPC endpoint, the one
+/** The network connection. Quantum Safe Watch talks to one RPC endpoint, the one
  * the user chose or the default, and to nothing else. Before anything an
  * endpoint says is believed, its genesis hash must be the pinned one. */
 import { Connection } from "@solana/web3.js";

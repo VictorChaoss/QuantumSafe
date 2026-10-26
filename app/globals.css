@@ -7,7 +7,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "../vendor/shadcn-tailwind-4.13.0.css";
-@import "./bunker-mode-tokens.css";
+@import "./qsafe-tokens.css";
 :root {
   --background: #080b0e;
   --foreground: #f5f7f6;
@@ -519,7 +519,7 @@ svg {
   height: 17px;
   background: #435e67;
 }
-.bunker-row {
+.qsafe-row {
   border-color: #607c85;
   background: #23323755;
 }
@@ -1119,7 +1119,7 @@ svg {
   }
 }
 
-/* ───────── Bunker Mode: the descent, the door, and the inside ───────── */
+/* ───────── Quantum Safe Mode: the descent, the door, and the inside ───────── */
 body {
   background-color: var(--background);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -1293,7 +1293,7 @@ body {
 }
 
 /* The door: plays once when the vault page loads. */
-.bunker-door {
+.qsafe-door {
   position: fixed;
   inset: 0;
   z-index: 60;
@@ -1302,22 +1302,22 @@ body {
   pointer-events: none;
   animation: door-gone 0.01s linear 1.5s forwards;
 }
-.bunker-door span {
+.qsafe-door span {
   background-color: #0b0f10;
   background-image: linear-gradient(90deg, #0d1214, #12181a);
   animation: door-left 0.9s cubic-bezier(0.7, 0, 0.2, 1) 0.45s forwards;
 }
-.bunker-door span:last-of-type {
+.qsafe-door span:last-of-type {
   background-image: linear-gradient(270deg, #0d1214, #12181a);
   animation-name: door-right;
 }
-.bunker-door i {
+.qsafe-door i {
   width: 2px;
   background: var(--ice);
   box-shadow: 0 0 40px 6px #a9deff66;
   animation: door-slit 1.35s ease-out forwards;
 }
-.bunker-door b {
+.qsafe-door b {
   position: absolute;
   left: 50%;
   bottom: 14vh;
@@ -1668,7 +1668,7 @@ body {
   .door-plate dl {
     gap: 20px;
   }
-  /* Deposit and withdraw stay within reach of a thumb, once a Bunker is open.
+  /* Deposit and withdraw stay within reach of a thumb, once a Quantum Safe is open.
      The sealed panel is short, and a pinned bar would sit on top of its text. */
   .balance-panel.is-open > .actions {
     position: sticky;
@@ -2033,7 +2033,7 @@ body {
   font-size: 13px;
   color: #d4e9eb;
 }
-.button.bunker-mode {
+.button.qsafe {
   border-color: #47686f;
   color: var(--ice);
 }
@@ -2045,7 +2045,7 @@ body {
     grid-column: 1 / -1;
     grid-row: 2;
   }
-  .balance-panel > .actions .button.bunker-mode {
+  .balance-panel > .actions .button.qsafe {
     flex-basis: 100%;
   }
 }
@@ -2271,7 +2271,7 @@ body {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .bunker-door {
+  .qsafe-door {
     display: none;
   }
 }
@@ -2489,7 +2489,7 @@ body {
   position: relative;
   overflow: hidden;
 }
-.stage-bunkered .sim-connector span::after,
+.stage-qsafeed .sim-connector span::after,
 .stage-withdrawn .sim-connector span::after {
   content: "";
   position: absolute;
@@ -3097,8 +3097,8 @@ body {
 .compare-row.today .compare-target {
   color: #eeab9b;
 }
-.compare-row.bunkered .compare-key.ice,
-.compare-row.bunkered .compare-key.ice + svg + .compare-target {
+.compare-row.qsafeed .compare-key.ice,
+.compare-row.qsafeed .compare-key.ice + svg + .compare-target {
   color: #bfe6d9;
 }
 .check-compare > p {
@@ -3998,7 +3998,7 @@ details.advanced .field {
 }
 
 
-/* ── The landing page's animated explainer (components/bunker/story.tsx) ── */
+/* ── The landing page's animated explainer (components/qsafe/story.tsx) ── */
 .story {
   margin: 56px 0 0;
   border: 1px solid #2b3336;
@@ -4110,7 +4110,7 @@ details.advanced .field {
   stroke: var(--ice);
   stroke-width: 2;
 }
-/* Beat one: the coins arrive, and most of them go into the Bunker. */
+/* Beat one: the coins arrive, and most of them go into the Quantum Safe. */
 .story[data-beat="0"] .story-coin:not(.safe) > g > g {
   animation: story-drop 0.5s var(--d) cubic-bezier(0.3, 1.5, 0.5, 1) backwards;
 }
@@ -4137,21 +4137,21 @@ details.advanced .field {
   40% { transform: translateY(-7px); }
 }
 
-.story-bunker {
+.story-qsafe {
   filter: drop-shadow(0 0 9px rgba(169, 222, 255, 0.16));
   transition: filter 0.6s;
 }
-.story-bunker .shell {
+.story-qsafe .shell {
   fill: #101b1b;
   stroke: var(--ice);
   stroke-width: 3;
 }
-.story-bunker .floor {
+.story-qsafe .floor {
   stroke: var(--ice);
   stroke-width: 5;
   stroke-linecap: round;
 }
-.story-bunker .shelf {
+.story-qsafe .shelf {
   stroke: #2c4a48;
   stroke-width: 2;
   stroke-linecap: round;
@@ -4201,7 +4201,7 @@ details.advanced .field {
   from { opacity: 0.9; transform: scale(1); }
   to { opacity: 0; transform: scale(3.4); }
 }
-.story[data-beat="5"] .story-bunker {
+.story[data-beat="5"] .story-qsafe {
   filter: drop-shadow(0 0 16px rgba(169, 222, 255, 0.45));
 }
 
@@ -4364,7 +4364,7 @@ details.advanced .field {
   transition-delay: 2.5s;
 }
 
-/* The thief at the Bunker door, first with the wallet's key and then with the Bunker's own. */
+/* The thief at the Quantum Safe door, first with the wallet's key and then with the Quantum Safe's own. */
 .story[data-beat="3"] .story-lane.with .story-thief,
 .story[data-beat="4"] .story-lane.with .story-thief {
   transform: translate(4px, 80px);
@@ -4382,8 +4382,8 @@ details.advanced .field {
   stroke-width: 2.6;
   stroke-linecap: round;
 }
-.story-key.bunker path,
-.story-key.bunker circle {
+.story-key.qsafe path,
+.story-key.qsafe circle {
   stroke: var(--ice);
 }
 .story-sparks {
@@ -4413,7 +4413,7 @@ details.advanced .field {
   0%, 27%, 36%, 55%, 64%, 100% { opacity: 0; }
   29%, 57% { opacity: 1; }
 }
-.story[data-beat="3"] .story-bunker {
+.story[data-beat="3"] .story-qsafe {
   animation: story-knock 1.9s 0.75s;
 }
 @keyframes story-knock {
@@ -4421,7 +4421,7 @@ details.advanced .field {
   30%, 58% { transform: translateX(-3px); }
   34%, 62% { transform: translateX(2px); }
 }
-.story[data-beat="4"] .story-key.bunker {
+.story[data-beat="4"] .story-key.qsafe {
   animation: story-turn 3s;
 }
 @keyframes story-turn {
@@ -4805,7 +4805,7 @@ details.advanced .field {
   }
 }
 
-/* ── The practice run (components/bunker/practice.tsx) ── */
+/* ── The practice run (components/qsafe/practice.tsx) ── */
 .practice {
   border: 1px solid #2b3336;
   border-radius: 6px;
@@ -4821,14 +4821,14 @@ details.advanced .field {
   overflow: hidden;
 }
 .practice-wallet,
-.practice-bunker {
+.practice-qsafe {
   position: absolute;
   display: flex;
   align-items: flex-start;
   justify-content: center;
 }
 .practice-wallet b,
-.practice-bunker b {
+.practice-qsafe b {
   font: 600 clamp(8px, 0.9vw, 11px) / 1 var(--bm-mono);
   letter-spacing: 0.18em;
   color: #7f8b8e;
@@ -4856,7 +4856,7 @@ details.advanced .field {
   border-radius: 7px 0 0 7px;
   background: #0d1112;
 }
-.practice-bunker {
+.practice-qsafe {
   left: 40%;
   top: 26%;
   width: 26%;
@@ -4868,10 +4868,10 @@ details.advanced .field {
   background: linear-gradient(180deg, rgba(169, 222, 255, 0.13), rgba(169, 222, 255, 0.03));
   box-shadow: 0 0 36px rgba(169, 222, 255, 0.12), inset 0 0 26px rgba(169, 222, 255, 0.08);
 }
-.practice-bunker b {
+.practice-qsafe b {
   color: var(--ice);
 }
-.practice-bunker.knock {
+.practice-qsafe.knock {
   animation: practice-knock 0.5s 0.9s 3;
 }
 @keyframes practice-knock {
@@ -5088,7 +5088,7 @@ details.advanced .field {
     width: 4%;
   }
   .practice-wallet b,
-  .practice-bunker b {
+  .practice-qsafe b {
     font-size: 9px;
   }
   .practice-words {
@@ -5114,7 +5114,7 @@ details.advanced .field {
   }
   .practice-bait,
   .practice-stop,
-  .practice-bunker.knock {
+  .practice-qsafe.knock {
     animation: none !important;
   }
 }
@@ -6318,7 +6318,7 @@ a.door-panel:focus-visible {
 
 
 /* ==========================================================================
-   QUANTUM SAFE: PURE TITANIUM & GLACIAL ICE THEME (BUNKER / APPLE PRO STYLE)
+   QUANTUM SAFE: PURE TITANIUM & GLACIAL ICE THEME (QSAFE / APPLE PRO STYLE)
    ========================================================================== */
 
 .qs-brand {

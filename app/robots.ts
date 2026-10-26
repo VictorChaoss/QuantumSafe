@@ -2,6 +2,6 @@ import type { MetadataRoute } from "next";
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: "*", allow: "/", disallow: "/api/" },
-    sitemap: "https://bunkermode.io/sitemap.xml",
+    sitemap: "https://qsafemode.io/sitemap.xml",
   };
 }

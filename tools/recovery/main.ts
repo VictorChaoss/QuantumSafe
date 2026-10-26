@@ -1,10 +1,10 @@
-/** Bunker offline recovery tool (DRAFT). The only code that handles the
+/** Quantum Safe offline recovery tool (DRAFT). The only code that handles the
  * archival master. It makes no network request: the page's Content Security
  * Policy forbids every connection, and everything it produces is a file the
  * user carries to the website. */
 import { hex, unhex } from "../../sdk/bytes";
 import { address, base58, isWalletAddress, vaultAddressBytes } from "../../sdk/v3/core";
-import { MAINNET_GENESIS, MAINNET_PROGRAM_ID } from "../../lib/bunker-config";
+import { MAINNET_GENESIS, MAINNET_PROGRAM_ID } from "../../lib/qsafe-config";
 import { genesisVault, recoveryPacket, recoveryRoot } from "../../sdk/v3/master";
 import { epochSeed } from "../../sdk/v3/derive";
 import { signerOf, SIGNS_RECOVERY, verifies } from "../../sdk/v3/onetime";
@@ -122,7 +122,7 @@ function run(statusId: string, fn: () => Promise<void>) {
 function epochOf(id: string): bigint {
   const raw = value(id).trim();
   if (!/^(0|[1-9][0-9]{0,18})$/.test(raw))
-    throw new Error("Enter the key generation shown on your Bunker page");
+    throw new Error("Enter the key generation shown on your Quantum Safe page");
   return BigInt(raw);
 }
 
@@ -137,21 +137,21 @@ function dayPassword(id: string, repeatId: string, kitPassword: string) {
     throw new Error("The day key needs a different password from the recovery kit");
   return password;
 }
-/** Solana mainnet's genesis hash, and the one Bunker program on it. The tool
+/** Solana mainnet's genesis hash, and the one Quantum Safe program on it. The tool
  * decides which kind of network it is looking at from these, not from the
  * label in the file it was handed, and builds nothing on mainnet for any
  * other program address. */
 function onlyPublished(k: { genesis: string; program: string }, what: string) {
   if (k.genesis === MAINNET_GENESIS && k.program !== MAINNET_PROGRAM_ID)
-    throw new Error(`On mainnet this tool works only with the published Bunker program. ${what} names another.`);
+    throw new Error(`On mainnet this tool works only with the published Quantum Safe program. ${what} names another.`);
 }
 const describe = (k: { network: string; genesis: string; program: string }) =>
   `${
     k.genesis !== MAINNET_GENESIS
       ? "TEST NETWORK. Nothing built here holds real funds."
       : k.program === MAINNET_PROGRAM_ID
-        ? "MAINNET. This Bunker will hold real funds. Public beta, not audited."
-        : "MAINNET, BUT NOT THE BUNKER PROGRAM. Do not use this card."
+        ? "MAINNET. This Quantum Safe will hold real funds. Public beta, not audited."
+        : "MAINNET, BUT NOT THE QSAFE PROGRAM. Do not use this card."
   }\nNetwork: ${k.network}\nGenesis: ${k.genesis}\nProgram: ${k.program}`;
 $("card").addEventListener("change", () => {
   read(file("card"), "the network card")
@@ -198,11 +198,11 @@ function policyText(): string {
   }
   const wait = Number(value("delay"));
   const period = $<HTMLSelectElement>("delay").selectedOptions[0].text.toLowerCase();
-  const fixed = " None of this can be changed for this Bunker later.";
+  const fixed = " None of this can be changed for this Quantum Safe later.";
   if (wait === 0)
-    return `I understand that this Bunker has no waiting period: anyone who gets my day key and its password can send everything anywhere, at once, and I will have no chance to cancel.${fixed}`;
+    return `I understand that this Quantum Safe has no waiting period: anyone who gets my day key and its password can send everything anywhere, at once, and I will have no chance to cancel.${fixed}`;
   if (trusted.length === 0)
-    return `I understand that every withdrawal from this Bunker will take ${period} to arrive, with no way to speed one up, because I have listed no trusted address.${fixed}`;
+    return `I understand that every withdrawal from this Quantum Safe will take ${period} to arrive, with no way to speed one up, because I have listed no trusted address.${fixed}`;
   return `I understand that withdrawals to my ${trusted.length === 1 ? "trusted address arrive" : `${trusted.length} trusted addresses arrive`} at once, that withdrawals to any other address take ${period}, and that I have checked every character of ${trusted.length === 1 ? "that address" : "those addresses"}.${fixed}`;
 }
 /** The exact sentence that was on screen when the box was ticked. */
@@ -235,13 +235,13 @@ $("create").addEventListener(
     // The statement accepted must be the one that describes what is about to
     // be built, not one a browser restored from an earlier visit.
     if (!checked("policy-ack") || accepted !== policyText())
-      throw new Error("Read and tick the statement about where this Bunker may send");
+      throw new Error("Read and tick the statement about where this Quantum Safe may send");
     const program = address(card.program);
     const salt = crypto.getRandomValues(new Uint8Array(32));
     const master = crypto.getRandomValues(new Uint8Array(32));
     const delaySecs = Number(value("delay"));
     // The address is a hash of the keys and the waiting period, so nobody
-    // else can create this Bunker with different ones.
+    // else can create this Quantum Safe with different ones.
     const { d } = genesisVault(master, {
       chainTag: address(card.genesis),
       programId: program,
@@ -356,7 +356,7 @@ async function openKit() {
     await read(file("kit"), "your recovery kit"),
     value("kit-password"),
   );
-  $("kit-echo").textContent = `${describe(kit)}\nBunker: ${kit.vault}`;
+  $("kit-echo").textContent = `${describe(kit)}\nQsafe: ${kit.vault}`;
   $("kit-box").hidden = false;
   onlyPublished(kit, "This kit");
   return kit;
@@ -395,7 +395,7 @@ $("check-kit").addEventListener(
       : "no trusted addresses";
     say(
       "recover-status",
-      `This kit opens with that password. It is for Bunker ${kit.vault}, with ${trusted}. Nothing was created or changed.`,
+      `This kit opens with that password. It is for Quantum Safe ${kit.vault}, with ${trusted}. Nothing was created or changed.`,
       "ok",
     );
   }),

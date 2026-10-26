@@ -22,7 +22,7 @@ export function noticeOf(vault: string, e: WatchEvent, now: bigint): Notice {
       urgent: true,
       title: "Withdrawal announced",
       message: [
-        `A withdrawal was announced from Bunker ${short(vault)}.`,
+        `A withdrawal was announced from Quantum Safe ${short(vault)}.`,
         // The amount and the whole destination, in the alert service's words.
         `${lines[1]}.`,
         opens > now ? `Opens in ${formatDuration(opens - now)}.` : "It can be released now.",
@@ -40,8 +40,8 @@ export const blindNotice = (since: number): Notice => ({
   vault: "",
   kind: "blind",
   urgent: true,
-  title: "Bunker Watch cannot read the network",
-  message: `It has not been able to check your Bunkers for several minutes, so it would not see a withdrawal being announced. Check your connection or the RPC endpoint in Settings, or look at your Bunker on bunkermode.io. ${NEVER_ASKS}`,
+  title: "Quantum Safe Watch cannot read the network",
+  message: `It has not been able to check your Qsafes for several minutes, so it would not see a withdrawal being announced. Check your connection or the RPC endpoint in Settings, or look at your Quantum Safe on qsafemode.io. ${NEVER_ASKS}`,
 });
 export const ICE = "#A9DEFF";
 export const CREAM = "#EAE7DF";

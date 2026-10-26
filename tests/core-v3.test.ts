@@ -8,7 +8,7 @@ import { proofAddress, recoverMessage, spentAddress, vaultAddress } from "../sdk
 /** `sdk/v3/core.ts` derives addresses with no Solana library, for the offline
  * tool. Here it is held against `@solana/web3.js`, an independent
  * implementation, on fixed and pseudo-random inputs. */
-const fixture = JSON.parse(readFileSync("fixtures/bunker-v3.json", "utf8"));
+const fixture = JSON.parse(readFileSync("fixtures/qsafe-v3.json", "utf8"));
 let state = 0x9e3779b9;
 const next = () => {
   state ^= state << 13;
@@ -73,7 +73,7 @@ describe("Addresses without a Solana library", () => {
     for (let i = 0; i < 400; i++) {
       const programId = new PublicKey(random32());
       const id = random32();
-      const [expected, bump] = PublicKey.findProgramAddressSync([Buffer.from("bunker3"), id], programId);
+      const [expected, bump] = PublicKey.findProgramAddressSync([Buffer.from("qsafe3"), id], programId);
       if (bump < 255) lowBumps++;
       expect(base58(vaultAddressBytes(programId.toBytes(), id))).toBe(expected.toBase58());
       expect(vaultAddress(programId, id).toBase58()).toBe(expected.toBase58());

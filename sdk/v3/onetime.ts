@@ -1,4 +1,4 @@
-/** How Bunker uses LM-OTS (docs/PROTOCOL.md §1.3): which identifier each key
+/** How Quantum Safe uses LM-OTS (docs/PROTOCOL.md §1.3): which identifier each key
  * signs under, where the randomizer comes from, and the limit the program puts
  * on verification cost. */
 import { hkdf } from "@noble/hashes/hkdf";
@@ -24,8 +24,8 @@ export const VERIFY_STEP_LIMIT = 4080;
 export const SIGNS_ANNOUNCEMENTS = 1;
 export const SIGNS_RECOVERY = 2;
 const text = (s: string) => new TextEncoder().encode(s);
-const IDENTIFIER_DOMAIN = text("BUNKER3_LMOTS_ID");
-const RANDOMIZER_LABEL = text("BUNKER-LMOTS-C");
+const IDENTIFIER_DOMAIN = text("QSAFE3_LMOTS_ID");
+const RANDOMIZER_LABEL = text("QSAFE-LMOTS-C");
 const NO_SALT = new Uint8Array(0);
 /** What a signer's identifier is computed from. All three are public. */
 export type SignerContext = { programId: Uint8Array; chainTag: Uint8Array; salt: Uint8Array };

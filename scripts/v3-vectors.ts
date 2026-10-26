@@ -1,6 +1,6 @@
 // PUBLIC TEST MATERIAL ONLY. Reproducible protocol-3 derivation, encoding and
 // signature vectors from the TypeScript client. Never fund these keys.
-//   npx tsx scripts/v3-vectors.ts > fixtures/bunker-v3.json
+//   npx tsx scripts/v3-vectors.ts > fixtures/qsafe-v3.json
 import { PublicKey } from "@solana/web3.js";
 import { sha256 } from "@noble/hashes/sha256";
 import { hex } from "../sdk/bytes";

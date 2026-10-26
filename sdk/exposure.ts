@@ -31,7 +31,7 @@ export type Exposure = {
   approvals: TokenHolding[];
   /** Balances the token's own issuer can move without any signature here. */
   issuerMovable: TokenHolding[];
-  /** Movable holdings Bunker's program supports (classic SPL only). */
+  /** Movable holdings Quantum Safe's program supports (classic SPL only). */
   supported: TokenHolding[];
   unsupported: TokenHolding[];
   frozen: number;

@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 it("source archives exclude key files and exchanged files", () => {
-  const dir = mkdtempSync(join(tmpdir(), "bunker-source-test-"));
+  const dir = mkdtempSync(join(tmpdir(), "qsafe-source-test-"));
   try {
     writeFileSync(join(dir, "README.md"), "Public source fixture");
     // Files nobody listed are not published, whatever they are called.
@@ -13,12 +13,12 @@ it("source archives exclude key files and exchanged files", () => {
     mkdirSync(join(dir, "downloads"));
     writeFileSync(join(dir, "downloads", "my-kit.json"), "DO NOT PUBLISH");
     for (const name of [
-      "bunker-test-RECOVERY-KIT-7ayn5V2r.json",
-      "bunker-test-day-key-7ayn5V2r-epoch-0.json",
-      "bunker-test-creation-request-7ayn5V2r.json",
-      "bunker-test-recovery-packet-7ayn5V2r-epoch-0.json",
-      "bunker-test-network-card-localnet.json",
-      "bunker-devnet-public-0.json",
+      "qsafe-test-RECOVERY-KIT-7ayn5V2r.json",
+      "qsafe-test-day-key-7ayn5V2r-epoch-0.json",
+      "qsafe-test-creation-request-7ayn5V2r.json",
+      "qsafe-test-recovery-packet-7ayn5V2r-epoch-0.json",
+      "qsafe-test-network-card-localnet.json",
+      "qsafe-devnet-public-0.json",
       "test.recovery.json",
       ".env.local",
       "shot.tmp.mjs",
@@ -38,7 +38,7 @@ it("source archives exclude key files and exchanged files", () => {
     ]);
     const archive = spawnSync(
       "tar",
-      ["-tzf", join(dir, "public/source/bunker-source.tar.gz")],
+      ["-tzf", join(dir, "public/source/qsafe-source.tar.gz")],
       { encoding: "utf8" },
     );
     expect(archive.status).toBe(0);
@@ -49,7 +49,7 @@ it("source archives exclude key files and exchanged files", () => {
 });
 it("stops, rather than skips, when key material sits inside a published directory", () => {
   for (const name of [
-    "bunker-test-RECOVERY-KIT-7ayn5V2r.json",
+    "qsafe-test-RECOVERY-KIT-7ayn5V2r.json",
     "deploy-keypair.json",
     "id.json",
     ".env.production",
@@ -62,7 +62,7 @@ it("stops, rather than skips, when key material sits inside a published director
     "old-day-key.json",
     ".npmrc",
   ]) {
-    const dir = mkdtempSync(join(tmpdir(), "bunker-source-test-"));
+    const dir = mkdtempSync(join(tmpdir(), "qsafe-source-test-"));
     try {
       mkdirSync(join(dir, "docs"));
       writeFileSync(join(dir, "docs", name), "DO NOT PUBLISH");
@@ -70,12 +70,12 @@ it("stops, rather than skips, when key material sits inside a published director
       expect(build.status, name).not.toBe(0);
       expect(build.stderr, name).toContain("Refusing to publish");
       expect(build.stderr, name).toContain(`docs/${name}`);
-      expect(existsSync(join(dir, "public/source/bunker-source.tar.gz")), name).toBe(false);
+      expect(existsSync(join(dir, "public/source/qsafe-source.tar.gz")), name).toBe(false);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
   }
-  const dir = mkdtempSync(join(tmpdir(), "bunker-source-test-"));
+  const dir = mkdtempSync(join(tmpdir(), "qsafe-source-test-"));
   try {
     writeFileSync(join(dir, ".npmrc"), "//registry.npmjs.org/:_authToken=abc\n");
     const build = spawnSync(process.execPath, [resolve("scripts/bundle-source.mjs")], { cwd: dir, encoding: "utf8" });

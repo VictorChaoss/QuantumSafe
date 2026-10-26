@@ -1,4 +1,4 @@
-/** Everything Bunker Watch remembers. All of it is public chain data or a
+/** Everything Quantum Safe Watch remembers. All of it is public chain data or a
  * setting: there is no key, password or file of any kind in here.
  *
  * It is written against a three-method store so the same code runs on
@@ -26,18 +26,18 @@ export function memoryStore(seed: Record<string, unknown> = {}): KV & { data: Ma
   };
 }
 
-/** What the popup shows for one Bunker, as of the last successful read. */
+/** What the popup shows for one Quantum Safe, as of the last successful read. */
 export type View = {
   address: string;
   lamports: string;
   epoch: string;
   opIndex: string;
   delaySecs: number;
-  /** A waiting withdrawal, and whether it goes to one of the Bunker's trusted addresses. */
+  /** A waiting withdrawal, and whether it goes to one of the Quantum Safe's trusted addresses. */
   pending: (PendingView & { trusted: boolean }) | null;
   /** Chain time of the read, in seconds. */
   checkedAt: string;
-  /** Set when the last pass could not read this Bunker. The rest is then from an earlier pass. */
+  /** Set when the last pass could not read this Quantum Safe. The rest is then from an earlier pass. */
   problem?: string;
 };
 /** An alert that has been decided on and not yet shown. */
@@ -65,7 +65,7 @@ export type Status = {
   refusals: number;
   /** Wall-clock milliseconds since which no pass has read the network. */
   failingSince: number | null;
-  /** The owner has been told that Bunker Watch cannot see. */
+  /** The owner has been told that Quantum Safe Watch cannot see. */
   toldBlind: boolean;
 };
 /** After this long without a reading, the badge and a notification say so. */
@@ -92,11 +92,11 @@ export async function watched(kv: KV): Promise<string[]> {
   const list = await one<unknown>(kv, "watched", []);
   return Array.isArray(list) ? list.filter((a): a is string => typeof a === "string" && ADDRESS.test(a)).slice(0, MAX_WATCHED) : [];
 }
-/** Starts watching a Bunker that has just been read and checked. */
+/** Starts watching a Quantum Safe that has just been read and checked. */
 export async function watch(kv: KV, address: string, snapshot: Snapshot, view: View) {
   const list = await watched(kv);
-  if (list.includes(address)) throw new Error("You are already watching that Bunker.");
-  if (list.length >= MAX_WATCHED) throw new Error(`You can watch up to ${MAX_WATCHED} Bunkers. Stop watching one first.`);
+  if (list.includes(address)) throw new Error("You are already watching that Quantum Safe.");
+  if (list.length >= MAX_WATCHED) throw new Error(`You can watch up to ${MAX_WATCHED} Qsafes. Stop watching one first.`);
   await kv.set({ watched: [...list, address], [snapKey(address)]: snapshot, [viewKey(address)]: view });
 }
 export async function unwatch(kv: KV, address: string) {
@@ -136,7 +136,7 @@ export async function saveRead(kv: KV, address: string, snapshot: Snapshot, view
 export const outbox = (kv: KV) => one<Notice[]>(kv, "outbox", []);
 export const queue = async (kv: KV, notice: Notice) => kv.set({ outbox: [...(await outbox(kv)).filter((n) => n.id !== notice.id), notice] });
 export const shown = async (kv: KV, id: string) => kv.set({ outbox: (await outbox(kv)).filter((n) => n.id !== id) });
-/** Forgets readings of Bunkers that are no longer watched. */
+/** Forgets readings of Qsafes that are no longer watched. */
 export async function forget(kv: KV, addresses: string[]) {
   const kept = await watched(kv);
   const gone = addresses.filter((a) => !kept.includes(a));

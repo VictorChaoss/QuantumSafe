@@ -5,7 +5,7 @@ import { handleUpdate } from "../lib/alerts/commands";
 import { eventText, FOOTER } from "../lib/alerts/messages";
 import { MAX_CHATS_PER_VAULT, MAX_VAULTS_PER_CHAT, MemoryStore } from "../lib/alerts/store";
 import { diff, runWatch, Snapshot, WatchEvent } from "../lib/alerts/watch";
-import { configFromEnv } from "../lib/bunker-config";
+import { configFromEnv } from "../lib/qsafe-config";
 import { vaultAddress, VAULT_SIZE } from "../sdk/v3/protocol";
 const program = new PublicKey(new Uint8Array(32).fill(11));
 const id = (n: number) => new Uint8Array(32).fill(n);
@@ -18,7 +18,7 @@ type Sim = { epoch: bigint; opIndex: bigint; lamports: number; pending: Record |
 function vaultData(vaultId: Uint8Array, v: Sim) {
   const d = new Uint8Array(VAULT_SIZE);
   const view = new DataView(d.buffer);
-  d.set(new TextEncoder().encode("BUNKER03"));
+  d.set(new TextEncoder().encode("QSAFE03"));
   d.set(vaultId, 8);
   d.set(id(2), 40);
   d.set(id(3), 72);
@@ -135,7 +135,7 @@ describe("Alert watcher", () => {
     expect(await watch(store, c, sent, "blocked")).toMatchObject({ events: 1, messages: 1, errors: 1 });
     expect((await watch(store, c, sent, "blocked")).messages).toBe(0);
   });
-  it("reports an account that stopped being a Bunker as an error, not an event", async () => {
+  it("reports an account that stopped being a Quantum Safe as an error, not an event", async () => {
     const c = chain();
     const store = new MemoryStore();
     await store.subscribe("100", vault.toBase58(), null);
@@ -286,7 +286,7 @@ describe("Alert wording", () => {
       expect(text.endsWith(FOOTER), e.kind).toBe(true);
       expect(text).not.toMatch(/[<>*_`\[\]]/); // nothing that reads as markup
     }
-    expect(eventText(vault.toBase58(), events[1], 0n, null)).toContain("bunkermode.io/recovery");
+    expect(eventText(vault.toBase58(), events[1], 0n, null)).toContain("qsafemode.io/recovery");
     expect(eventText(vault.toBase58(), events[1], 0n, null)).toContain("42 base units of token");
     expect(eventText(vault.toBase58(), events[3], 0n, null)).toContain("2 withdrawals left");
     expect(eventText(vault.toBase58(), events[6], 0n, null)).toContain("Withdraw everything");
@@ -303,19 +303,19 @@ describe("Bot commands", () => {
   });
   const say = (text: unknown, chat: unknown = { id: 100, type: "private" }) =>
     ({ message: { text, chat } }) as never;
-  it("subscribes only to a real Bunker, from a private chat", async () => {
+  it("subscribes only to a real Quantum Safe, from a private chat", async () => {
     const store = new MemoryStore();
     const ok = await handleUpdate(say(`/start ${vault.toBase58()}`), deps(store));
     expect(ok?.chat).toBe("100");
-    expect(ok?.text).toContain("Watching Bunker");
+    expect(ok?.text).toContain("Watching Quantum Safe");
     expect(ok?.text).toContain("Silence is not proof");
     expect(await store.vaultsOf("100")).toEqual([vault.toBase58()]);
-    // Watching starts from the state the Bunker is in when it is subscribed.
+    // Watching starts from the state the Quantum Safe is in when it is subscribed.
     expect(JSON.parse((await store.snapshot(vault.toBase58()))!)).toMatchObject({ epoch: "0", lamports: "9000000", pending: null });
     const notVault = await handleUpdate(say(`/start ${payer.toBase58()}`), deps(store));
-    expect(notVault?.text).toContain("not a Bunker");
+    expect(notVault?.text).toContain("not a Quantum Safe");
     for (const bad of ["/start", "/start not-an-address", "/start <b>x</b>", `/start ${"1".repeat(60)}`])
-      expect((await handleUpdate(say(bad), deps(store)))?.text).toContain("Open your Bunker");
+      expect((await handleUpdate(say(bad), deps(store)))?.text).toContain("Open your Quantum Safe");
     expect(await store.vaultsOf("100")).toHaveLength(1);
     // Groups, channels, non-text and malformed updates are ignored entirely.
     for (const update of [
@@ -335,14 +335,14 @@ describe("Bot commands", () => {
     const over = await handleUpdate(say(`/start ${vaultAddress(program, id(6)).toBase58()}`), d);
     expect(over?.text).toContain(`up to ${MAX_VAULTS_PER_CHAT}`);
     expect((await handleUpdate(say("/list"), d))?.text.split("\n").filter((l) => l.length > 40)).toHaveLength(MAX_VAULTS_PER_CHAT);
-    // One Bunker cannot collect unlimited watchers, and the reply says which limit it was.
+    // One Quantum Safe cannot collect unlimited watchers, and the reply says which limit it was.
     const crowd = new MemoryStore();
     for (let n = 0; n < MAX_CHATS_PER_VAULT; n++)
       expect(await crowd.subscribe(`chat-${n}`, vault.toBase58(), null)).toBe("ok");
     expect(await crowd.subscribe("one-more", vault.toBase58(), null)).toBe("vault-limit");
     expect(await crowd.subscribe("chat-0", vault.toBase58(), null)).toBe("ok");
     expect((await handleUpdate(say(`/start ${vault.toBase58()}`, { id: 999, type: "private" }), deps(crowd)))?.text).toContain("as many watchers");
-    expect((await handleUpdate(say("/stop"), d))?.text).toContain(`${MAX_VAULTS_PER_CHAT} Bunker`);
+    expect((await handleUpdate(say("/stop"), d))?.text).toContain(`${MAX_VAULTS_PER_CHAT} Quantum Safe`);
     expect(await store.vaultsOf("100")).toEqual([]);
     expect(await store.nextVaults(10)).toEqual([]);
     expect((await handleUpdate(say("/stop"), d))?.text).toContain("not watching");
@@ -352,24 +352,24 @@ describe("Bot commands", () => {
 describe("Alert configuration", () => {
   const full = {
     TELEGRAM_BOT_TOKEN: "1:abc",
-    TELEGRAM_BOT_USERNAME: "BunkerAlertsBot",
+    TELEGRAM_BOT_USERNAME: "QsafeAlertsBot",
     TELEGRAM_WEBHOOK_SECRET: "w".repeat(24),
     CRON_SECRET: "c".repeat(24),
     KV_REST_API_URL: "https://store.example",
     KV_REST_API_TOKEN: "t",
   };
   it("is off unless every piece is present and well formed", () => {
-    expect(alertsFromEnv(full)?.botUsername).toBe("BunkerAlertsBot");
+    expect(alertsFromEnv(full)?.botUsername).toBe("QsafeAlertsBot");
     for (const key of Object.keys(full)) expect(alertsFromEnv({ ...full, [key]: undefined }), key).toBeNull();
     expect(alertsFromEnv({ ...full, CRON_SECRET: "short" })).toBeNull();
     expect(alertsFromEnv({ ...full, TELEGRAM_BOT_USERNAME: "bad name" })).toBeNull();
     expect(() => alertsFromEnv({ ...full, KV_REST_API_URL: "http://store.example" })).toThrow("HTTPS");
   });
   it("is advertised only when every piece is configured", () => {
-    expect(configFromEnv(full).alertsBot).toBe("BunkerAlertsBot");
+    expect(configFromEnv(full).alertsBot).toBe("QsafeAlertsBot");
     expect(configFromEnv({ ...full, CRON_SECRET: undefined }).alertsBot).toBeNull();
-    const test = { ...full, BUNKER_ENABLE_TEST_CUSTODY: "true", BUNKER_TEST_NETWORK: "localnet", BUNKER_TEST_PROGRAM_ID: "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn" };
-    expect(configFromEnv(test).alertsBot).toBe("BunkerAlertsBot");
+    const test = { ...full, QSAFE_ENABLE_TEST_CUSTODY: "true", QSAFE_TEST_NETWORK: "localnet", QSAFE_TEST_PROGRAM_ID: "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn" };
+    expect(configFromEnv(test).alertsBot).toBe("QsafeAlertsBot");
     expect(configFromEnv({ ...test, CRON_SECRET: undefined }).alertsBot).toBeNull();
     // Never advertised in a state where the alert service itself would be off.
     for (const weak of [{ CRON_SECRET: "short" }, { TELEGRAM_WEBHOOK_SECRET: "short" }]) {

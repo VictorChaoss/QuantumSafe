@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { Keypair } from "@solana/web3.js";
-import { configFromEnv, getRpcUrl, MAINNET_GENESIS, MAINNET_PROGRAM_ID, DEVNET_GENESIS } from "../lib/bunker-config";
+import { configFromEnv, getRpcUrl, MAINNET_GENESIS, MAINNET_PROGRAM_ID, DEVNET_GENESIS } from "../lib/qsafe-config";
 import { sessionFor } from "../tools/cli/lib";
 import { fileName } from "../sdk/v3/kit";
 import { transition } from "../sdk/demo";
@@ -29,9 +29,9 @@ describe("Release gate", () => {
     (mode) => {
       expect(
         configFromEnv({
-          BUNKER_ENABLE_TEST_CUSTODY: "true",
-          BUNKER_TEST_NETWORK: mode,
-          BUNKER_TEST_PROGRAM_ID: "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn",
+          QSAFE_ENABLE_TEST_CUSTODY: "true",
+          QSAFE_TEST_NETWORK: mode,
+          QSAFE_TEST_PROGRAM_ID: "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn",
         }),
       ).toMatchObject(off);
     },
@@ -39,14 +39,14 @@ describe("Release gate", () => {
   it("a test setup with a malformed program id sends nothing", () => {
     for (const id of ["test", "", "https://evil.example/x", "k7FaK87W HGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn"])
       expect(
-        configFromEnv({ BUNKER_ENABLE_TEST_CUSTODY: "true", BUNKER_TEST_NETWORK: "devnet", BUNKER_TEST_PROGRAM_ID: id }),
+        configFromEnv({ QSAFE_ENABLE_TEST_CUSTODY: "true", QSAFE_TEST_NETWORK: "devnet", QSAFE_TEST_PROGRAM_ID: id }),
         id,
       ).toMatchObject(off);
   });
   it("half a test setup sends nothing; no test settings at all is the live site", () => {
-    expect(configFromEnv({ BUNKER_TEST_NETWORK: "devnet" })).toMatchObject(off);
-    expect(configFromEnv({ BUNKER_TEST_PROGRAM_ID: "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn" })).toMatchObject(off);
-    for (const unset of [{}, { BUNKER_ENABLE_TEST_CUSTODY: "false" }, { BUNKER_ENABLE_TEST_CUSTODY: "", BUNKER_TEST_NETWORK: "" }])
+    expect(configFromEnv({ QSAFE_TEST_NETWORK: "devnet" })).toMatchObject(off);
+    expect(configFromEnv({ QSAFE_TEST_PROGRAM_ID: "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn" })).toMatchObject(off);
+    for (const unset of [{}, { QSAFE_ENABLE_TEST_CUSTODY: "false" }, { QSAFE_ENABLE_TEST_CUSTODY: "", QSAFE_TEST_NETWORK: "" }])
       expect(configFromEnv(unset)).toMatchObject(published);
   });
   it("treats an empty RPC setting as unset", () => {
@@ -60,16 +60,16 @@ describe("Release gate", () => {
     const payer = Keypair.generate();
     const other = "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn";
     const rpc = "https://rpc.example";
-    expect(() => sessionFor({ network: "mainnet-beta", genesis: MAINNET_GENESIS, program: other }, rpc, payer)).toThrow("only the published Bunker program");
-    expect(() => sessionFor({ network: "devnet", genesis: MAINNET_GENESIS, program: MAINNET_PROGRAM_ID }, rpc, payer)).toThrow("only the published Bunker program");
-    expect(() => sessionFor({ network: "mainnet-beta", genesis: DEVNET_GENESIS, program: MAINNET_PROGRAM_ID }, rpc, payer)).toThrow("only the published Bunker program");
+    expect(() => sessionFor({ network: "mainnet-beta", genesis: MAINNET_GENESIS, program: other }, rpc, payer)).toThrow("only the published Quantum Safe program");
+    expect(() => sessionFor({ network: "devnet", genesis: MAINNET_GENESIS, program: MAINNET_PROGRAM_ID }, rpc, payer)).toThrow("only the published Quantum Safe program");
+    expect(() => sessionFor({ network: "mainnet-beta", genesis: DEVNET_GENESIS, program: MAINNET_PROGRAM_ID }, rpc, payer)).toThrow("only the published Quantum Safe program");
     expect(sessionFor({ network: "mainnet-beta", genesis: MAINNET_GENESIS, program: MAINNET_PROGRAM_ID }, rpc, payer).program.toBase58()).toBe(MAINNET_PROGRAM_ID);
     expect(sessionFor({ network: "devnet", genesis: DEVNET_GENESIS, program: other }, rpc, payer).program.toBase58()).toBe(other);
   });
   it("names mainnet key files without the word test", () => {
     const file = { kind: "archival", vault: "7ayn5V2rABCDEFGH" } as const;
-    expect(fileName({ ...file, network: "mainnet-beta" } as never)).toBe("bunker-RECOVERY-KIT-7ayn5V2r.json");
-    expect(fileName({ ...file, network: "localnet" } as never)).toBe("bunker-test-RECOVERY-KIT-7ayn5V2r.json");
+    expect(fileName({ ...file, network: "mainnet-beta" } as never)).toBe("qsafe-RECOVERY-KIT-7ayn5V2r.json");
+    expect(fileName({ ...file, network: "localnet" } as never)).toBe("qsafe-test-RECOVERY-KIT-7ayn5V2r.json");
   });
   it("asks a wallet to sign for the network it is on", () => {
     expect(WALLET_CHAIN).toEqual({
@@ -91,15 +91,15 @@ describe("Release gate", () => {
     expect(calls).toEqual([MAINNET_PROGRAM_ID]);
     // A forged test configuration that turns out to be talking to mainnet.
     const forged = { ...configFromEnv({}), network: "devnet" as const, programId: "test" };
-    await expect(assertNetwork(c, forged, true)).rejects.toThrow("only the published Bunker program");
+    await expect(assertNetwork(c, forged, true)).rejects.toThrow("only the published Quantum Safe program");
     // A mainnet configuration, or a key file, that names some other program.
     const other = { ...configFromEnv({}), programId: "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn" };
-    await expect(assertNetwork(c, other, true)).rejects.toThrow("only the published Bunker program");
+    await expect(assertNetwork(c, other, true)).rejects.toThrow("only the published Quantum Safe program");
     // A configuration labelled mainnet whose pinned genesis is something else.
     const mislabelled = { ...configFromEnv({}), expectedGenesis: DEVNET_GENESIS };
     await expect(
       assertNetwork({ ...c, getGenesisHash: async () => DEVNET_GENESIS } as unknown as Connection, mislabelled, true),
-    ).rejects.toThrow("only the published Bunker program");
+    ).rejects.toThrow("only the published Quantum Safe program");
     expect(calls).toEqual([MAINNET_PROGRAM_ID]);
   });
 });

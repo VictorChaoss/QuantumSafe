@@ -14,7 +14,7 @@ import {
   createTransferCheckedInstruction,
   getMint,
 } from "./classic-token";
-import { BunkerConfig, MAINNET_GENESIS, MAINNET_PROGRAM_ID } from "../lib/bunker-config";
+import { QsafeConfig, MAINNET_GENESIS, MAINNET_PROGRAM_ID } from "../lib/qsafe-config";
 import { formatAmount } from "./bytes";
 export type Asset = {
   key: string;
@@ -27,7 +27,7 @@ export type Asset = {
 };
 /** The Wallet Standard name of each network, which a wallet must list for the
  * account that signs. */
-export const WALLET_CHAIN: Record<BunkerConfig["network"], string> = {
+export const WALLET_CHAIN: Record<QsafeConfig["network"], string> = {
   "mainnet-beta": "solana:mainnet",
   devnet: "solana:devnet",
   localnet: "solana:localnet",
@@ -40,7 +40,7 @@ export function createConnection() {
 }
 export async function assertNetwork(
   connection: Connection,
-  config: BunkerConfig,
+  config: QsafeConfig,
   write = false,
 ) {
   if (write && !config.custodyEnabled) throw new Error(config.releaseStatus);
@@ -49,21 +49,21 @@ export async function assertNetwork(
     throw new Error(
       "RPC network does not match the pinned network. Operation blocked.",
     );
-  // On mainnet there is one Bunker program. A configuration, a key file or a
+  // On mainnet there is one Quantum Safe program. A configuration, a key file or a
   // network card that names another is refused before anything is signed.
   if (
     write &&
     (hash === MAINNET_GENESIS || config.network === "mainnet-beta") &&
     (hash !== MAINNET_GENESIS || config.network !== "mainnet-beta" || config.programId !== MAINNET_PROGRAM_ID)
   )
-    throw new Error("On mainnet, only the published Bunker program is used. Operation blocked.");
+    throw new Error("On mainnet, only the published Quantum Safe program is used. Operation blocked.");
   if (write) {
     if (!config.programId) throw new Error("No program configured");
     const info = await connection.getAccountInfo(
       new PublicKey(config.programId),
     );
     if (!info?.executable)
-      throw new Error("Bunker program is not deployed on this network");
+      throw new Error("Quantum Safe program is not deployed on this network");
   }
 }
 export async function assets(
@@ -107,7 +107,7 @@ export async function assets(
 }
 export function explorer(
   signature: string,
-  network: BunkerConfig["network"],
+  network: QsafeConfig["network"],
   kind = "tx",
 ) {
   return network === "localnet"
@@ -119,7 +119,7 @@ export function explorer(
 export class UnconfirmedError extends Error {
   constructor(public readonly signature: string) {
     super(
-      "This step was sent to the network but could not be confirmed. It may have gone through. Check what your Bunker shows before trying anything again.",
+      "This step was sent to the network but could not be confirmed. It may have gone through. Check what your Quantum Safe shows before trying anything again.",
     );
   }
 }
@@ -155,7 +155,7 @@ export async function confirm(
 }
 export async function send(
   connection: Connection,
-  config: BunkerConfig,
+  config: QsafeConfig,
   payer: PublicKey,
   ixs: TransactionInstruction[],
   sign: (tx: Transaction, chain: string) => Promise<Transaction>,

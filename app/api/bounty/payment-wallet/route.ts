@@ -1,6 +1,6 @@
 import { boundedText } from "@/lib/bounded-body";
 import { PAYMENT_WALLET } from "@/lib/bounty";
-import { getConfig } from "@/lib/bunker-config";
+import { getConfig } from "@/lib/qsafe-config";
 import { getLaunch } from "@/lib/launch-config";
 import {
   balanceOfCall,

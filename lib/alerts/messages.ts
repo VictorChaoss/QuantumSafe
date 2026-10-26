@@ -4,7 +4,7 @@ import { formatAmount } from "@/sdk/bytes";
 import { mintLabel } from "@/sdk/known-mints";
 import { formatDuration } from "@/sdk/v3/chain";
 import type { PendingView, WatchEvent } from "./watch";
-export const FOOTER = "Bunker will never ask for your recovery kit or day key by message.";
+export const FOOTER = "Quantum Safe will never ask for your recovery kit or day key by message.";
 const short = (a: string) => `${a.slice(0, 4)}…${a.slice(-4)}`;
 const name = (mint: string) => mintLabel(mint) ?? short(mint);
 const sol = (lamports: bigint) => `${formatAmount(lamports, 9)} SOL`;
@@ -12,7 +12,7 @@ const sol = (lamports: bigint) => `${formatAmount(lamports, 9)} SOL`;
 const record = (p: PendingView) =>
   `${p.kind === 0 ? sol(BigInt(p.amount)) : `${p.amount} base units of token ${name(p.mint)}`} to ${p.destination}`;
 const RECOVER =
-  "Not you? Upload your cancel file at bunkermode.io/recovery now. No cancel file? Open the offline recovery tool with your recovery kit, make a recovery packet, and submit that. Either one replaces your keys.";
+  "Not you? Upload your cancel file at qsafemode.io/recovery now. No cancel file? Open the offline recovery tool with your recovery kit, make a recovery packet, and submit that. Either one replaces your keys.";
 /** The text for one change in a watched vault. */
 export function eventText(
   vault: string,
@@ -20,7 +20,7 @@ export function eventText(
   now: bigint,
   link: string | null,
 ): string {
-  const head = `Bunker ${short(vault)}`;
+  const head = `Quantum Safe ${short(vault)}`;
   const lines: string[] = [];
   if (e.kind === "deposit") lines.push(`${head}: deposit received.`, `+${sol(e.lamports)}`);
   else if (e.kind === "announced") {
@@ -36,25 +36,25 @@ export function eventText(
   } else if (e.kind === "left")
     lines.push(
       e.count === 1
-        ? `${head}: a withdrawal left your Bunker.`
-        : `${head}: ${e.count} withdrawals left your Bunker.`,
+        ? `${head}: a withdrawal left your Quantum Safe.`
+        : `${head}: ${e.count} withdrawals left your Quantum Safe.`,
       e.record
         ? record(e.record)
         : e.lamports > 0n
           ? `−${sol(e.lamports)} since the last check`
-          : "Open your Bunker to see what moved.",
+          : "Open your Quantum Safe to see what moved.",
       `Not you? Your day key is compromised. ${RECOVER}`,
     );
   else if (e.kind === "ended")
     lines.push(
       `${head}: an announced withdrawal is no longer waiting. It was released at its deadline, or it expired and was cleared.`,
       record(e.record),
-      "Open your Bunker to see which.",
+      "Open your Quantum Safe to see which.",
     );
   else if (e.kind === "fell")
     lines.push(
       `${head}: the balance is lower by ${sol(e.lamports)} since the last check.`,
-      "One or more withdrawals left before the keys were replaced. Open your Bunker to see what moved.",
+      "One or more withdrawals left before the keys were replaced. Open your Quantum Safe to see what moved.",
     );
   else
     lines.push(
@@ -63,7 +63,7 @@ export function eventText(
       ...(e.unresolved
         ? [
             `A withdrawal was waiting: ${record(e.unresolved)}`,
-            "It was either cancelled by this, or released just before it. Open your Bunker to see which.",
+            "It was either cancelled by this, or released just before it. Open your Quantum Safe to see which.",
           ]
         : []),
       "Not you? Then someone else has your recovery kit. Withdraw everything to a new wallet immediately.",
@@ -74,7 +74,7 @@ export function eventText(
 }
 export const WELCOME = (vault: string) =>
   [
-    `Watching Bunker ${short(vault)}.`,
+    `Watching Quantum Safe ${short(vault)}.`,
     "You will get a message here when SOL arrives, a withdrawal is announced or leaves, or its keys are replaced. Token deposits are not reported.",
     "Alerts are best effort and can be late or missing. Silence is not proof that nothing happened.",
     "Send /list to see what you are watching, /stop to stop everything.",

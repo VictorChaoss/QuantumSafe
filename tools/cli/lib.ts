@@ -1,7 +1,7 @@
-/** Bunker without the website (DRAFT).
+/** Quantum Safe without the website (DRAFT).
  *
  * Everything the vault page does with a day key, as plain functions over an
- * RPC connection and files on disk: read a Bunker, withdraw, finish an
+ * RPC connection and files on disk: read a Quantum Safe, withdraw, finish an
  * interrupted withdrawal, release, clear, and submit a recovery packet. It
  * uses the same client code as the site, including the signing journal, which
  * here is a file beside the day key instead of browser storage.
@@ -9,11 +9,11 @@
  * The recovery kit is never opened here. Making a recovery packet stays in the
  * offline tool.
  *
- * Like the site, on mainnet this sends only to the published Bunker program. */
+ * Like the site, on mainnet this sends only to the published Quantum Safe program. */
 import "../../sdk/polyfill";
 import { existsSync, openSync, closeSync, readFileSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import { Connection, Keypair, PublicKey, Transaction, TransactionInstruction } from "@solana/web3.js";
-import { type BunkerConfig, MAINNET_GENESIS, MAINNET_PROGRAM_ID } from "../../lib/bunker-config";
+import { type QsafeConfig, MAINNET_GENESIS, MAINNET_PROGRAM_ID } from "../../lib/qsafe-config";
 import { formatAmount, parseAmount, unhex } from "../../sdk/bytes";
 import {
   createAssociatedTokenAccountIdempotentInstruction,
@@ -42,23 +42,23 @@ import { parseRecoveryFile, recoveryFileStatus } from "../../sdk/v3/requests";
 const ANNOUNCE_WINDOW_SECS = 3600n;
 export type Session = {
   connection: Connection;
-  config: BunkerConfig;
+  config: QsafeConfig;
   program: PublicKey;
   payer: Keypair;
   log: (line: string) => void;
 };
 /** A fee wallet in the standard Solana keypair file format. It pays fees and
- * has no authority over any Bunker. */
+ * has no authority over any Quantum Safe. */
 export function readFeeWallet(path: string): Keypair {
   const parsed = JSON.parse(readFileSync(path, "utf8")) as unknown;
   if (!Array.isArray(parsed) || parsed.length !== 64 || parsed.some((n) => !Number.isInteger(n) || n < 0 || n > 255))
     throw new Error("That is not a Solana keypair file (a JSON list of 64 numbers)");
   return Keypair.fromSecretKey(Uint8Array.from(parsed as number[]));
 }
-/** The network and program come from the Bunker's own file, never from flags:
+/** The network and program come from the Quantum Safe's own file, never from flags:
  * the RPC must be on that network or nothing is sent. */
 export function sessionFor(
-  identity: { network: BunkerConfig["network"]; genesis: string; program: string },
+  identity: { network: QsafeConfig["network"]; genesis: string; program: string },
   rpc: string,
   payer: Keypair,
   log: (line: string) => void = console.log,
@@ -72,7 +72,7 @@ export function sessionFor(
     (identity.genesis === MAINNET_GENESIS || identity.network === "mainnet-beta") &&
     (identity.genesis !== MAINNET_GENESIS || identity.network !== "mainnet-beta" || identity.program !== MAINNET_PROGRAM_ID)
   )
-    throw new Error("On mainnet, only the published Bunker program is used. This file names another.");
+    throw new Error("On mainnet, only the published Quantum Safe program is used. This file names another.");
   return {
     connection: new Connection(url.href, "confirmed"),
     config: {
@@ -80,7 +80,7 @@ export function sessionFor(
       custodyEnabled: true,
       programId: identity.program,
       expectedGenesis: identity.genesis,
-      releaseStatus: "Bunker from the command line.",
+      releaseStatus: "Quantum Safe from the command line.",
       alertsBot: null,
     },
     program: new PublicKey(identity.program),
@@ -150,7 +150,7 @@ export const journalPath = (dayKeyPath: string) => `${dayKeyPath}.journal.json`;
 export async function openDayKey(path: string, password: string): Promise<DayKey> {
   return decryptDayKey(readFileSync(path, "utf8"), password);
 }
-export async function readBunker(s: Session, vault: PublicKey) {
+export async function readQsafe(s: Session, vault: PublicKey) {
   const [found, tokens, now] = await Promise.all([
     fetchVault(s.connection, s.program, vault),
     vaultTokens(s.connection, vault),
@@ -158,10 +158,10 @@ export async function readBunker(s: Session, vault: PublicKey) {
   ]);
   return { ...found, tokens, now };
 }
-export function describe(vault: string, b: Awaited<ReturnType<typeof readBunker>>): string[] {
+export function describe(vault: string, b: Awaited<ReturnType<typeof readQsafe>>): string[] {
   const p = b.state.pending;
   return [
-    `Bunker ${vault}`,
+    `Quantum Safe ${vault}`,
     `Key generation ${b.state.epoch}, withdrawals announced ${b.state.opIndex}`,
     `Waiting period: ${b.state.delaySecs ? `${b.state.delaySecs} seconds` : "none"}`,
     ...b.state.trusted.map((t) => `Trusted address (no wait): ${t.toBase58()}`),
@@ -172,12 +172,12 @@ export function describe(vault: string, b: Awaited<ReturnType<typeof readBunker>
       : "Pending: none",
   ];
 }
-/** A day key is usable only for the Bunker and key generation it was made for. */
+/** A day key is usable only for the Quantum Safe and key generation it was made for. */
 function admit(day: DayKey, state: VaultState) {
   if (BigInt(day.epoch) > state.epoch)
-    throw new Error(`This day key is for key generation ${day.epoch}; the Bunker is on ${state.epoch}. Submit the recovery packet first.`);
+    throw new Error(`This day key is for key generation ${day.epoch}; the Quantum Safe is on ${state.epoch}. Submit the recovery packet first.`);
   if (BigInt(day.epoch) !== state.epoch)
-    throw new Error(`This day key (generation ${day.epoch}) has been replaced. The Bunker is on generation ${state.epoch}.`);
+    throw new Error(`This day key (generation ${day.epoch}) has been replaced. The Quantum Safe is on generation ${state.epoch}.`);
   sameTerms(day, state);
 }
 /** The trusted addresses and waiting period are fixed and are in the day key.
@@ -188,7 +188,7 @@ function sameTerms(day: DayKey, state: VaultState) {
     day.trusted.some((t, i) => t !== state.trusted[i].toBase58()) ||
     day.delaySecs !== state.delaySecs
   )
-    throw new Error("The network reports different trusted addresses or a different waiting period from the ones this Bunker was built with. Nothing was done.");
+    throw new Error("The network reports different trusted addresses or a different waiting period from the ones this Quantum Safe was built with. Nothing was done.");
 }
 
 // ── Withdrawing ─────────────────────────────────────────────────────────────
@@ -208,12 +208,12 @@ export type Reviewed = {
  * caller to show and confirm. Signs nothing. */
 export async function review(s: Session, day: DayKey, r: Request): Promise<Reviewed> {
   const vault = new PublicKey(day.vault);
-  const b = await readBunker(s, vault);
+  const b = await readQsafe(s, vault);
   admit(day, b.state);
   if (b.state.pending) throw new Error("A withdrawal is already pending. Release, clear or cancel it first.");
   const to = new PublicKey(r.to.trim());
   if (!PublicKey.isOnCurve(to.toBytes()) || to.equals(vault))
-    throw new Error("Use a normal wallet address outside this Bunker");
+    throw new Error("Use a normal wallet address outside this Quantum Safe");
   const base = { recipient: to.toBase58(), epoch: b.state.epoch, opIndex: b.state.opIndex };
   const timing = async (w: { kind: 0 | 1; mint: PublicKey; destination: PublicKey }) =>
     b.state.delaySecs === 0
@@ -241,7 +241,7 @@ export async function review(s: Session, day: DayKey, r: Request): Promise<Revie
     };
   }
   const token = b.tokens.find((t) => t.mint === r.mint);
-  if (!token) throw new Error("That token is not in the Bunker");
+  if (!token) throw new Error("That token is not in the Quantum Safe");
   const amount = parseAmount(r.amount, token.decimals);
   if (amount > token.amount || token.frozen)
     throw new Error(token.frozen ? "This token account is frozen by its issuer" : `At most ${formatAmount(token.amount, token.decimals)} is available`);
@@ -276,7 +276,7 @@ async function publish(s: Session, day: DayKey, signed: SignedAnnouncement): Pro
   sameTerms(day, state);
   if (landed(state)) return outcome(state);
   if (state.epoch !== a.epoch || state.opIndex !== a.opIndex || state.pending)
-    throw new Error("The Bunker's keys were replaced after this withdrawal was signed. It can no longer be announced. Nothing moved.");
+    throw new Error("The Quantum Safe's keys were replaced after this withdrawal was signed. It can no longer be announced. Nothing moved.");
   await feePreflight(s.connection, s.payer.publicKey);
   const instant = state.delaySecs === 0 || (await toTrusted(state, a));
   const setup: TransactionInstruction[] = [];
@@ -314,7 +314,7 @@ export async function withdraw(s: Session, day: DayKey, dayKeyPath: string, revi
   const [{ state }, now] = await Promise.all([fetchVault(s.connection, s.program, vault), chainTime(s.connection)]);
   admit(day, state);
   if (state.epoch !== reviewed.epoch || state.opIndex !== reviewed.opIndex)
-    throw new Error("The Bunker changed after this withdrawal was reviewed, so it was not signed. A withdrawal may already have gone through: check its status first.");
+    throw new Error("The Quantum Safe changed after this withdrawal was reviewed, so it was not signed. A withdrawal may already have gone through: check its status first.");
   const device = BigInt(Math.floor(Date.now() / 1000));
   const by = (device > now ? device : now) + ANNOUNCE_WINDOW_SECS;
   const limit = now + MAX_ANNOUNCE_AHEAD_SECS;
@@ -370,7 +370,7 @@ export async function submitRecovery(s: Session, packetPath: string): Promise<st
   const status = recoveryFileStatus(file, state);
   if (status === "already-applied") return "This packet has already been applied.";
   if (status !== "ready")
-    throw new Error(status === "wrong-epoch" ? `This packet is for key generation ${file.epoch}; the Bunker is on ${state.epoch}.` : "The packet's signature does not match this Bunker's recovery key.");
+    throw new Error(status === "wrong-epoch" ? `This packet is for key generation ${file.epoch}; the Quantum Safe is on ${state.epoch}.` : "The packet's signature does not match this Quantum Safe's recovery key.");
   await feePreflight(s.connection, s.payer.publicKey);
   const stages = stageIxs(s.program, s.payer.publicKey, file.message, file.signatureBytes);
   for (let i = 0; i < stages.length; i++) await transmit(s, `Step ${i + 1} of 3: publishing the recovery packet`, [stages[i]]);

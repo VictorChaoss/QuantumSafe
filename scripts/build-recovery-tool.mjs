@@ -24,10 +24,10 @@ const template = await readFile("tools/recovery/template.html", "utf8");
 const html = template.replace("__SCRIPT_HASH__", scriptHash).replace("__SCRIPT__", () => script);
 if (html.includes("__SCRIPT")) throw new Error("Template placeholder left behind");
 await mkdir(out, { recursive: true });
-await writeFile(`${out}/bunker-recovery-tool.html`, html);
+await writeFile(`${out}/qsafe-recovery-tool.html`, html);
 const manifest = {
   format: 1,
-  file: "bunker-recovery-tool.html",
+  file: "qsafe-recovery-tool.html",
   bytes: Buffer.byteLength(html),
   sha256: createHash("sha256").update(html).digest("hex"),
   scriptCsp: scriptHash,

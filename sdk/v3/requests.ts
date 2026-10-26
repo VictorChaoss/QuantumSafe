@@ -9,7 +9,7 @@ import { z } from "zod";
 import { hex, unhex } from "../bytes";
 import { SIGNATURE_BYTES } from "../lmots";
 import { identityOf } from "./kit";
-import { labelMatchesGenesis } from "../../lib/bunker-config";
+import { labelMatchesGenesis } from "../../lib/qsafe-config";
 import {
   address as addressBytes,
   decodeRecover,
@@ -78,7 +78,7 @@ function parse<T>(schema: z.ZodType<T>, raw: string, what: string): T {
   }
 }
 export function parseNetworkCard(raw: string): NetworkCard {
-  const card = parse(networkCardSchema, raw, "a Bunker network card");
+  const card = parse(networkCardSchema, raw, "a Quantum Safe network card");
   addressBytes(card.genesis);
   addressBytes(card.program);
   return card;
@@ -92,7 +92,7 @@ export const genesisOf = (r: CreationRequest) => ({
   trusted: r.trusted.map(addressBytes),
 });
 export function parseCreationRequest(raw: string): CreationRequest {
-  const r = parse(creationRequestSchema, raw, "a Bunker creation request");
+  const r = parse(creationRequestSchema, raw, "a Quantum Safe creation request");
   if (r.opRoot === ZERO || r.recRoot === ZERO || r.opRoot === r.recRoot)
     throw new Error("Creation request has invalid commitments");
   // The address must be the one these exact parameters create.
@@ -109,7 +109,7 @@ export function parseRecoveryFile(raw: string): RecoveryFile & {
   message: Uint8Array;
   signatureBytes: Uint8Array;
 } {
-  const f = parse(recoveryFileSchema, raw, "a Bunker recovery packet");
+  const f = parse(recoveryFileSchema, raw, "a Quantum Safe recovery packet");
   const d = identityOf(f);
   const payloadBytes = unhex(f.payload);
   const r = decodeRecover(payloadBytes);

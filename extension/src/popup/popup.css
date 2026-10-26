@@ -1,5 +1,5 @@
-/* Bunker Watch popup, in the look of the Bunker Mode films. The colours and
-   font roles come from app/bunker-mode-tokens.css: the build puts that file's
+/* Quantum Safe Watch popup, in the look of the Quantum Safe Mode films. The colours and
+   font roles come from app/qsafe-tokens.css: the build puts that file's
    :root block above this one, so there is one place they are defined. The
    font files are in the extension; nothing is fetched. */
 @font-face { font-family: "Inter"; src: url("fonts/inter-latin-800-normal.woff2") format("woff2"); font-weight: 800; }

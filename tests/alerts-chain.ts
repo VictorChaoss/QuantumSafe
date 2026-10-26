@@ -31,7 +31,7 @@ const c = new Connection("http://127.0.0.1:19099", "confirmed");
 const genesis = await c.getGenesisHash();
 if (["5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d", "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG"].includes(genesis))
   throw new Error("This test only runs against an isolated local validator");
-if (!(await c.getAccountInfo(PROGRAM))?.executable) throw new Error("Build bunker3.so and start scripts/local-validator.sh");
+if (!(await c.getAccountInfo(PROGRAM))?.executable) throw new Error("Build qsafe3.so and start scripts/local-validator.sh");
 const payer = Keypair.generate();
 await c.confirmTransaction(await c.requestAirdrop(payer.publicKey, 50_000_000_000));
 const send = (...ixs: TransactionInstruction[]) => sendAndConfirmTransaction(c, new Transaction().add(...ixs), [payer]);
@@ -82,15 +82,15 @@ const announce = async (v: Awaited<ReturnType<typeof vaultWith>>, amount: bigint
   );
 };
 
-// A Bunker with a 24-hour waiting period.
+// A Quantum Safe with a 24-hour waiting period.
 const waiting = await vaultWith(86_400);
 const welcome = await start(waiting.vault);
-if (!welcome?.text.includes("Watching Bunker")) throw new Error("Subscription was refused");
+if (!welcome?.text.includes("Watching Quantum Safe")) throw new Error("Subscription was refused");
 none(await pass(), "for history before subscribing");
 await send(SystemProgram.transfer({ fromPubkey: payer.publicKey, toPubkey: waiting.vault, lamports: 3_000_000_000 }));
 expectOne(await pass(), "deposit received", "+3 SOL");
 await announce(waiting, 1_250_000_000n, false);
-expectOne(await pass(), "ANNOUNCED", "1.25 SOL", recipient.toBase58(), "It can leave in ", "bunkermode.io/recovery");
+expectOne(await pass(), "ANNOUNCED", "1.25 SOL", recipient.toBase58(), "It can leave in ", "qsafemode.io/recovery");
 none(await pass(), "on a second pass with nothing new");
 const { state } = await fetchVault(c, PROGRAM, waiting.vault);
 const packet = recoveryPacket(waiting.master, waiting.d, 0n);
@@ -98,15 +98,15 @@ for (const ix of stageIxs(PROGRAM, payer.publicKey, packet.message, packet.signa
 await send(computeIx(), recoverIx(PROGRAM, payer.publicKey, packet.payload, state), closeProofIx(PROGRAM, payer.publicKey, packet.message));
 expectOne(await pass(), "NEW KEYS were installed", "Withdraw everything");
 
-// A Bunker with no waiting period: the alert arrives after the money has gone.
+// A Quantum Safe with no waiting period: the alert arrives after the money has gone.
 const instant = await vaultWith(0);
 await start(instant.vault);
 await send(SystemProgram.transfer({ fromPubkey: payer.publicKey, toPubkey: instant.vault, lamports: 2_000_000_000 }));
 expectOne(await pass(), "deposit received", "+2 SOL");
 await announce(instant, 500_000_000n, true);
-expectOne(await pass(), "a withdrawal left your Bunker", "−0.5 SOL", "Your day key is compromised");
+expectOne(await pass(), "a withdrawal left your Quantum Safe", "−0.5 SOL", "Your day key is compromised");
 
-// Traffic cannot hide an alert. A thief floods the Bunker's address with
+// Traffic cannot hide an alert. A thief floods the Quantum Safe's address with
 // transactions and then announces: the announcement is still reported.
 const flooded = await vaultWith(86_400);
 await start(flooded.vault);
@@ -117,8 +117,8 @@ for (let i = 0; i < 15; i++)
   await send(SystemProgram.transfer({ fromPubkey: payer.publicKey, toPubkey: flooded.vault, lamports: 1 + i }));
 expectOne(await pass(), "ANNOUNCED", "0.7 SOL");
 
-// Traffic cannot fake one. A stranger recovers a Bunker of their own in a
-// transaction that also touches the watched Bunker: no false alarm.
+// Traffic cannot fake one. A stranger recovers a Quantum Safe of their own in a
+// transaction that also touches the watched Quantum Safe: no false alarm.
 const strangers = await vaultWith(0);
 const own = recoveryPacket(strangers.master, strangers.d, 0n);
 for (const ix of stageIxs(PROGRAM, payer.publicKey, own.message, own.signature)) await send(ix);
@@ -128,11 +128,11 @@ await send(
   recoverIx(PROGRAM, payer.publicKey, own.payload, (await fetchVault(c, PROGRAM, strangers.vault)).state),
   closeProofIx(PROGRAM, payer.publicKey, own.message),
 );
-none(await pass(), "after a stranger's recovery that only touched the watched Bunker");
+none(await pass(), "after a stranger's recovery that only touched the watched Quantum Safe");
 
-// An address that is not a Bunker cannot be watched, and /stop ends everything.
+// An address that is not a Quantum Safe cannot be watched, and /stop ends everything.
 const refused = await handleUpdate({ message: { text: `/start ${payer.publicKey.toBase58()}`, chat: { id: 4242, type: "private" } } }, { store, connection: c, program: PROGRAM });
-if (!refused?.text.includes("not a Bunker")) throw new Error("A non-Bunker address was accepted");
+if (!refused?.text.includes("not a Quantum Safe")) throw new Error("A non-Quantum Safe address was accepted");
 await handleUpdate({ message: { text: "/stop", chat: { id: 4242, type: "private" } } }, { store, connection: c, program: PROGRAM });
 await send(SystemProgram.transfer({ fromPubkey: payer.publicKey, toPubkey: instant.vault, lamports: 1_000_000 }));
 none(await pass(), "after /stop");

@@ -19,7 +19,7 @@ export async function installLocalWallet(page: Page, payer: Keypair) {
       };
       const wallet = {
         version: "1.0.0",
-        name: "Bunker local test wallet",
+        name: "Quantum Safe local test wallet",
         icon: "data:image/png;base64,iVBORw0KGgo=",
         chains: ["solana:localnet"],
         accounts: [account],
@@ -55,5 +55,5 @@ export async function installLocalWallet(page: Page, payer: Keypair) {
 }
 export async function connect(page: Page) {
   await page.getByRole("button", { name: "Connect wallet", exact: true }).click();
-  await page.getByRole("button", { name: "Bunker local test wallet Connect" }).click();
+  await page.getByRole("button", { name: "Quantum Safe local test wallet Connect" }).click();
 }

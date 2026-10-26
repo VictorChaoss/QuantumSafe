@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["programs/bunker3", "programs/bunker3-cpi-probe", "crates/bunker-lmots"]
+members = ["programs/qsafe3", "programs/qsafe3-cpi-probe", "crates/qsafe-lmots"]
 # The Solana version `solana-verify` builds the program with (docs/LAUNCH-RUNBOOK.md).
 # Keep it equal to SOLANA_VERSION in .github/workflows/ci.yml.
 [workspace.metadata.cli]
@@ -9,7 +9,7 @@ solana = "4.3.0"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
-authors = ["Bunker contributors"]
+authors = ["Quantum Safe contributors"]
 [workspace.lints.rust]
 unexpected_cfgs = { level = "allow", check-cfg = ['cfg(target_os, values("solana"))', 'cfg(target_arch, values("bpf"))'] }
 [workspace.dependencies]

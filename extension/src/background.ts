@@ -1,4 +1,4 @@
-/** The part of Bunker Watch that runs when the popup is closed.
+/** The part of Quantum Safe Watch that runs when the popup is closed.
  *
  * The browser wakes it once a minute. It runs one pass, shows a notification
  * for anything that changed, sets the toolbar badge, and goes back to sleep.
@@ -10,7 +10,7 @@ import { connect, endpointOf } from "./rpc";
 import * as store from "./store";
 import { runPass } from "./watch";
 
-const ALARM = "bunker-watch";
+const ALARM = "qsafe-watch";
 const kv = store.chromeStore();
 
 async function schedule() {
@@ -36,7 +36,7 @@ async function deliver() {
 }
 async function tick() {
   // Two wakes can overlap; the second one has nothing to add.
-  await navigator.locks.request("bunker-watch-pass", { ifAvailable: true }, async (held) => {
+  await navigator.locks.request("qsafe-watch-pass", { ifAvailable: true }, async (held) => {
     if (!held) return;
     // Anything decided on an earlier wake and not shown yet comes first.
     await deliver();
@@ -69,7 +69,7 @@ chrome.runtime.onMessage.addListener((message, _sender, reply) => {
 });
 chrome.notifications.onClicked.addListener((id) => {
   const [kind] = id.split(":");
-  // What to do is on the website. The extension itself does nothing to a Bunker.
+  // What to do is on the website. The extension itself does nothing to a Quantum Safe.
   void chrome.tabs.create({ url: `${SITE}/${["announced", "left", "recovered"].includes(kind) ? "emergency" : "vault"}` });
   void chrome.notifications.clear(id);
 });

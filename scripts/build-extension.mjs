@@ -1,14 +1,14 @@
-// Builds Bunker Watch, the read-only browser extension, into one zip file.
+// Builds Quantum Safe Watch, the read-only browser extension, into one zip file.
 // The same source gives the same zip, byte for byte: files are added in a
 // fixed order with a fixed date and are stored, not compressed, so the result
 // does not depend on the machine or on a compression library's version. The
 // zip is not committed; its SHA-256 is published next to it and CI builds it
 // twice and compares.
 //
-//   node scripts/build-extension.mjs          writes public/source/bunker-watch.zip,
+//   node scripts/build-extension.mjs          writes public/source/qsafe-watch.zip,
 //                                             public/source/extension-manifest.json and
-//                                             the same files unpacked in dist/bunker-watch/
-//   node scripts/build-extension.mjs --test   writes dist/bunker-watch-test/, a build
+//                                             the same files unpacked in dist/qsafe-watch/
+//   node scripts/build-extension.mjs --test   writes dist/qsafe-watch-test/, a build
 //                                             for a local validator. Never published.
 import { build } from "esbuild";
 import { createHash } from "node:crypto";
@@ -30,12 +30,12 @@ if (test) {
       return at > 0 && !l.startsWith("#") ? [[l.slice(0, at).trim(), l.slice(at + 1).trim()]] : [];
     }),
   );
-  const rpc = env.BUNKER_TEST_RPC_URL ?? "http://127.0.0.1:19099";
-  if (!env.BUNKER_TEST_PROGRAM_ID || !env.BUNKER_LOCAL_GENESIS) throw new Error("Run npm run setup:local first.");
+  const rpc = env.QSAFE_TEST_RPC_URL ?? "http://127.0.0.1:19099";
+  if (!env.QSAFE_TEST_PROGRAM_ID || !env.QSAFE_LOCAL_GENESIS) throw new Error("Run npm run setup:local first.");
   // A test build is for a validator on this computer and nothing else.
   if (!["127.0.0.1", "localhost"].includes(new URL(rpc).hostname)) throw new Error("A test build may only use a local validator.");
-  local = JSON.stringify({ rpc, program: env.BUNKER_TEST_PROGRAM_ID, genesis: env.BUNKER_LOCAL_GENESIS });
-  manifest.name = "Bunker Watch (LOCAL TEST BUILD)";
+  local = JSON.stringify({ rpc, program: env.QSAFE_TEST_PROGRAM_ID, genesis: env.QSAFE_LOCAL_GENESIS });
+  manifest.name = "Quantum Safe Watch (LOCAL TEST BUILD)";
   manifest.host_permissions = [`${new URL(rpc).origin}/*`];
   manifest.optional_host_permissions = [];
   manifest.content_security_policy.extension_pages = manifest.content_security_policy.extension_pages.replace(
@@ -69,15 +69,15 @@ const bundle = async (entry) => {
     legalComments: "none",
     write: false,
     alias: { "@": root },
-    define: { __BUNKER_WATCH_TEST__: local, __BUNKER_WATCH_KIT__: JSON.stringify(kitPictures) },
+    define: { __QSAFE_WATCH_TEST__: local, __QSAFE_WATCH_KIT__: JSON.stringify(kitPictures) },
     logLevel: "warning",
   });
   return result.outputFiles[0].contents;
 };
 // The colours and font roles are the site's and the films': one definition, in one file.
-const tokens = await readFile("app/bunker-mode-tokens.css", "utf8");
+const tokens = await readFile("app/qsafe-tokens.css", "utf8");
 const rootBlock = tokens.match(/:root \{[^}]*\}/)?.[0];
-if (!rootBlock) throw new Error("app/bunker-mode-tokens.css has no :root block");
+if (!rootBlock) throw new Error("app/qsafe-tokens.css has no :root block");
 const files = new Map();
 files.set("manifest.json", Buffer.from(JSON.stringify(manifest, null, 2) + "\n"));
 files.set("background.js", Buffer.from(await bundle("extension/src/background.ts")));
@@ -89,30 +89,30 @@ for (const [dir, list] of [["fonts", FONTS], ["icons", ICONS], ["kit", kitPictur
 const names = [...files.keys()].sort();
 
 if (test) {
-  const out = "dist/bunker-watch-test";
+  const out = "dist/qsafe-watch-test";
   await rm(out, { recursive: true, force: true });
   for (const name of names) {
     await mkdir(resolve(out, name, ".."), { recursive: true });
     await writeFile(`${out}/${name}`, files.get(name));
   }
-  console.log(`Bunker Watch, local test build: ${names.length} files in ${out}. Not for publishing.`);
+  console.log(`Quantum Safe Watch, local test build: ${names.length} files in ${out}. Not for publishing.`);
 } else {
   // Every address the browser will let a published build reach must be https.
   for (const host of [...manifest.host_permissions, ...manifest.optional_host_permissions])
     if (!host.startsWith("https://")) throw new Error(`A published build must not be allowed to reach ${host}.`);
   // The same files unpacked, for loading into a browser by hand and for the tests.
-  await rm("dist/bunker-watch", { recursive: true, force: true });
+  await rm("dist/qsafe-watch", { recursive: true, force: true });
   for (const name of names) {
-    await mkdir(resolve("dist/bunker-watch", name, ".."), { recursive: true });
-    await writeFile(`dist/bunker-watch/${name}`, files.get(name));
+    await mkdir(resolve("dist/qsafe-watch", name, ".."), { recursive: true });
+    await writeFile(`dist/qsafe-watch/${name}`, files.get(name));
   }
   const zip = storedZip(names.map((name) => [name, files.get(name)]));
   const out = "public/source";
   await mkdir(out, { recursive: true });
-  await writeFile(`${out}/bunker-watch.zip`, zip);
+  await writeFile(`${out}/qsafe-watch.zip`, zip);
   const record = {
     format: 1,
-    file: "bunker-watch.zip",
+    file: "qsafe-watch.zip",
     name: manifest.name,
     version: manifest.version,
     bytes: zip.length,
@@ -133,7 +133,7 @@ if (test) {
     status: "Public beta. Read-only: holds no keys.",
   };
   await writeFile(`${out}/extension-manifest.json`, JSON.stringify(record, null, 2) + "\n");
-  console.log(`Bunker Watch: ${record.bytes} bytes, sha256 ${record.sha256}`);
+  console.log(`Quantum Safe Watch: ${record.bytes} bytes, sha256 ${record.sha256}`);
 }
 
 /** A zip archive with every file stored as it is, dated 1 January 1980. */

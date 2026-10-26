@@ -9,16 +9,16 @@ import {
   Shield,
   Cpu,
 } from "lucide-react";
-import { Header, Footer } from "@/components/bunker/shell";
-import Story from "@/components/bunker/story";
-import { Card, Clip } from "@/components/bunker/loop";
-import { BIcon } from "@/components/bunker/icon";
+import { Header, Footer } from "@/components/qsafe/shell";
+import Story from "@/components/qsafe/story";
+import { Card, Clip } from "@/components/qsafe/loop";
+import { BIcon } from "@/components/qsafe/icon";
 import { getLaunch } from "@/lib/launch-config";
 import {
   ChampionsStarballCanvas,
   QuantumLaunchIntro,
   StackPaperSimulator,
-} from "@/components/bunker/quantum-hero";
+} from "@/components/qsafe/quantum-hero";
 
 function Plate({
   clip,
@@ -190,7 +190,7 @@ const faq: [string, React.ReactNode][] = [
     "What if this website goes away?",
     <>
       Your vault lives on the Solana blockchain with renounced upgrade authority and zero admin keys.
-      Both the offline recovery tool and the single-file Node.js CLI (<code>bunker-cli.mjs</code>) run
+      Both the offline recovery tool and the single-file Node.js CLI (<code>qsafe-cli.mjs</code>) run
       locally against any Solana RPC without needing this website.
     </>,
   ],
@@ -247,7 +247,7 @@ export default function Home() {
             </div>
             <div className="hero-more">
               <div className="hero-note qs-hero-note">
-                <BIcon name="bunker-key" size={15} />
+                <BIcon name="qsafe-key" size={15} />
                 Hot wallet deposits in. 34-Chain SHA-256 LM-OTS key withdraws out.
               </div>
             </div>
@@ -448,7 +448,7 @@ export default function Home() {
               <span className="mono">WALLET KEY STOPS HERE</span>
               <span />
             </div>
-            <div className="flow-row bunker-row">
+            <div className="flow-row qsafe-row">
               <BIcon name="vault" size={26} />
               <div>
                 <strong>Your Quantum Safe</strong>

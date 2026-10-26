@@ -143,7 +143,7 @@ describe("LM-OTS signing", () => {
   });
 });
 
-describe("Bunker's use of LM-OTS", () => {
+describe("Quantum Safe's use of LM-OTS", () => {
   const material = (tag: number) => {
     const m = new Uint8Array(ONE_TIME_BYTES);
     m.set(secret(tag));

@@ -1,4 +1,4 @@
-// Bunker Watch against the isolated LOCAL validator, end to end: the real
+// Quantum Safe Watch against the isolated LOCAL validator, end to end: the real
 // extension, loaded into a real browser, watching a real vault account while
 // the command-line client announces a withdrawal from it and a recovery
 // packet then cancels it.
@@ -28,17 +28,17 @@ const c = new Connection(RPC, "confirmed");
 const genesis = await c.getGenesisHash();
 if (["5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d", "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG"].includes(genesis))
   throw new Error("This test only runs against an isolated local validator");
-if (!(await c.getAccountInfo(PROGRAM))?.executable) throw new Error("Build bunker3.so and start scripts/local-validator.sh");
+if (!(await c.getAccountInfo(PROGRAM))?.executable) throw new Error("Build qsafe3.so and start scripts/local-validator.sh");
 const check = (condition: boolean, what: string) => {
   if (!condition) throw new Error(`FAILED: ${what}`);
 };
 const started = Date.now();
-const dir = mkdtempSync(join(tmpdir(), "bunker-watch-test-"));
+const dir = mkdtempSync(join(tmpdir(), "qsafe-watch-test-"));
 const password = "watch test day key password";
 const payer = Keypair.generate();
 await c.confirmTransaction(await c.requestAirdrop(payer.publicKey, 20_000_000_000));
 
-// A Bunker with a one-day wait, built the way the offline tool builds one.
+// A Quantum Safe with a one-day wait, built the way the offline tool builds one.
 const master = crypto.getRandomValues(new Uint8Array(32));
 const g = genesisVault(master, {
   chainTag: new PublicKey(genesis).toBytes(),
@@ -62,7 +62,7 @@ const dayPath = join(dir, "day.json");
 writeFileSync(dayPath, await encryptFile(dayKey, password));
 
 execFileSync(process.execPath, ["scripts/build-extension.mjs", "--test"], { stdio: "inherit" });
-const extension = resolve("dist/bunker-watch-test");
+const extension = resolve("dist/qsafe-watch-test");
 const browser = await chromium.launchPersistentContext(join(dir, "profile"), {
   channel: "chromium",
   headless: true,
@@ -91,16 +91,16 @@ try {
   popup.on("pageerror", (e) => errors.push(e.message));
   await popup.goto(`chrome-extension://${id}/popup.html`);
   await popup.getByText("LOCAL TEST", { exact: true }).waitFor();
-  await popup.getByRole("button", { name: "+ Watch a Bunker" }).click();
-  // An address that is not a Bunker of this program is refused.
-  await popup.getByLabel("Bunker address").fill(payer.publicKey.toBase58());
+  await popup.getByRole("button", { name: "+ Watch a Quantum Safe" }).click();
+  // An address that is not a Quantum Safe of this program is refused.
+  await popup.getByLabel("Quantum Safe address").fill(payer.publicKey.toBase58());
   await popup.getByRole("button", { name: "Watch", exact: true }).click();
-  await popup.getByRole("alert").filter({ hasText: "No Bunker found" }).waitFor();
-  check(((await stored()).watched ?? []).toString() === "", "nothing was stored for an address that is not a Bunker");
-  await popup.getByLabel("Bunker address").fill(vault.toBase58());
+  await popup.getByRole("alert").filter({ hasText: "No Quantum Safe found" }).waitFor();
+  check(((await stored()).watched ?? []).toString() === "", "nothing was stored for an address that is not a Quantum Safe");
+  await popup.getByLabel("Quantum Safe address").fill(vault.toBase58());
   await popup.getByRole("button", { name: "Watch", exact: true }).click();
-  await popup.locator(`[data-bunker="${vault.toBase58()}"]`).getByText("No withdrawal waiting").waitFor();
-  await within("the badge says one Bunker is watched", 20_000, async () => (await badge()) === "1");
+  await popup.locator(`[data-qsafe="${vault.toBase58()}"]`).getByText("No withdrawal waiting").waitFor();
+  await within("the badge says one Quantum Safe is watched", 20_000, async () => (await badge()) === "1");
   check((await logged()).length === 0, "nothing announced yet");
 
   // Announce a withdrawal with the command-line client.
@@ -134,7 +134,7 @@ try {
   const all = JSON.stringify(await stored());
   for (const secret of [dayKey.seed, hex(master), password]) check(!all.includes(secret), "no secret in the extension's storage");
   check(errors.length === 0, `no errors in the popup (${errors.join("; ")})`);
-  console.log(JSON.stringify({ bunkerWatch: "ok", network: "isolated local validator", seconds: Math.round((Date.now() - started) / 1000) }, null, 2));
+  console.log(JSON.stringify({ qsafeWatch: "ok", network: "isolated local validator", seconds: Math.round((Date.now() - started) / 1000) }, null, 2));
 } finally {
   await browser.close();
   rmSync(dir, { recursive: true, force: true });

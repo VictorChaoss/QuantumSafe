@@ -8,13 +8,13 @@ describe("Launch addresses", () => {
   });
   it("accepts a Solana address and nothing else", () => {
     const wallet = "Ci5cG8d6MvU5ykKkQhN3LHnPN2VCmwZuotRNLqA9SYth";
-    const live = { BUNKER_LAUNCH_LIVE: "true" };
-    expect(launchFromEnv({ ...live, BOUNTY_WALLET_ADDRESS: wallet, BUNKER_COIN_ADDRESS: wallet })).toEqual({
+    const live = { QSAFE_LAUNCH_LIVE: "true" };
+    expect(launchFromEnv({ ...live, BOUNTY_WALLET_ADDRESS: wallet, QSAFE_COIN_ADDRESS: wallet })).toEqual({
       coinAddress: wallet,
       bountyWallet: wallet,
     });
     for (const bad of ["", "TBD", "coming soon", "https://pump.fun/coin/x", `${wallet} `, "0x7ce70FF1", "<script>"])
-      expect(launchFromEnv({ ...live, BOUNTY_WALLET_ADDRESS: bad, BUNKER_COIN_ADDRESS: bad }), bad).toEqual({
+      expect(launchFromEnv({ ...live, BOUNTY_WALLET_ADDRESS: bad, QSAFE_COIN_ADDRESS: bad }), bad).toEqual({
         coinAddress: null,
         bountyWallet: null,
       });
@@ -24,10 +24,10 @@ describe("Addresses staged before launch", () => {
   it("stay hidden until the launch switch is exactly \"true\"", () => {
     const staged = {
       BOUNTY_WALLET_ADDRESS: "Ci5cG8d6MvU5ykKkQhN3LHnPN2VCmwZuotRNLqA9SYth",
-      BUNKER_COIN_ADDRESS: "Ci5cG8d6MvU5ykKkQhN3LHnPN2VCmwZuotRNLqA9SYth",
+      QSAFE_COIN_ADDRESS: "Ci5cG8d6MvU5ykKkQhN3LHnPN2VCmwZuotRNLqA9SYth",
     };
     for (const flag of [undefined, "", "false", "1", "TRUE", "yes", "true "])
-      expect(launchFromEnv({ ...staged, BUNKER_LAUNCH_LIVE: flag }), String(flag)).toEqual({
+      expect(launchFromEnv({ ...staged, QSAFE_LAUNCH_LIVE: flag }), String(flag)).toEqual({
         coinAddress: null,
         bountyWallet: null,
       });
@@ -41,6 +41,6 @@ describe("Bounty terms", () => {
     expect(Array.isArray(HALL_OF_FAME)).toBe(true);
   });
   it("sends reports to the private channel", () => {
-    expect(REPORT_URL).toBe("https://github.com/plantsweb3/bunker/security/advisories/new");
+    expect(REPORT_URL).toBe("https://github.com/VictorChaoss/QuantumSafe/security/advisories/new");
   });
 });

@@ -9,13 +9,13 @@ import { join } from "node:path";
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { checkDeployment } from "../scripts/check-deployment";
 
-const RPC = process.env.BUNKER_LOCAL_RPC ?? "http://127.0.0.1:19099";
-const BINARY = "target/deploy/bunker3.so";
+const RPC = process.env.QSAFE_LOCAL_RPC ?? "http://127.0.0.1:19099";
+const BINARY = "target/deploy/qsafe3.so";
 const check = (ok: boolean, what: string) => {
   if (!ok) throw new Error(`FAILED: ${what}`);
 };
 const c = new Connection(RPC, "confirmed");
-const dir = mkdtempSync(join(tmpdir(), "bunker-deploy-"));
+const dir = mkdtempSync(join(tmpdir(), "qsafe-deploy-"));
 const keyFile = (name: string, k: Keypair) => {
   const path = join(dir, `${name}.json`);
   writeFileSync(path, JSON.stringify(Array.from(k.secretKey)));

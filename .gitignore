@@ -57,18 +57,18 @@ next-env.d.ts
 /public/source/
 
 # Explicit exported recovery filenames must never enter source or Git.
-bunker-devnet-*.json
-bunker-test-*.json
-bunker-RECOVERY-KIT-*.json
-bunker-day-key-*.json
-bunker-cancel-file-*.json
-bunker-recovery-packet-*.json
-bunker-creation-request-*.json
-bunker-network-card-*.json
+qsafe-devnet-*.json
+qsafe-test-*.json
+qsafe-RECOVERY-KIT-*.json
+qsafe-day-key-*.json
+qsafe-cancel-file-*.json
+qsafe-recovery-packet-*.json
+qsafe-creation-request-*.json
+qsafe-network-card-*.json
 id.json
 *.key
 
 # standalone in-process VM tests
-/programs/bunker3-svm-tests/target/
+/programs/qsafe3-svm-tests/target/
 # Written by the dev server for coding assistants; not source.
 AGENTS.md

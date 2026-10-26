@@ -1,5 +1,5 @@
 import { Connection, PublicKey } from "@solana/web3.js";
-import { getConfig, getRpcUrl } from "@/lib/bunker-config";
+import { getConfig, getRpcUrl } from "@/lib/qsafe-config";
 /** The answer changes only when a program is deployed or its authority moves.
  * Remembering it briefly keeps this public endpoint from being a way to spend
  * the site's RPC quota. */

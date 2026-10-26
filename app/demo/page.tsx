@@ -1,6 +1,6 @@
-import { Header, Footer } from "@/components/bunker/shell";
-import Demo from "@/components/bunker/demo";
-import Practice from "@/components/bunker/practice";
+import { Header, Footer } from "@/components/qsafe/shell";
+import Demo from "@/components/qsafe/demo";
+import Practice from "@/components/qsafe/practice";
 export const metadata = { title: "Practice run" };
 export default function Page() {
   return (

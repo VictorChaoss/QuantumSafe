@@ -8,10 +8,10 @@ import { getAssociatedTokenAddress } from "../../sdk/classic-token";
 import { createMint, getAccount, getOrCreateAssociatedTokenAccount, mintTo } from "../token-fixture";
 // Protocol 3 draft against an isolated LOCAL validator. No user wallet is used.
 // The 24-hour wait cannot elapse here; release after the wait is covered by the
-// in-process VM suite in programs/bunker3-svm-tests.
+// in-process VM suite in programs/qsafe3-svm-tests.
 const PROGRAM = "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn";
 /** A program-derived address: no private key exists for it. */
-const PROGRAM_DERIVED = PublicKey.findProgramAddressSync([Buffer.from("bunker3"), Buffer.alloc(32, 7)], new PublicKey(PROGRAM))[0].toBase58();
+const PROGRAM_DERIVED = PublicKey.findProgramAddressSync([Buffer.from("qsafe3"), Buffer.alloc(32, 7)], new PublicKey(PROGRAM))[0].toBase58();
 type Ctx = Awaited<ReturnType<typeof setup>>;
 async function setup(page: Page, info: TestInfo, origin = "") {
   test.setTimeout(120000);
@@ -91,7 +91,7 @@ async function setup(page: Page, info: TestInfo, origin = "") {
     if (!r.url().startsWith("file:") && !r.url().startsWith("blob:")) toolRequests.push(r.url());
   });
   tool.on("pageerror", (e) => errors.push(`tool: ${e.message}`));
-  await tool.goto(`file://${resolve("public/source/bunker-recovery-tool.html")}`);
+  await tool.goto(`file://${resolve("public/source/qsafe-recovery-tool.html")}`);
   /** Runs `trigger` on the tool page and saves the `count` files it downloads, by name. */
   const toolSaves = async (trigger: () => Promise<void>, count: number) => {
     const files: Record<string, string> = {};
@@ -116,7 +116,7 @@ async function setup(page: Page, info: TestInfo, origin = "") {
     };
     return find;
   };
-  /** Builds a Bunker: kit and keys offline, creation request submitted on the site. */
+  /** Builds a Quantum Safe: kit and keys offline, creation request submitted on the site. */
   const build = async (wait: boolean, trusted: string[] = []) => {
     await page.goto(`${origin}/recovery`);
     await connect(page);
@@ -144,7 +144,7 @@ async function setup(page: Page, info: TestInfo, origin = "") {
     // The tool starts on a 24-hour wait for untrusted addresses, and nothing
     // is created until the statement describing the choice is accepted.
     await expect(tool.locator("#delay")).toHaveValue("86400");
-    // Only an ordinary wallet can be trusted: the Bunker's own kind of
+    // Only an ordinary wallet can be trusted: the Quantum Safe's own kind of
     // address, which a program controls, is refused, and named by its slot.
     await expect(tool.locator("#trusted-3")).toBeHidden();
     await tool.locator("#more-trusted").click();
@@ -158,7 +158,7 @@ async function setup(page: Page, info: TestInfo, origin = "") {
         ? "no waiting period"
         : trusted.length
           ? "trusted address"
-          : "every withdrawal from this Bunker will take 24 hours",
+          : "every withdrawal from this Quantum Safe will take 24 hours",
     );
     await tool.locator("#create").click();
     await expect(tool.locator("#build-status")).toContainText("Read and tick the statement");
@@ -188,8 +188,8 @@ async function setup(page: Page, info: TestInfo, origin = "") {
       ),
     ).toBeVisible();
     for (const address of trusted) await expect(page.getByText(address, { exact: true })).toBeVisible();
-    await page.getByRole("button", { name: "Build Bunker on test network" }).click();
-    await expect(page.getByText("Bunker built.", { exact: false })).toBeVisible({ timeout: 25000 });
+    await page.getByRole("button", { name: "Build Quantum Safe on test network" }).click();
+    await expect(page.getByText("Quantum Safe built.", { exact: false })).toBeVisible({ timeout: 25000 });
     const vault = await page.locator(".vault-address code").innerText();
     return { kit, day0, cancel0, vault };
   };
@@ -234,7 +234,7 @@ async function setup(page: Page, info: TestInfo, origin = "") {
     await page.getByLabel("Day key", { exact: true }).setInputFiles(dayKey);
     await page.getByLabel("Day key password", { exact: true }).fill(dayPassword);
     await page.getByRole("checkbox").check();
-    await page.getByRole("button", { name: "Unseal Bunker" }).click();
+    await page.getByRole("button", { name: "Unseal Quantum Safe" }).click();
   };
   const deposit = async (amount: string) => {
     await page.getByRole("button", { name: "Deposit", exact: true }).click();
@@ -249,7 +249,7 @@ test("with a waiting period: announce, count down, cancel by recovery, continue 
 }, info) => {
   test.setTimeout(120000);
   const { c, recipient, errors, vaultState, build, unseal, deposit, makePacket, reissue, toolRequests }: Ctx = await setup(page, info);
-  // 1. Build a Bunker WITH a 24-hour waiting period, opted into explicitly.
+  // 1. Build a Quantum Safe WITH a 24-hour waiting period, opted into explicitly.
   const { kit, day0, cancel0, vault } = await build(true);
   expect((await vaultState(vault)).delaySecs).toBe(86_400);
 
@@ -281,7 +281,7 @@ test("with a waiting period: announce, count down, cancel by recovery, continue 
   expect(await c.getBalance(recipient.publicKey)).toBe(0);
   await page.screenshot({ path: info.outputPath("v3-waiting.png"), fullPage: true });
 
-  // 4. Cancel it with the cancel file saved when the Bunker was built. The
+  // 4. Cancel it with the cancel file saved when the Quantum Safe was built. The
   // recovery kit is not opened and the offline tool is not used.
   const stale = await makePacket(kit, "1");
   const packet = cancel0;
@@ -289,7 +289,7 @@ test("with a waiting period: announce, count down, cancel by recovery, continue 
   await connect(page);
   await page.getByRole("tab", { name: "Recover or cancel" }).click();
   // Someone without a day key can still find the number the tool asks for.
-  await page.getByPlaceholder("Bunker address").fill(vault);
+  await page.getByPlaceholder("Quantum Safe address").fill(vault);
   await page.getByRole("button", { name: "Look up" }).click();
   await expect(page.getByText("A withdrawal is waiting.", { exact: false })).toBeVisible({ timeout: 15000 });
   await expect(page.locator(".micro", { hasText: "Key generation" }).locator("b")).toHaveText("0");
@@ -329,8 +329,8 @@ test("with a waiting period: announce, count down, cancel by recovery, continue 
   expect([state.epoch, state.opIndex, state.pending?.amount]).toEqual([1n, 1n, 100_000_000n]);
 
   // 6. Seal.
-  await page.getByRole("button", { name: "Seal Bunker" }).click();
-  await expect(page.getByText("Bunker sealed.", { exact: false })).toBeVisible();
+  await page.getByRole("button", { name: "Seal Quantum Safe" }).click();
+  await expect(page.getByText("Quantum Safe sealed.", { exact: false })).toBeVisible();
   await expect(page.getByText("Sealed", { exact: true })).toBeVisible();
   expect(toolRequests, "the offline tool made no network request").toEqual([]);
   expect(errors).toEqual([]);
@@ -342,7 +342,7 @@ test("trusted addresses: instant to them, a cancellable wait to anyone else", as
   const mint = await createMint(c, payer, payer.publicKey, null, 6);
   const walletToken = await getOrCreateAssociatedTokenAccount(c, payer, mint, payer.publicKey);
   await mintTo(c, payer, mint, walletToken.address, payer, 500_000_000);
-  // A Bunker with a 24-hour wait and one trusted address.
+  // A Quantum Safe with a 24-hour wait and one trusted address.
   const trusted = recipient.publicKey;
   const { day0, vault } = await build(true, [trusted.toBase58()]);
   const built = await vaultState(vault);
@@ -358,7 +358,7 @@ test("trusted addresses: instant to them, a cancellable wait to anyone else", as
   await expect(page.getByLabel("Recipient wallet address")).toHaveValue(trusted.toBase58());
   await expect(page.locator(".wait-hint")).toContainText("A trusted address: this arrives as soon as you approve it.");
   await page.getByRole("button", { name: "Review withdrawal" }).click();
-  await expect(page.getByText("one of your Bunker’s trusted addresses", { exact: false })).toBeVisible();
+  await expect(page.getByText("one of your Quantum Safe’s trusted addresses", { exact: false })).toBeVisible();
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Sign and send" }).click();
   await expect(page.getByText("Withdrawal sent.", { exact: false })).toBeVisible({ timeout: 40000 });
@@ -376,7 +376,7 @@ test("trusted addresses: instant to them, a cancellable wait to anyone else", as
   await page.getByLabel("Amount", { exact: true }).fill("120");
   await page.getByLabel("Recipient wallet address").fill(trusted.toBase58());
   await page.getByRole("button", { name: "Review withdrawal" }).click();
-  await expect(page.getByText("one of your Bunker’s trusted addresses", { exact: false })).toBeVisible();
+  await expect(page.getByText("one of your Quantum Safe’s trusted addresses", { exact: false })).toBeVisible();
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Sign and send" }).click();
   await expect(page.getByText("Withdrawal sent.", { exact: false })).toBeVisible({ timeout: 40000 });
@@ -442,7 +442,7 @@ test("tokens: deposit and withdraw a classic SPL token", async ({ page }, info) 
   expect((await getAccount(c, vaultToken)).amount).toBe(180_000_000n);
   await expect(page.locator(".token-rows")).toContainText("180");
   expect((await vaultState(vault)).opIndex).toBe(1n);
-  // More than the Bunker holds is refused before anything is signed.
+  // More than the Quantum Safe holds is refused before anything is signed.
   await page.getByRole("button", { name: "Withdraw", exact: true }).click();
   await page.getByLabel("Asset").selectOption(mint.toBase58());
   await page.getByLabel("Amount", { exact: true }).fill("181");
@@ -453,7 +453,7 @@ test("tokens: deposit and withdraw a classic SPL token", async ({ page }, info) 
   expect(errors).toEqual([]);
 });
 
-test("bunker mode: sweep the wallet in, then read the activity back", async ({ page }, info) => {
+test("qsafe mode: sweep the wallet in, then read the activity back", async ({ page }, info) => {
   const { c, recipient, errors, payer, build, unseal }: Ctx = await setup(page, info);
   const mint = await createMint(c, payer, payer.publicKey, null, 6);
   const walletToken = await getOrCreateAssociatedTokenAccount(c, payer, mint, payer.publicKey);
@@ -461,11 +461,11 @@ test("bunker mode: sweep the wallet in, then read the activity back", async ({ p
   const { day0, vault } = await build(false);
   await unseal(day0);
   await expect(page.getByText("Unsealed", { exact: true })).toBeVisible({ timeout: 15000 });
-  await page.getByRole("button", { name: "Bunker Mode" }).click();
+  await page.getByRole("button", { name: "Quantum Safe Mode" }).click();
   await expect(page.getByLabel("Move SOL")).toBeChecked();
   await expect(page.locator(".sweep-list li")).toHaveCount(2);
   await page.getByRole("button", { name: "Move it all in" }).click();
-  await expect(page.getByText("Bunker Mode on.", { exact: false })).toBeVisible({ timeout: 40000 });
+  await expect(page.getByText("Quantum Safe Mode on.", { exact: false })).toBeVisible({ timeout: 40000 });
   // The wallet keeps only its fee reserve; everything else is inside.
   expect(await c.getBalance(payer.publicKey)).toBe(20_000_000);
   const vaultToken = await getAssociatedTokenAddress(mint, new PublicKey(vault), true);
@@ -487,30 +487,30 @@ test("bunker mode: sweep the wallet in, then read the activity back", async ({ p
   await expect(log.locator("li").nth(0)).toContainText("−1 SOL");
   await expect(log.locator("li").nth(1)).toContainText("Deposit");
   await expect(log.locator("li").nth(2)).toContainText("+42");
-  await expect(log.locator("li").nth(3)).toContainText("Bunker built");
+  await expect(log.locator("li").nth(3)).toContainText("Quantum Safe built");
   expect(errors).toEqual([]);
 });
 
-test("bunker mode keeps the SOL you set aside for spending, and remembers it", async ({ page }, info) => {
+test("qsafe mode keeps the SOL you set aside for spending, and remembers it", async ({ page }, info) => {
   const { c, errors, payer, build, unseal }: Ctx = await setup(page, info);
   const { day0, vault } = await build(false);
   await unseal(day0);
   await expect(page.getByText("Unsealed", { exact: true })).toBeVisible({ timeout: 15000 });
-  // Alerts are offered for the open Bunker, in a new tab so this one keeps its day key.
+  // Alerts are offered for the open Quantum Safe, in a new tab so this one keeps its day key.
   const alerts = page.getByRole("link", { name: "Get desktop alerts" });
   await expect(alerts).toHaveAttribute("href", "/watch#install");
   await expect(alerts).toHaveAttribute("target", "_blank");
-  await expect(page.getByRole("button", { name: "Copy this Bunker’s address for Bunker Watch" })).toBeVisible();
-  await page.getByRole("button", { name: "Bunker Mode" }).click();
+  await expect(page.getByRole("button", { name: "Copy this Quantum Safe’s address for Quantum Safe Watch" })).toBeVisible();
+  await page.getByRole("button", { name: "Quantum Safe Mode" }).click();
   await page.getByLabel("Keep in this wallet for spending (SOL)").fill("0.5");
   await expect(page.getByText("0.5 SOL stays in the wallet", { exact: false })).toBeVisible();
   const before = BigInt(await c.getBalance(new PublicKey(vault)));
   await page.getByRole("button", { name: "Move it all in" }).click();
-  await expect(page.getByText("Bunker Mode on.", { exact: false })).toBeVisible({ timeout: 40000 });
+  await expect(page.getByText("Quantum Safe Mode on.", { exact: false })).toBeVisible({ timeout: 40000 });
   expect(await c.getBalance(payer.publicKey)).toBe(500_000_000);
   expect(BigInt(await c.getBalance(new PublicKey(vault)))).toBeGreaterThan(before);
   // The next sweep starts from the same amount.
-  await page.getByRole("button", { name: "Bunker Mode" }).click();
+  await page.getByRole("button", { name: "Quantum Safe Mode" }).click();
   await expect(page.getByLabel("Keep in this wallet for spending (SOL)")).toHaveValue("0.5");
   // A typo stops the sweep before anything is signed.
   await page.getByLabel("Keep in this wallet for spending (SOL)").fill("half");
@@ -545,14 +545,14 @@ test("passkey: save a day key to the device and unseal with it", async ({ page }
   await expect(page.getByText("Unseals with passkey", { exact: true })).toBeVisible();
   // What is stored is ciphertext: neither the seed nor the word appears.
   const stored = await page.evaluate(() =>
-    Object.entries(localStorage).filter(([k]) => k.startsWith("bunker3-passkey:")),
+    Object.entries(localStorage).filter(([k]) => k.startsWith("qsafe3-passkey:")),
   );
   expect(stored).toHaveLength(1);
   expect(stored[0][1]).not.toContain("seed");
   const seed = JSON.parse(readFileSync(day0, "utf8")).ciphertext as string;
   expect(stored[0][1]).not.toContain(seed.slice(0, 32));
   // Seal, come back, and open with the passkey alone: no file, no password.
-  await page.getByRole("button", { name: "Seal Bunker" }).click();
+  await page.getByRole("button", { name: "Seal Quantum Safe" }).click();
   await page.goto("http://localhost:5173/vault");
   await connect(page);
   // The cross-device statement is required however the key is opened.
@@ -572,9 +572,9 @@ test("passkey: save a day key to the device and unseal with it", async ({ page }
   expect(await c.getBalance(recipient.publicKey)).toBe(250_000_000);
   expect((await vaultState(vault)).opIndex).toBe(1n);
   // Tampered storage does not unlock.
-  await page.getByRole("button", { name: "Seal Bunker" }).click();
+  await page.getByRole("button", { name: "Seal Quantum Safe" }).click();
   await page.evaluate(() => {
-    const key = Object.keys(localStorage).find((k) => k.startsWith("bunker3-passkey:"))!;
+    const key = Object.keys(localStorage).find((k) => k.startsWith("qsafe3-passkey:"))!;
     const r = JSON.parse(localStorage.getItem(key)!);
     r.ciphertext = (r.ciphertext[0] === "0" ? "1" : "0") + r.ciphertext.slice(1);
     localStorage.setItem(key, JSON.stringify(r));

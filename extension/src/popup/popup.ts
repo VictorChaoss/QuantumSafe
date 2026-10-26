@@ -1,6 +1,6 @@
-/** The Bunker Watch popup: what is watched, what is waiting, a wallet check
+/** The Quantum Safe Watch popup: what is watched, what is waiting, a wallet check
  * and the endpoint setting. It reads the same store the background pass
- * writes, and it does nothing to a Bunker: every action that changes one is
+ * writes, and it does nothing to a Quantum Safe: every action that changes one is
  * a link to the website. */
 import "@/sdk/polyfill";
 import { PublicKey } from "@solana/web3.js";
@@ -42,9 +42,9 @@ const amountOf = (p: NonNullable<store.View["pending"]>) =>
  * it shares with the site. Anything else is the network's and is not shown raw. */
 const OURS = [
   "That is not",
-  "No Bunker found",
+  "No Quantum Safe found",
   "Vault address does not match",
-  "Unrecognized Bunker account",
+  "Unrecognized Quantum Safe account",
   "You are already",
   "You can watch",
   "Use an https",
@@ -69,7 +69,7 @@ const head = () =>
   h(
     "div",
     { className: "head" },
-    h("div", { className: "brand" }, svg("svg", { viewBox: "0 0 128 128", "aria-hidden": "true" }, svg("g", { fill: "#F0F3F2" }, svg("path", { d: MARK }), svg("path", { d: MARK_INNER }))), "BUNKER · WATCH"),
+    h("div", { className: "brand" }, svg("svg", { viewBox: "0 0 128 128", "aria-hidden": "true" }, svg("g", { fill: "#F0F3F2" }, svg("path", { d: MARK }), svg("path", { d: MARK_INNER }))), "QSAFE · WATCH"),
     h("div", { className: "net" }, NETWORK.label),
   );
 const big = (first: string, second: string) => h("h1", { className: "big" }, first, h("span", {}, second));
@@ -78,8 +78,8 @@ const out = (path: string, label: string, className = "link") =>
   h("a", { className, href: `${SITE}${path}`, target: "_blank", rel: "noreferrer" }, label);
 /** A picture from the watch kit, if this build has it. The build lists the
  * pictures it packed; one that is not there is not asked for. */
-declare const __BUNKER_WATCH_KIT__: string[] | undefined;
-const packed = typeof __BUNKER_WATCH_KIT__ === "undefined" ? [] : __BUNKER_WATCH_KIT__;
+declare const __QSAFE_WATCH_KIT__: string[] | undefined;
+const packed = typeof __QSAFE_WATCH_KIT__ === "undefined" ? [] : __QSAFE_WATCH_KIT__;
 const kit = (name: string) => (packed.includes(`${name}.jpg`) ? h("img", { className: "kit", src: `kit/${name}.jpg`, alt: "" }) : null);
 
 function ring(fraction: number) {
@@ -101,7 +101,7 @@ function ring(fraction: number) {
     }),
   );
 }
-/** When a Bunker was last read. An old reading says how old, because a card
+/** When a Quantum Safe was last read. An old reading says how old, because a card
  * that looks current and is hours stale is worse than no card. */
 function readAt(view: store.View, now: bigint) {
   const age = now - BigInt(view.checkedAt);
@@ -115,7 +115,7 @@ function waitingCard(view: store.View, now: bigint) {
   return h(
     "div",
     { className: "panel cream", "data-waiting": view.address },
-    h("div", { className: "ph" }, h("span", {}, `Bunker ${short(view.address)}`), h("span", {}, readAt(view, now))),
+    h("div", { className: "ph" }, h("span", {}, `Quantum Safe ${short(view.address)}`), h("span", {}, readAt(view, now))),
     h(
       "div",
       { className: "pb" },
@@ -136,8 +136,8 @@ function waitingCard(view: store.View, now: bigint) {
 function quietCard(view: store.View, now: bigint) {
   return h(
     "div",
-    { className: "panel", "data-bunker": view.address },
-    h("div", { className: "ph" }, h("span", {}, `Bunker ${short(view.address)}`), h("span", {}, readAt(view, now))),
+    { className: "panel", "data-qsafe": view.address },
+    h("div", { className: "ph" }, h("span", {}, `Quantum Safe ${short(view.address)}`), h("span", {}, readAt(view, now))),
     h(
       "div",
       { className: "pb" },
@@ -154,7 +154,7 @@ function quietCard(view: store.View, now: bigint) {
   );
 }
 function addForm() {
-  const input = h("input", { placeholder: "Bunker address", "aria-label": "Bunker address", autocomplete: "off", spellcheck: "false", value: ui.typed.add });
+  const input = h("input", { placeholder: "Quantum Safe address", "aria-label": "Quantum Safe address", autocomplete: "off", spellcheck: "false", value: ui.typed.add });
   input.addEventListener("input", () => (ui.typed.add = input.value));
   const submit = () =>
     void run(async () => {
@@ -176,7 +176,7 @@ async function watchTab(): Promise<Node[]> {
   const problem =
     ui.problem ||
     (store.blind(status)
-      ? "Bunker Watch has not been able to read the network for several minutes. What is shown here may be out of date."
+      ? "Quantum Safe Watch has not been able to read the network for several minutes. What is shown here may be out of date."
       : status.problem);
   if (alerts.length) {
     return [
@@ -193,19 +193,19 @@ async function watchTab(): Promise<Node[]> {
     ].filter((n) => n !== null);
   }
   const waiting = shown.filter((v) => v.pending);
-  const count = `${shown.length} Bunker${shown.length === 1 ? "" : "s"} watched.`;
+  const count = `${shown.length} Quantum Safe${shown.length === 1 ? "" : "s"} watched.`;
   return [
-    shown.length === 0 ? big("Nothing watched.", "Add your Bunker.") : waiting.length ? big("Withdrawal waiting.", count) : big("All quiet.", count),
+    shown.length === 0 ? big("Nothing watched.", "Add your Quantum Safe.") : waiting.length ? big("Withdrawal waiting.", count) : big("All quiet.", count),
     shown.length === 0 ? kit("watch-empty") : null,
     problem ? h("p", { className: "note problem", role: "alert" }, problem) : null,
     ...shown.map((v) => (v.pending ? waitingCard(v, now) : quietCard(v, now))),
     ui.adding
       ? addForm()
       : shown.length < MAX_WATCHED
-        ? h("button", { className: "btn out", onclick: () => ((ui.adding = true), (ui.problem = ""), void render()) }, "+ Watch a Bunker")
+        ? h("button", { className: "btn out", onclick: () => ((ui.adding = true), (ui.problem = ""), void render()) }, "+ Watch a Quantum Safe")
         : null,
     shown.length === 0
-      ? h("p", { className: "note" }, "Paste a Bunker's address. Bunker Watch reads it once a minute and tells you when a withdrawal is announced. It holds no keys and cannot move anything.")
+      ? h("p", { className: "note" }, "Paste a Quantum Safe's address. Quantum Safe Watch reads it once a minute and tells you when a withdrawal is announced. It holds no keys and cannot move anything.")
       : null,
     h("p", { className: "note" }, "Alerts are best effort. ", h("em", {}, "Silence is not proof"), " nothing happened."),
     recent.length
@@ -266,7 +266,7 @@ function checkTab(): Node[] {
         )
       : null,
     h("p", { className: "note" }, "Revoke delegations in your wallet. This check ", h("em", {}, "connects no wallet"), " and stores nothing."),
-    out("/check", "The full check on bunkermode.io"),
+    out("/check", "The full check on qsafemode.io"),
   ].filter((n) => n !== null);
 }
 
@@ -349,7 +349,7 @@ async function run(job: () => Promise<unknown>) {
   ui.busy = false;
   await render();
 }
-const TICKER = [STATUS_LINE, "READ-ONLY: HOLDS NO KEYS", "ALERTS ARE BEST EFFORT", "BUNKER NEVER ASKS FOR A RECOVERY KIT"];
+const TICKER = [STATUS_LINE, "READ-ONLY: HOLDS NO KEYS", "ALERTS ARE BEST EFFORT", "QSAFE NEVER ASKS FOR A RECOVERY KIT"];
 const tickerRun = () => TICKER.flatMap((line) => [line, h("i", {}, "✦")]);
 async function render() {
   const body = ui.tab === "watch" ? await watchTab() : ui.tab === "check" ? checkTab() : await settingsTab();

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Header, Footer } from "@/components/bunker/shell";
-import { Clip } from "@/components/bunker/loop";
-import VaultGauge from "@/components/bunker/vault-gauge";
-import PaymentWallet from "@/components/bunker/payment-wallet";
-import VaultTransactions from "@/components/bunker/vault-transactions";
-import FilmPlayer from "@/components/bunker/film";
+import { Header, Footer } from "@/components/qsafe/shell";
+import { Clip } from "@/components/qsafe/loop";
+import VaultGauge from "@/components/qsafe/vault-gauge";
+import PaymentWallet from "@/components/qsafe/payment-wallet";
+import VaultTransactions from "@/components/qsafe/vault-transactions";
+import FilmPlayer from "@/components/qsafe/film";
 import { HALL_OF_FAME, PAYMENT_WALLET, REPORT_URL, TIERS } from "@/lib/bounty";
 import { getLaunch } from "@/lib/launch-config";
 import { rewardAccountsOf } from "@/lib/creator-reward-accounts";
@@ -15,7 +15,7 @@ import paymentLabels from "@/lib/payment-labels.json";
 export const metadata: Metadata = {
   title: "Bug bounty",
   description:
-    "Break Bunker, report it privately, and get paid from the bounty vault. Public beta on Solana mainnet; its program is audited by CertiK.",
+    "Break Quantum Safe, report it privately, and get paid from the bounty vault. Public beta on Solana mainnet; its program is audited by CertiK.",
 };
 /** Each step, with the clip from the bounty film that shows it. */
 const steps: [string, string, string][] = [
@@ -28,7 +28,7 @@ const steps: [string, string, string][] = [
 const rules = [
   "Proof of concept only. Show that it works; don’t use it.",
   "Never touch funds that aren’t yours.",
-  "Test on your own Bunker, with small amounts.",
+  "Test on your own Quantum Safe, with small amounts.",
   "No public disclosure before the fix ships.",
 ];
 /** The second sentence is a statement about the chain, so it is printed only
@@ -58,7 +58,7 @@ export default function Bounty() {
               <span className="bm-accent">It’s a bounty.</span>
             </h1>
             <p>
-              Bunker holds real funds on Solana mainnet. Its program has been
+              Quantum Safe holds real funds on Solana mainnet. Its program has been
               audited, and no audit catches everything. If you can break it,
               tell us first and get paid for it.
             </p>
@@ -73,7 +73,7 @@ export default function Bounty() {
           </div>
           <div className="bm-panel bounty-film">
             <div className="bm-panel__head">
-              <span>Secure the Bunker</span>
+              <span>Secure the Quantum Safe</span>
               <span>1:11</span>
             </div>
             <FilmPlayer film="bounty" />
@@ -99,13 +99,13 @@ export default function Bounty() {
                 <span className="halftone" />
               </div>
               <p>
-                Funded by creator rewards from the Bunker Mode coin ($BUNKER).
+                Funded by creator rewards from the Quantum Safe Mode coin ($QSAFE).
                 Rewards flow into this wallet and pay for bug bounties and
-                Bunker’s development.
+                Quantum Safe’s development.
               </p>
               <p className="fine">
                 The coin is not an investment and doesn’t unlock anything in
-                Bunker. Nothing here is financial advice.
+                Quantum Safe. Nothing here is financial advice.
               </p>
               <p className="fine">
                 The figure is the SOL in the wallet plus the creator rewards
@@ -196,7 +196,7 @@ export default function Bounty() {
           </ol>
           <p className="micro">
             Not covered: other people’s wallets and apps, Solana itself, sites
-            pretending to be Bunker, tricking a person rather than the
+            pretending to be Quantum Safe, tricking a person rather than the
             software, and the coin. Already listed limits are on the{" "}
             <Link href="/security">security page</Link>; a way around one of
             them is still a finding.

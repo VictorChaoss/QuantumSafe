@@ -40,7 +40,7 @@ import {
 } from "../sdk/v3/protocol";
 import { vectors } from "../scripts/v3-vectors";
 
-const fixture = JSON.parse(readFileSync("fixtures/bunker-v3.json", "utf8"));
+const fixture = JSON.parse(readFileSync("fixtures/qsafe-v3.json", "utf8"));
 const program = new PublicKey(fixture.program);
 const d: Descriptor = {
   chainTag: unhex(fixture.chainTag),
@@ -69,7 +69,7 @@ describe("Protocol 3 derivation", () => {
   it("builds the 109-byte context in the specified order", () => {
     const c = context(d);
     expect(c.length).toBe(241);
-    expect(new TextDecoder().decode(c.slice(0, 12))).toBe("BUNKER-KDF-4");
+    expect(new TextDecoder().decode(c.slice(0, 12))).toBe("QSAFE-KDF-4");
     expect(c[12]).toBe(0);
     expect(hex(c.slice(13, 45))).toBe(fixture.chainTag);
     expect(hex(c.slice(45, 77))).toBe(fixture.programBytes);
@@ -188,18 +188,18 @@ describe("Protocol 3 encodings", () => {
   it("binds messages to the program and the vault address", () => {
     const m = announceMessage(program, unhex(fixture.announce.payload));
     expect(m.length).toBe(276);
-    expect(new TextDecoder().decode(m.slice(0, 16))).toBe("BUNKER3_ANNOUNCE");
+    expect(new TextDecoder().decode(m.slice(0, 16))).toBe("QSAFE3_ANNOUNCE");
     expect(hex(m.slice(16, 48))).toBe(fixture.programBytes);
     expect(new PublicKey(m.slice(48, 80)).toBase58()).toBe(fixture.vault);
     const r = recoverMessage(program, unhex(fixture.recover.payload));
     expect(r.length).toBe(218);
-    expect(new TextDecoder().decode(r.slice(0, 16))).toBe("BUNKER3_RECOVER_");
+    expect(new TextDecoder().decode(r.slice(0, 16))).toBe("QSAFE3_RECOVER_");
     const elsewhere = new PublicKey(new Uint8Array(32).fill(12));
     expect(hex(announceMessage(elsewhere, unhex(fixture.announce.payload)))).not.toBe(hex(m));
   });
   it("parses a vault and reports the phase of its withdrawal", () => {
     const data = new Uint8Array(VAULT_SIZE);
-    data.set(new TextEncoder().encode("BUNKER03"));
+    data.set(new TextEncoder().encode("QSAFE03"));
     data.set(d.vaultId, 8);
     data.set(d.chainTag, 40);
     data.set(unhex(fixture.epoch0.opRoot), 72);
@@ -351,7 +351,7 @@ describe("Protocol 3 vault identity", () => {
 describe("Refusal codes", () => {
   it("has a sentence for every code the program defines, and for no other", async () => {
     const { REFUSALS } = await import("../sdk/v3/refusals");
-    const source = readFileSync("programs/bunker3/src/state.rs", "utf8");
+    const source = readFileSync("programs/qsafe3/src/state.rs", "utf8");
     const body = /pub enum Refusal \{([\s\S]*?)\n\}/.exec(source)![1];
     const codes = [...body.matchAll(/=\s*(\d+),/g)].map((m) => Number(m[1])).sort((a, b) => a - b);
     expect(codes.length).toBeGreaterThan(15);

@@ -1,12 +1,12 @@
 # Security policy
 
-Bunker is in public beta on Solana mainnet and holds real funds. CertiK audited the on-chain program and its signature verifier (commit `f6a37ce`) and published its report on 2026-10-20: https://skynet.certik.com/projects/bunker-mode. No critical, high or medium issues; of its four findings, three are resolved and one is acknowledged. The one code fix is live in commit `9bb0856`, and the upgrade authority has been renounced. The website, offline tool, command-line client and browser extension were not part of that audit. Its upgrade authority has been renounced: nobody can change the program, and a flaw cannot be fixed in place. Deposit only what you could afford to lose.
+Quantum Safe is in public beta on Solana mainnet and holds real funds. CertiK audited the on-chain program and its signature verifier (commit `f6a37ce`) and published its report on 2026-10-20: https://skynet.certik.com/projects/qsafe. No critical, high or medium issues; of its four findings, three are resolved and one is acknowledged. The one code fix is live in commit `9bb0856`, and the upgrade authority has been renounced. The website, offline tool, command-line client and browser extension were not part of that audit. Its upgrade authority has been renounced: nobody can change the program, and a flaw cannot be fixed in place. Deposit only what you could afford to lose.
 
 ## Report privately
 
-Use [GitHub private vulnerability reporting](https://github.com/plantsweb3/bunker/security/advisories/new). Include the affected commit, a minimal local reproduction, expected and observed behavior, and impact. Do not include passwords, wallet seeds, recovery files, API credentials, or private personal data. Do not test against other people's funds or accounts. Use the isolated validator.
+Use [GitHub private vulnerability reporting](https://github.com/VictorChaoss/QuantumSafe/security/advisories/new). Include the affected commit, a minimal local reproduction, expected and observed behavior, and impact. Do not include passwords, wallet seeds, recovery files, API credentials, or private personal data. Do not test against other people's funds or accounts. Use the isolated validator.
 
-If private reporting is unavailable, do not put exploit details in a public issue. The repository owner must restore that channel before collecting reports. There is a bug bounty, described at https://bunkermode.io/bounty; its payout amounts are not set yet. There is no guaranteed response time and no completed audit.
+If private reporting is unavailable, do not put exploit details in a public issue. The repository owner must restore that channel before collecting reports. There is a bug bounty, described at https://qsafemode.io/bounty; its payout amounts are not set yet. There is no guaranteed response time and no completed audit.
 
 ## Scope
 

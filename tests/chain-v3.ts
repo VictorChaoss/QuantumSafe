@@ -31,7 +31,7 @@ if (
 )
   throw new Error("This test only runs against an isolated local validator");
 if (!(await c.getAccountInfo(PROGRAM))?.executable)
-  throw new Error("Build bunker3.so and restart scripts/local-validator.sh");
+  throw new Error("Build qsafe3.so and restart scripts/local-validator.sh");
 const cycles = Number(process.env.CYCLES ?? 25);
 const payer = Keypair.generate();
 await c.confirmTransaction(await c.requestAirdrop(payer.publicKey, 500_000_000_000));

@@ -1,5 +1,5 @@
 /** Protocol 3 encodings and instructions (docs/PROTOCOL.md §2–§4).
- * DRAFT: mirrors programs/bunker3; not reviewed, not used by the released app. */
+ * DRAFT: mirrors programs/qsafe3; not reviewed, not used by the released app. */
 import "../polyfill";
 import { Buffer } from "buffer";
 import {
@@ -48,7 +48,7 @@ export const PROOF_SIZE = 74 + SIGNATURE_SIZE;
 export const executeWindowSecs = (delaySecs: number) => BigInt(Math.max(delaySecs, 86_400));
 const ROLE_OPERATIONAL = 1;
 const text = (s: string) => new TextEncoder().encode(s);
-export const ANNOUNCE_DOMAIN = text("BUNKER3_ANNOUNCE");
+export const ANNOUNCE_DOMAIN = text("QSAFE3_ANNOUNCE");
 /** How far ahead of the chain clock an announcement's deadline may be. */
 export const MAX_ANNOUNCE_AHEAD_SECS = 86_400n;
 const ZERO = new Uint8Array(32);
@@ -67,7 +67,7 @@ const root32 = (b: Uint8Array, what: string) => {
 };
 
 export const vaultAddress = (program: PublicKey, vaultId: Uint8Array) =>
-  PublicKey.findProgramAddressSync([Buffer.from("bunker3"), vaultId], program)[0];
+  PublicKey.findProgramAddressSync([Buffer.from("qsafe3"), vaultId], program)[0];
 export const proofAddress = (
   program: PublicKey,
   payer: PublicKey,
@@ -202,12 +202,12 @@ export type VaultState = {
 export function parseVault(d: Uint8Array): VaultState {
   if (
     d.length !== VAULT_SIZE ||
-    new TextDecoder().decode(d.slice(0, 8)) !== "BUNKER03" ||
+    new TextDecoder().decode(d.slice(0, 8)) !== "QSAFE03" ||
     d[156] > 1 ||
     (d[156] === 0 && !isZero(d.slice(157, 286))) ||
     (d[156] === 1 && d[157] > 1)
   )
-    throw new Error("Unrecognized Bunker account");
+    throw new Error("Unrecognized Quantum Safe account");
   return {
     vaultId: d.slice(8, 40),
     chainTag: d.slice(40, 72),

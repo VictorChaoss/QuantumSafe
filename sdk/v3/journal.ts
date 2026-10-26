@@ -50,7 +50,7 @@ export type Journal = z.infer<typeof journal>;
 const KEPT_ENTRIES = 16;
 export type VaultIdentity = { genesis: string; program: string; vault: string };
 export const journalKey = (k: VaultIdentity) =>
-  `bunker3-journal:${k.genesis}:${k.program}:${k.vault}`;
+  `qsafe3-journal:${k.genesis}:${k.program}:${k.vault}`;
 const used = (e: JournalEntry) => ({ [e.epoch]: e.opIndex });
 /** Throws if the stored journal is unreadable: an unreadable journal means
  * this browser no longer knows what it signed, so it must not sign. */
@@ -165,7 +165,7 @@ const REFUSAL = {
   orphaned:
     "This key was reserved but its signature was not saved. Recover to a new key; do not sign again.",
   behind:
-    "The network is showing an older state of your Bunker than this browser has already signed for. Nothing was signed. Refresh, and if it persists, recover to a new key.",
+    "The network is showing an older state of your Quantum Safe than this browser has already signed for. Nothing was signed. Refresh, and if it persists, recover to a new key.",
 } as const;
 /** Reserves the current key, signs once, saves the result. Never signs a key
  * this browser has already reserved. */
@@ -186,7 +186,7 @@ export async function authorizeAnnouncement(
     const expected = operationalRoot(seed, d, chain.epoch, chain.opIndex);
     if (hex(expected) !== hex(chain.opRoot))
       throw new Error(
-        "This day key does not match the Bunker’s current key. Nothing was signed. Use the newest day key from the recovery tool.",
+        "This day key does not match the Quantum Safe’s current key. Nothing was signed. Use the newest day key from the recovery tool.",
       );
     // The deadline comes from the network's clock; bound it by this device's.
     const local = BigInt(Math.floor(Date.now() / 1000));

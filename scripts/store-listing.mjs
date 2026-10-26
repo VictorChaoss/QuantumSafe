@@ -1,4 +1,4 @@
-// Draws the pictures for the Chrome Web Store listing of Bunker Watch, from
+// Draws the pictures for the Chrome Web Store listing of Quantum Safe Watch, from
 // the built extension itself: the real popup, over stored readings that are
 // made up and labelled SIMULATION.
 //
@@ -9,7 +9,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 const out = "docs/store-listing";
-const ext = `file://${resolve("dist/bunker-watch")}`;
+const ext = `file://${resolve("dist/qsafe-watch")}`;
 const still = `file://${resolve("public/assets/kit/clips/datacenter-city-flyover-poster.jpg")}`;
 const tile = `file://${resolve("public/assets/kit/design/halftone-tile-dark.png")}`;
 const NOW = 1_800_000_000;
@@ -47,7 +47,7 @@ body { width: ${w}px; height: ${h}px; position: relative; }
 .in { position: absolute; inset: 0; padding: ${Math.round(h * 0.13)}px ${Math.round(w * 0.07)}px; display: flex; flex-direction: column; justify-content: space-between; }
 .big { font-size: ${size}px; } .mono { font-size: ${Math.max(10, Math.round(size / 5.4))}px; }</style>
 <div class="bg"></div><div class="shade"></div><div class="tile"></div>
-<div class="in"><div class="mono">Bunker · Watch</div><div class="big">Watch<span>your Bunker.</span></div><div class="mono status">Public beta · read-only: holds no keys</div></div>`;
+<div class="in"><div class="mono">Quantum Safe · Watch</div><div class="big">Watch<span>your Quantum Safe.</span></div><div class="mono status">Public beta · read-only: holds no keys</div></div>`;
 
 const browser = await chromium.launch();
 await mkdir(out, { recursive: true });
@@ -87,7 +87,7 @@ async function draw(name, html, width, height, stored, after) {
   await page.close();
   (await import("node:fs")).rmSync(file);
 }
-await draw("screenshot-1-all-quiet", shot("Watch", "your Bunker.", "Checks up to five Bunkers once a minute, from your own browser. No account and no server of ours."), 1280, 800, quiet);
+await draw("screenshot-1-all-quiet", shot("Watch", "your Quantum Safe.", "Checks up to five Qsafes once a minute, from your own browser. No account and no server of ours."), 1280, 800, quiet);
 await draw("screenshot-2-withdrawal-announced", shot("Know", "in a minute.", "A desktop alert when a withdrawal is announced, with the amount, the whole destination and the time left to cancel it."), 1280, 800, { ...quiet, [`view:${A}`]: view(A, "12400000000", "1", "12", waiting) });
 await draw("screenshot-3-check-a-wallet", shot("Check", "any wallet.", "See what one signature could move from a wallet, and who can already move it. Connects no wallet. Stores nothing."), 1280, 800, quiet, async (popup) => {
   await popup.getByRole("tab", { name: "Check a wallet" }).click();
@@ -95,7 +95,7 @@ await draw("screenshot-3-check-a-wallet", shot("Check", "any wallet.", "See what
   await popup.getByRole("button", { name: "Check" }).click();
   await popup.locator("[data-exposure]").waitFor();
 });
-await draw("screenshot-4-read-only", shot("Reads.", "Moves nothing.", "Holds no keys and cannot send a transaction. Bunker never asks for your recovery kit or its password."), 1280, 800, quiet, async (popup) => {
+await draw("screenshot-4-read-only", shot("Reads.", "Moves nothing.", "Holds no keys and cannot send a transaction. Quantum Safe never asks for your recovery kit or its password."), 1280, 800, quiet, async (popup) => {
   await popup.getByRole("tab", { name: "Settings" }).click();
 });
 await draw("promo-small-440x280", promo(440, 280, 54), 440, 280);

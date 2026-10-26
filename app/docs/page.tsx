@@ -1,7 +1,7 @@
 import { AUDIT } from "@/lib/audit";
 import Link from "next/link";
-import { DocumentLayout } from "@/components/bunker/document-layout";
-export const metadata = { title: "How Bunker works" };
+import { DocumentLayout } from "@/components/qsafe/document-layout";
+export const metadata = { title: "How Quantum Safe works" };
 export default function Page() {
   return (
     <DocumentLayout
@@ -31,7 +31,7 @@ export default function Page() {
         </ul>
       </section>
       <section>
-        <h2>1. Build a Bunker, offline</h2>
+        <h2>1. Build a Quantum Safe, offline</h2>
         <p>
           Download the recovery tool from the{" "}
           <Link href="/recovery">recovery page</Link>. It is a single file
@@ -50,7 +50,7 @@ export default function Page() {
           from its password with scrypt, a function chosen because each
           guess at the password costs an attacker a large amount of memory.
           There is no reset, so the recovery kit’s password should be five or
-          more unrelated words. The Bunker’s address is computed from its keys and its
+          more unrelated words. The Quantum Safe’s address is computed from its keys and its
           waiting period, so nobody else can create it with different ones. The tool makes you re-open the saved kit before it
           continues.
         </p>
@@ -58,13 +58,13 @@ export default function Page() {
       <section>
         <h2>2. Trusted addresses and the waiting period</h2>
         <p>
-          When you build a Bunker you can list up to four trusted addresses.
+          When you build a Quantum Safe you can list up to four trusted addresses.
           A withdrawal to one of them arrives as soon as you approve it. A
           withdrawal to any other address waits, 24 hours unless you pick
           another period from one hour to seven days, and you can cancel it
           during the wait. You can also turn the wait off entirely. The
-          addresses and the period are part of the Bunker’s own address and
-          cannot be changed afterwards; to change them, build a new Bunker
+          addresses and the period are part of the Quantum Safe’s own address and
+          cannot be changed afterwards; to change them, build a new Quantum Safe
           and move to it.
         </p>
         <p>
@@ -83,7 +83,7 @@ export default function Page() {
       <section>
         <h2>3. Deposit from anywhere</h2>
         <p>
-          A Bunker has an ordinary Solana address. SOL can be sent to it from
+          A Quantum Safe has an ordinary Solana address. SOL can be sent to it from
           any wallet, exchange or trading terminal. Classic SPL tokens are
           deposited through the app, which creates the right token account.
           Token-2022 is not supported.
@@ -92,7 +92,7 @@ export default function Page() {
       <section>
         <h2>4. Withdraw</h2>
         <p>
-          Open your Bunker with the day key. Enter the asset, amount and
+          Open your Quantum Safe with the day key. Enter the asset, amount and
           recipient, review them, and approve three transactions: two upload a
           1,124-byte one-time signature, and the third verifies it. The
           signature fixes the exact asset, amount and destination, and names
@@ -115,15 +115,15 @@ export default function Page() {
           your recovery kit to do it. Keep the cancel file where you can reach
           it in minutes, and not beside the day key. It holds no secret and
           cannot move anything; the worst anyone else can do with it is stop
-          your Bunker until you make a new day key from your recovery kit.
+          your Quantum Safe until you make a new day key from your recovery kit.
         </p>
         <p>
           <b>To replace keys at any other time:</b> in
-          {" "}the offline tool, open your recovery kit and enter your Bunker’s
+          {" "}the offline tool, open your recovery kit and enter your Quantum Safe’s
           current key generation. It saves a recovery packet, a new day key
           and that key’s cancel file. Upload the packet on the recovery page. It installs new keys,
           retires every earlier day key, and cancels a withdrawal that has not
-          left. For a given Bunker and key generation the packet is always the
+          left. For a given Quantum Safe and key generation the packet is always the
           same bytes, so making or submitting it twice is harmless.
         </p>
         <p>
@@ -135,7 +135,7 @@ export default function Page() {
       <section>
         <h2>6. Seal</h2>
         <p>
-          Sealing removes the day key from the browser tab. The Bunker on-chain
+          Sealing removes the day key from the browser tab. The Quantum Safe on-chain
           is unchanged, and opens again only with the day key.
         </p>
       </section>
@@ -149,13 +149,13 @@ export default function Page() {
           to pay fees, and the address of any Solana connection.
         </p>
         <p>
-          <a href="/source/bunker-cli.mjs" download="bunker-cli.mjs">
-            Download bunker-cli.mjs
+          <a href="/source/qsafe-cli.mjs" download="qsafe-cli.mjs">
+            Download qsafe-cli.mjs
           </a>{" "}
           and keep it with your day key. Its SHA-256 is in{" "}
           <a href="/source/cli-manifest.json">cli-manifest.json</a>; compare it
           with a copy built from the public source. Run{" "}
-          <code>node bunker-cli.mjs help</code> for the commands.
+          <code>node qsafe-cli.mjs help</code> for the commands.
         </p>
       </section>
       <section>
@@ -167,7 +167,7 @@ export default function Page() {
           </li>
           <li>
             Keep the recovery kit off the device you browse with. Whoever
-            holds it and its password controls the Bunker.
+            holds it and its password controls the Quantum Safe.
           </li>
           <li>
             Lose both the recovery kit and the day key and nobody can open the
@@ -175,7 +175,7 @@ export default function Page() {
           </li>
         </ul>
         <p>
-          <Link href="/security">What Bunker does and does not protect.</Link>
+          <Link href="/security">What Quantum Safe does and does not protect.</Link>
         </p>
       </section>
       <section>
@@ -187,7 +187,7 @@ export default function Page() {
           beta. Its on-chain program was audited by CertiK;{" "}
           <a href={AUDIT.url} target="_blank" rel="noreferrer">read the report</a>.
         </p>
-        <a href="https://github.com/plantsweb3/bunker" className="button light">
+        <a href="https://github.com/VictorChaoss/QuantumSafe" className="button light">
           Get the working repository
         </a>
       </section>

@@ -1,4 +1,4 @@
-import { getConfig, getRpcUrl } from "@/lib/bunker-config";
+import { getConfig, getRpcUrl } from "@/lib/qsafe-config";
 import { boundedText } from "@/lib/bounded-body";
 import { rewardAccountsOf } from "@/lib/creator-reward-accounts";
 import { getLaunch } from "@/lib/launch-config";

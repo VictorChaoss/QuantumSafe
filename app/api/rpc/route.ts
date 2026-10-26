@@ -1,9 +1,9 @@
-import { getConfig, getRpcUrl, MAINNET_GENESIS, MAINNET_PROGRAM_ID } from "@/lib/bunker-config";
+import { getConfig, getRpcUrl, MAINNET_GENESIS, MAINNET_PROGRAM_ID } from "@/lib/qsafe-config";
 import { boundedText, BodyLimitError } from "@/lib/bounded-body";
 import { clientOf, rateLimiter } from "@/lib/rate-limit";
 const allow = rateLimiter(300, 60_000);
 /** A person approves a handful of transactions a minute, each simulated once.
- * Anything faster is not a person using a Bunker. */
+ * Anything faster is not a person using a Quantum Safe. */
 const allowSend = rateLimiter(40, 60_000);
 const SENDS = ["simulateTransaction", "sendTransaction"];
 /** The upstream network's genesis hash, remembered for a minute once it has

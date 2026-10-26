@@ -8,15 +8,15 @@
 
 Assets go into a program-owned vault from any wallet. They come out only with a one-time hash signature from a key the wallet never holds. A stolen seed phrase or a signature given to a drainer site cannot authorize a withdrawal. One recovery kit, kept offline, replaces lost or exposed keys and cancels a withdrawal that is still waiting.
 
-**Release status:** public beta on Solana mainnet. The program is live on Solana mainnet at `DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSuLKm2nJJ`, built from commit `9bb0856` (executable hash `161e6b4caac746dc35115910c2b4d50fe319b97d5a3a4ec39f9b6350adf14518`). It holds real funds. CertiK audited the on-chain program and its signature verifier (commit `f6a37ce`) and published its report on 2026-10-20: https://skynet.certik.com/projects/bunker-mode. No critical, high or medium issues; of its four findings, three are resolved and one is acknowledged. The one code fix is live in commit `9bb0856`, and the upgrade authority has been renounced. The website, offline tool, command-line client and browser extension were not part of that audit. Its upgrade authority has been renounced, so nobody can change the program, and a flaw cannot be fixed in place. Use it only with what you could afford to lose. See [Deployment](docs/DEPLOYMENT.md) and [Security](SECURITY.md).
+**Release status:** public beta on Solana mainnet. The program is live on Solana mainnet at `DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSuLKm2nJJ`, built from commit `9bb0856` (executable hash `161e6b4caac746dc35115910c2b4d50fe319b97d5a3a4ec39f9b6350adf14518`). It holds real funds. CertiK audited the on-chain program and its signature verifier (commit `f6a37ce`) and published its report on 2026-10-20: https://skynet.certik.com/projects/qsafe. No critical, high or medium issues; of its four findings, three are resolved and one is acknowledged. The one code fix is live in commit `9bb0856`, and the upgrade authority has been renounced. The website, offline tool, command-line client and browser extension were not part of that audit. Its upgrade authority has been renounced, so nobody can change the program, and a flaw cannot be fixed in place. Use it only with what you could afford to lose. See [Deployment](docs/DEPLOYMENT.md) and [Security](SECURITY.md).
 
 ## Start reviewing
 
 | Question | Start here |
 |---|---|
 | What can go wrong, and what is not defended? | [Threat model](docs/THREAT-MODEL.md) |
-| What exactly does the program permit? | [Protocol specification](docs/PROTOCOL.md), [program](programs/bunker3/src) |
-| What is signed, and where do the primitives come from? | [Cryptography](docs/CRYPTOGRAPHY.md), [signature verifier](crates/bunker-lmots) |
+| What exactly does the program permit? | [Protocol specification](docs/PROTOCOL.md), [program](programs/qsafe3/src) |
+| What is signed, and where do the primitives come from? | [Cryptography](docs/CRYPTOGRAPHY.md), [signature verifier](crates/qsafe-lmots) |
 | How are keys derived and stored? | [Client](sdk/v3), [offline recovery tool](tools/recovery) |
 | How is it put together? | [Architecture](docs/ARCHITECTURE.md) |
 | What has actually been tested, and what has not? | [Testing](docs/TESTING.md) |
@@ -66,7 +66,7 @@ Use a disposable Wallet Standard wallet that advertises `solana:localnet`, or ru
 npm run typecheck && npm run lint && npm test
 cargo test --workspace --locked
 npm run program:build
-(cd programs/bunker3-svm-tests && cargo test --locked)
+(cd programs/qsafe3-svm-tests && cargo test --locked)
 npm run test:chain          # needs the local validator
 npm run test:cli            # the command-line client, on the local validator
 npm run test:deploy         # the deployment check, against real deployments on the local validator
@@ -76,11 +76,11 @@ npm run audit:dependencies
 
 ## Without the website
 
-`tools/cli/bunker.ts` reads a Bunker, withdraws, finishes an interrupted withdrawal, releases, clears and submits a recovery packet, using a day key file, an ordinary Solana keypair file to pay fees, and an RPC address. It shares the site's signing code and keeps its signing journal in a file beside the day key. It never opens a recovery kit, and like the site, on mainnet it sends only to the published program.
+`tools/cli/qsafe.ts` reads a Quantum Safe, withdraws, finishes an interrupted withdrawal, releases, clears and submits a recovery packet, using a day key file, an ordinary Solana keypair file to pay fees, and an RPC address. It shares the site's signing code and keeps its signing journal in a file beside the day key. It never opens a recovery kit, and like the site, on mainnet it sends only to the published program.
 
-`npm run cli:build` bundles it into one file, `public/source/bunker-cli.mjs`, that runs with Node 22 and nothing else (`node bunker-cli.mjs help`). The site serves that file with its SHA-256, and CI rebuilds it and checks the two builds are identical.
+`npm run cli:build` bundles it into one file, `public/source/qsafe-cli.mjs`, that runs with Node 22 and nothing else (`node qsafe-cli.mjs help`). The site serves that file with its SHA-256, and CI rebuilds it and checks the two builds are identical.
 
-`extension/` is Bunker Watch, a browser extension that watches up to five Bunkers and shows a desktop alert when a withdrawal is announced, without the website and without the project's servers. It is read-only: it holds no keys and sends no transactions. `npm run extension:build` writes `public/source/bunker-watch.zip` and its SHA-256; CI builds it twice and checks the two are identical.
+`extension/` is Quantum Safe Watch, a browser extension that watches up to five Qsafes and shows a desktop alert when a withdrawal is announced, without the website and without the project's servers. It is read-only: it holds no keys and sends no transactions. `npm run extension:build` writes `public/source/qsafe-watch.zip` and its SHA-256; CI builds it twice and checks the two are identical.
 
 [Testing](docs/TESTING.md) says what each covers, what CI does not run, and the known gaps.
 
@@ -90,4 +90,4 @@ npm run audit:dependencies
 
 ## License and attribution
 
-Bunker-authored code is MIT. The one-time signature is LM-OTS as specified in RFC 8554, implemented here from the RFC text and checked against its published test vectors; it is used on its own rather than inside the LMS system that document mainly describes, and its on-chain verifier was audited by CertiK (the TypeScript signer was not part of that audit). Third-party notices are in [THIRD_PARTY.md](THIRD_PARTY.md); image provenance is in [docs/IMAGE-PROVENANCE.txt](docs/IMAGE-PROVENANCE.txt). Brand assets do not grant endorsement or trademark rights.
+Quantum Safe-authored code is MIT. The one-time signature is LM-OTS as specified in RFC 8554, implemented here from the RFC text and checked against its published test vectors; it is used on its own rather than inside the LMS system that document mainly describes, and its on-chain verifier was audited by CertiK (the TypeScript signer was not part of that audit). Third-party notices are in [THIRD_PARTY.md](THIRD_PARTY.md); image provenance is in [docs/IMAGE-PROVENANCE.txt](docs/IMAGE-PROVENANCE.txt). Brand assets do not grant endorsement or trademark rights.

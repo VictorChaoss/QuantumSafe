@@ -1,6 +1,6 @@
 export type DemoStage =
   | "wallet"
-  | "bunkered"
+  | "qsafeed"
   | "compromised"
   | "rejected"
   | "withdrawn";
@@ -15,8 +15,8 @@ export function transition(stage: DemoStage, action: DemoAction): DemoStage {
   const allowed: Partial<
     Record<DemoStage, Partial<Record<DemoAction, DemoStage>>>
   > = {
-    wallet: { deposit: "bunkered" },
-    bunkered: { compromise: "compromised" },
+    wallet: { deposit: "qsafeed" },
+    qsafeed: { compromise: "compromised" },
     compromised: { attack: "rejected" },
     rejected: { withdraw: "withdrawn" },
   };

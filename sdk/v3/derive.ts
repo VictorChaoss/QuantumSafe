@@ -11,7 +11,7 @@ import { ONE_TIME_BYTES } from "./onetime";
 import { trustedBytes } from "./core";
 export const MASTER_BYTES = 32;
 export const SEED_BYTES = 32;
-const LABEL = new TextEncoder().encode("BUNKER-KDF-4");
+const LABEL = new TextEncoder().encode("QSAFE-KDF-4");
 const ROLE_RECOVERY = 0x01;
 const ROLE_EPOCH_SEED = 0x02;
 const ROLE_OPERATIONAL = 0x03;
@@ -37,7 +37,7 @@ const index = (n: bigint) => {
   if (n < 0n || n > 0xffffffffffffffffn) throw new Error("Index out of range");
   return u64(n);
 };
-/** `"BUNKER-KDF-4" || 0x00 || chain_tag || program_id || salt || delay_secs ||
+/** `"QSAFE-KDF-4" || 0x00 || chain_tag || program_id || salt || delay_secs ||
  * trusted`, 241 bytes. Every input of the vault identity except the roots
  * themselves. */
 export function context(d: KeyContext): Uint8Array {

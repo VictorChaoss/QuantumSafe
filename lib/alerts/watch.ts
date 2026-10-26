@@ -191,7 +191,7 @@ export async function runWatch(options: {
       result.vaults++;
       try {
         const info = infos[j];
-        if (!info || !info.owner.equals(program)) throw new Error("not a Bunker account");
+        if (!info || !info.owner.equals(program)) throw new Error("not a Quantum Safe account");
         const state = parseVault(info.data);
         if (!vaultAddress(program, state.vaultId).equals(new PublicKey(address)))
           throw new Error("address does not match identity");

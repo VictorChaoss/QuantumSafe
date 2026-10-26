@@ -1,6 +1,6 @@
 # Cryptographic construction and provenance
 
-Status: experimental. The on-chain verifier (`crates/bunker-lmots`) was audited by CertiK (report published 2026-10-20); the TypeScript signer and key derivation were not. No production or post-quantum security level is asserted.
+Status: experimental. The on-chain verifier (`crates/qsafe-lmots`) was audited by CertiK (report published 2026-10-20); the TypeScript signer and key derivation were not. No production or post-quantum security level is asserted.
 
 ## Signature primitive
 
@@ -14,14 +14,14 @@ public key   K   = H( I || u32(q) || 0x8080 || y[0] || ... || y[33] )
 
 `I` is a 16-byte identifier and `q` a 32-bit number; together they name the key. Each chain step is hashed with its position, so within one key no two hash calls share an input, and two keys' calls can coincide only if the keys share `I` and `q`.
 
-Two implementations were written separately against the RFC text: the verifier the program uses, `crates/bunker-lmots` (about a hundred lines, no dependency but the SHA-256 system call), and the client's `sdk/lmots.ts`, on pinned `@noble/hashes`. Both are checked against RFC 8554 Appendix F:
+Two implementations were written separately against the RFC text: the verifier the program uses, `crates/qsafe-lmots` (about a hundred lines, no dependency but the SHA-256 system call), and the client's `sdk/lmots.ts`, on pinned `@noble/hashes`. Both are checked against RFC 8554 Appendix F:
 
 - **Verification**, against Test Case 1 (`fixtures/rfc8554-test-case-1.json`). It contains two LM-OTS signatures and no private key. Each must verify to a candidate public key that leads, through the Merkle path printed in the RFC, to the LMS public key printed in the RFC.
 - **Key generation and signing**, against Test Case 2 (`fixtures/rfc8554-test-case-2.json`), whose second-level tree uses this parameter set and whose private key the RFC gives as a seed. Signing the RFC's message with that key and the RFC's randomizer must reproduce the RFC's signature byte for byte, and the key's public key must lead through the printed path to the printed LMS public key.
 
 Both implementations share one author; the RFC vectors are the independent check. A second implementation by someone else is still wanted.
 
-An earlier draft used a plain iterated-SHA-256 Winternitz construction adopted from prior work. It was replaced after the internal design review (finding D-6) because it had no positional tweaks, no published analysis and no test vectors from anyone else. The key-derivation label changed with it (`BUNKER-KDF-4`), so no key of this scheme shares bytes with a key of that one.
+An earlier draft used a plain iterated-SHA-256 Winternitz construction adopted from prior work. It was replaced after the internal design review (finding D-6) because it had no positional tweaks, no published analysis and no test vectors from anyone else. The key-derivation label changed with it (`QSAFE-KDF-4`), so no key of this scheme shares bytes with a key of that one.
 
 ### How this use relates to the RFC, stated plainly
 
@@ -30,7 +30,7 @@ An earlier draft used a plain iterated-SHA-256 Winternitz construction adopted f
 **The identifier is derived, not random.** The program computes it from the vault it is verifying for:
 
 ```
-I = first 16 bytes of SHA-256( "BUNKER3_LMOTS_ID" || program_id || chain_tag || salt || role || epoch (8, LE) || index (8, LE) )
+I = first 16 bytes of SHA-256( "QSAFE3_LMOTS_ID" || program_id || chain_tag || salt || role || epoch (8, LE) || index (8, LE) )
 q = 0
 ```
 
@@ -38,7 +38,7 @@ q = 0
 
 Identifiers are not guaranteed unique across vaults. The salt is public once a vault exists, and the identifier does not include the vault's keys (it cannot: the vault's identity is computed from them). Someone can therefore create a vault whose keys share a victim's identifiers. This project found nothing they gain by it: their keys are their own, every signed message names its vault address, and the only effect is that two unrelated keys share hash-input prefixes, which the RFC (section 9.1) tolerates in small numbers. An honest owner's vaults never share a salt. Truncation to 16 bytes follows the RFC's size for `I`; an accidental collision between two positions has probability 2^-128.
 
-**The randomizer is derived, and chosen to bound the verifier's work.** Algorithm 3 of the RFC draws `C` at random; this is the one step of Algorithms 1, 3 and 4b not followed as written. Here a derived one-time key is 1,120 bytes: the 34 chain starts, then a 32-byte seed. Candidate randomizers are `HKDF-SHA256(seed, info = "BUNKER-LMOTS-C" || n (4, LE))` for n = 0, 1, 2, ..., and the signer uses the first one for which verification takes at most 4,080 chain steps. The program refuses a signature that would take more (`VERIFY_STEP_LIMIT`). The number of steps is always 255 × (h + 2), where h is the high byte of the checksum, so the limit admits h ≤ 14, which a uniformly random digest satisfies with probability 0.283. The result:
+**The randomizer is derived, and chosen to bound the verifier's work.** Algorithm 3 of the RFC draws `C` at random; this is the one step of Algorithms 1, 3 and 4b not followed as written. Here a derived one-time key is 1,120 bytes: the 34 chain starts, then a 32-byte seed. Candidate randomizers are `HKDF-SHA256(seed, info = "QSAFE-LMOTS-C" || n (4, LE))` for n = 0, 1, 2, ..., and the signer uses the first one for which verification takes at most 4,080 chain steps. The program refuses a signature that would take more (`VERIFY_STEP_LIMIT`). The number of steps is always 255 × (h + 2), where h is the high byte of the checksum, so the limit admits h ≤ 14, which a uniformly random digest satisfies with probability 0.283. The result:
 
 - verification has a fixed ceiling: about 568,000 compute units for `announce` and 575,000 for `recover` at the limit, where the previous construction could need over a million. The heaviest transaction the client builds was measured at 603,000 of the 800,000 it requests;
 - signing the same message with the same key always gives the same bytes, which is what lets the recovery packet be re-emitted (below);
@@ -56,7 +56,7 @@ A one-time key must sign at most one message. Signing two different messages wit
 
 One uniformly random 32-byte archival master derives every key with HKDF-SHA256 (RFC 5869), empty HKDF salt, and a fixed 241-byte context binding chain tag, program id, a random per-vault salt, the waiting period and the trusted destinations, followed by a role byte and little-endian indices. The vault's identity is the SHA-256 of a domain string, that salt, the chain tag, both genesis public keys, the waiting period and the trusted destinations (PROTOCOL.md §1.2); the program computes it and derives the vault address from it, so the address commits to the keys. The exact inputs are in [PROTOCOL.md](PROTOCOL.md) §1.1 and `sdk/v3/derive.ts`. Roles are disjoint: a recovery key per epoch, a 32-byte seed per epoch, and operational keys derived from that seed. A holder of an epoch seed cannot compute the master, a recovery key, or another epoch's seed.
 
-`fixtures/bunker-v3.json` holds public-test vectors. They are reproduced by the TypeScript client (`npx tsx scripts/v3-vectors.ts`), re-derived independently in Rust with RustCrypto's `hkdf` (keys, public keys and all three signatures, byte for byte), verified with the program's verifier, and accepted by the compiled program (`programs/bunker3-svm-tests/tests/client_vectors.rs`). The client and that check share one author; agreement shows consistency, not correctness.
+`fixtures/qsafe-v3.json` holds public-test vectors. They are reproduced by the TypeScript client (`npx tsx scripts/v3-vectors.ts`), re-derived independently in Rust with RustCrypto's `hkdf` (keys, public keys and all three signatures, byte for byte), verified with the program's verifier, and accepted by the compiled program (`programs/qsafe3-svm-tests/tests/client_vectors.rs`). The client and that check share one author; agreement shows consistency, not correctness.
 
 ## What is signed
 
@@ -69,7 +69,7 @@ The hash signature authorizes these two instructions only. Fee payment, account 
 
 ## Encrypted files
 
-Recovery kit and day key use the same envelope (`sdk/v3/kit.ts`): scrypt (N = 2^17, r = 8, p = 1, from the pinned `@noble/hashes`) with a random 16-byte salt deriving an AES-256-GCM key, a random 12-byte IV, a 128-bit tag, and associated data `BUNKER3_KIT_TEST_V3:` followed by the JSON of the envelope header. The header states in the clear which kind of file it is, and that label is authenticated: a page expecting a day key refuses a recovery kit before deriving anything from the password typed, and relabelling a file makes decryption fail. Plaintext is the schema-ordered JSON of the file. After decryption the vault address is re-derived from the stored program and vault id, a recovery kit's vault identity is recomputed from its master, salt and waiting period, and a file of one kind is refused where the other is expected.
+Recovery kit and day key use the same envelope (`sdk/v3/kit.ts`): scrypt (N = 2^17, r = 8, p = 1, from the pinned `@noble/hashes`) with a random 16-byte salt deriving an AES-256-GCM key, a random 12-byte IV, a 128-bit tag, and associated data `QSAFE3_KIT_TEST_V3:` followed by the JSON of the envelope header. The header states in the clear which kind of file it is, and that label is authenticated: a page expecting a day key refuses a recovery kit before deriving anything from the password typed, and relabelling a file makes decryption fail. Plaintext is the schema-ordered JSON of the file. After decryption the vault address is re-derived from the stored program and vault id, a recovery kit's vault identity is recomputed from its master, salt and waiting period, and a file of one kind is refused where the other is expected.
 
 The two files have different passwords. The day key's is typed into the website; the recovery kit's is typed only into the offline tool, which refuses to give both the same one. A password is normalised to Unicode NFKC before use, so the same password typed on another system opens the file. The recovery kit's must be at least 16 characters with at least eight different ones; the day key's at least 12 with six. That is a floor against the worst choices, not a strength guarantee. scrypt at these settings makes each guess cost 128 MiB of memory and roughly a third of a second on a laptop, which removes most of the advantage of graphics cards, but a guessable password is still guessable: an attacker who copies the recovery kit and can spend real money needs to be facing five or more unrelated words, and the tool says so. An earlier draft used PBKDF2 at 600,000 iterations, which an internal estimate put at about 2^44 guesses per $100,000. There is no reset. JavaScript cannot reliably erase copies from memory.
 

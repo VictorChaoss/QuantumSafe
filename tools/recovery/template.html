@@ -6,7 +6,7 @@
 <!-- No connection of any kind is permitted. The script is pinned by hash. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src '__SCRIPT_HASH__'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'; webrtc 'block'">
 <meta name="referrer" content="no-referrer">
-<title>Bunker recovery tool (offline)</title>
+<title>Quantum Safe recovery tool (offline)</title>
 <style>
 :root{color-scheme:dark;--bg:#0a0a0a;--fg:#f5f7f6;--mist:#9ca3af;--ice:#7dd3c7;--line:#2a3235}
 *{box-sizing:border-box}
@@ -59,27 +59,27 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
 </head>
 <body>
 <main>
-<div class="eyebrow">BUNKER · OFFLINE · PUBLIC BETA</div>
+<div class="eyebrow">QSAFE · OFFLINE · PUBLIC BETA</div>
 <h1>Recovery tool.</h1>
 <p>This file is the only place your recovery kit is ever opened. Its own policy stops it making network connections: it reads files you give it and saves files you carry back to the website.</p>
-<div class="warn" id="online"><strong>This device is online.</strong> The tool will not send anything, but for a real Bunker you would open it on a device that is disconnected, or never connects.</div>
-<div class="note">Public beta, not audited. A Bunker built for mainnet holds real funds: start small.</div>
+<div class="warn" id="online"><strong>This device is online.</strong> The tool will not send anything, but for a real Quantum Safe you would open it on a device that is disconnected, or never connects.</div>
+<div class="note">Public beta, not audited. A Quantum Safe built for mainnet holds real funds: start small.</div>
 <div class="warn" id="served" hidden><strong>Save this page first.</strong> The recovery tool does not run from a website. Download the file, then open the saved copy from your device.</div>
 <div id="tool">
 <nav role="tablist">
-<button id="tab-build" role="tab" aria-selected="true">Build a new Bunker</button>
+<button id="tab-build" role="tab" aria-selected="true">Build a new Quantum Safe</button>
 <button id="tab-recover" role="tab" aria-selected="false">Recover or cancel</button>
 </nav>
 <section id="panel-build">
 <h2>One kit, kept for good.</h2>
-<p>Five steps. At the end you will have four files: a recovery kit to put away, a day key to open your Bunker with, a cancel file to keep within reach, and a public request the website uses to build it.</p>
+<p>Five steps. At the end you will have four files: a recovery kit to put away, a day key to open your Quantum Safe with, a cancel file to keep within reach, and a public request the website uses to build it.</p>
 
 <div class="step">
 <div class="step-head"><span class="num">1</span><h3>Which network</h3></div>
 <label>Network card <small>Download it from the website’s Recovery page and choose it here.</small><input id="card" type="file" accept=".json,application/json"></label>
 <div class="box" id="card-box" hidden>
 <code id="card-echo" style="white-space:pre-wrap"></code>
-<label class="check"><input id="card-ack" type="checkbox"><span>These match what the Bunker website shows under “Network”. A Bunker built for a different program is a different Bunker.</span></label>
+<label class="check"><input id="card-ack" type="checkbox"><span>These match what the Quantum Safe website shows under “Network”. A Quantum Safe built for a different program is a different Quantum Safe.</span></label>
 </div>
 </div>
 
@@ -94,7 +94,7 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
 
 <div class="step">
 <div class="step-head"><span class="num">3</span><h3>Day key password</h3></div>
-<p class="lede">Protects the day key, which you open on the Bunker website to withdraw. It must be different from the recovery password.</p>
+<p class="lede">Protects the day key, which you open on the Quantum Safe website to withdraw. It must be different from the recovery password.</p>
 <label>Day key password<input id="day-password" type="password" autocomplete="new-password" placeholder="At least 12 characters"></label>
 <label>Confirm day key password<input id="day-repeat" type="password" autocomplete="new-password" placeholder="Type it again"></label>
 <div class="hint" id="day-hint"></div>
@@ -102,7 +102,7 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
 </div>
 
 <div class="step">
-<div class="step-head"><span class="num">4</span><h3>Where your Bunker may send, and how fast</h3></div>
+<div class="step-head"><span class="num">4</span><h3>Where your Quantum Safe may send, and how fast</h3></div>
 <p class="lede">Trusted addresses receive withdrawals at once. Everything else waits, and while it waits you can cancel it with this recovery kit. That wait is the only thing that stops someone who steals your day key.</p>
 <label>Trusted address 1 (optional)<input id="trusted-1" type="text" autocomplete="off" spellcheck="false" placeholder="A wallet whose keys you hold"></label>
 <label>Trusted address 2 (optional)<input id="trusted-2" type="text" autocomplete="off" spellcheck="false"></label>
@@ -111,7 +111,7 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
 <label style="margin-top:16px">Trusted address 4 (optional)<input id="trusted-4" type="text" autocomplete="off" spellcheck="false"></label>
 </div>
 <div class="row"><button class="link" id="more-trusted" type="button">Add more trusted addresses</button></div>
-<small>Choose wallets whose keys you hold and that a thief on your everyday computer could not also empty: a hardware wallet is the right answer. Not the wallet you connect to websites. Be careful with an exchange deposit address: someone who steals your day key can send anything in this Bunker there at once, in any amount, and an exchange may not credit a token it does not list or an amount below its minimum. Check every character; these cannot be changed for this Bunker.</small>
+<small>Choose wallets whose keys you hold and that a thief on your everyday computer could not also empty: a hardware wallet is the right answer. Not the wallet you connect to websites. Be careful with an exchange deposit address: someone who steals your day key can send anything in this Quantum Safe there at once, in any amount, and an exchange may not credit a token it does not list or an amount below its minimum. Check every character; these cannot be changed for this Quantum Safe.</small>
 <label>Withdrawals to any other address wait
 <select id="delay" autocomplete="off"><option value="3600">1 hour</option><option value="86400" selected>24 hours</option><option value="259200">3 days</option><option value="604800">7 days</option><option value="0">Not at all (no protection if your day key is stolen)</option></select></label>
 <div class="box accept">
@@ -129,30 +129,30 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
 <div class="status" id="build-status" role="status"></div>
 <ul class="files" id="build-files" hidden></ul>
 <div id="built" hidden class="done">
-<h3>Your Bunker’s address</h3>
+<h3>Your Quantum Safe’s address</h3>
 <p><code id="built-address"></code></p>
 <ol>
 <li><strong>Recovery kit.</strong> Move it off this device: a USB stick in a drawer, and a second copy somewhere else. Never upload it anywhere.</li>
-<li><strong>Day key.</strong> This is what you open your Bunker with on the website.</li>
-<li><strong>Creation request.</strong> Public. Upload it on the website’s Recovery page to build the Bunker, then deposit.</li>
-<li><strong>Cancel file.</strong> Your emergency stop. If a withdrawal you did not make is waiting, upload this file on the website’s Recovery page: it cancels the withdrawal and kills this day key, at once, without this kit. Keep it where you can reach it in minutes, somewhere other than beside the day key: your phone, your email to yourself. It holds no secret and cannot move anything. Anyone who has it can only do the same thing: stop your Bunker until you come back here with the kit to make a new day key.</li>
+<li><strong>Day key.</strong> This is what you open your Quantum Safe with on the website.</li>
+<li><strong>Creation request.</strong> Public. Upload it on the website’s Recovery page to build the Quantum Safe, then deposit.</li>
+<li><strong>Cancel file.</strong> Your emergency stop. If a withdrawal you did not make is waiting, upload this file on the website’s Recovery page: it cancels the withdrawal and kills this day key, at once, without this kit. Keep it where you can reach it in minutes, somewhere other than beside the day key: your phone, your email to yourself. It holds no secret and cannot move anything. Anyone who has it can only do the same thing: stop your Quantum Safe until you come back here with the kit to make a new day key.</li>
 </ol>
 </div>
 </div>
 </section>
 <section id="panel-recover" hidden>
 <h2>Install new keys.</h2>
-<p>A recovery packet replaces every key, kills every earlier day key and cancels a withdrawal that is still waiting. It never moves assets. Making the same packet twice gives the same file, so it is safe to repeat. If you already used your cancel file on the website, the keys have been replaced: enter the generation your Bunker shows now and re-issue its day key.</p>
+<p>A recovery packet replaces every key, kills every earlier day key and cancels a withdrawal that is still waiting. It never moves assets. Making the same packet twice gives the same file, so it is safe to repeat. If you already used your cancel file on the website, the keys have been replaced: enter the generation your Quantum Safe shows now and re-issue its day key.</p>
 <label>Recovery kit<input id="kit" type="file" accept=".json,application/json"></label>
 <label>Recovery password<input id="kit-password" type="password" autocomplete="off" placeholder="At least 12 characters"></label>
 <div class="box" id="kit-box" hidden><code id="kit-echo" style="white-space:pre-wrap"></code></div>
-<label>Current key generation (shown on your Bunker page, or look it up by Bunker address on the website’s Recovery page)<input id="epoch" type="text" inputmode="numeric" placeholder="0"></label>
+<label>Current key generation (shown on your Quantum Safe page, or look it up by Quantum Safe address on the website’s Recovery page)<input id="epoch" type="text" inputmode="numeric" placeholder="0"></label>
 <label>Password for the new day key (not the recovery password)<input id="new-day-password" type="password" autocomplete="new-password" placeholder="At least 12 characters"></label>
 <label>Confirm new day key password<input id="new-day-repeat" type="password" autocomplete="new-password" placeholder="At least 12 characters"></label>
 <div class="row"><button class="go" id="recover">Make recovery packet</button><button class="ghost" id="reissue">Only re-issue this generation’s day key and cancel file</button></div>
 <div class="box">
 <strong>Not recovering today?</strong>
-<small>A forgotten recovery password is the most likely way to lose a Bunker for good. Every few months, choose your kit above, type its password and press this. It only checks that the kit still opens; it creates nothing and changes nothing.</small>
+<small>A forgotten recovery password is the most likely way to lose a Quantum Safe for good. Every few months, choose your kit above, type its password and press this. It only checks that the kit still opens; it creates nothing and changes nothing.</small>
 <div class="row"><button class="ghost" id="check-kit" type="button">Check that my kit still opens</button></div>
 </div>
 <div class="status" id="recover-status" role="status"></div>

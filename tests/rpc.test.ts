@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { POST } from "../app/api/rpc/route";
 import { boundedText, BodyLimitError } from "../lib/bounded-body";
-import { MAINNET_GENESIS } from "../lib/bunker-config";
-function request(body: unknown, origin = "https://bunkermode.io") {
-  return new Request("https://bunkermode.io/api/rpc", {
+import { MAINNET_GENESIS } from "../lib/qsafe-config";
+function request(body: unknown, origin = "https://qsafemode.io") {
+  return new Request("https://qsafemode.io/api/rpc", {
     method: "POST",
     headers: { origin },
     body: typeof body === "string" ? body : JSON.stringify(body),
@@ -17,7 +17,7 @@ afterEach(() => {
 });
 describe("RPC boundary", () => {
   it("checks that the network is mainnet before forwarding a mainnet write", async () => {
-    vi.stubEnv("BUNKER_ENABLE_TEST_CUSTODY", "false");
+    vi.stubEnv("QSAFE_ENABLE_TEST_CUSTODY", "false");
     const elsewhere = vi.fn().mockResolvedValue(Response.json({ result: "wrong" }));
     vi.stubGlobal("fetch", elsewhere);
     expect((await POST(request(write))).status).toBe(403);
@@ -32,9 +32,9 @@ describe("RPC boundary", () => {
   });
   it("limits how fast one client can simulate or send", async () => {
     const from = (ip: string) =>
-      new Request("https://bunkermode.io/api/rpc", {
+      new Request("https://qsafemode.io/api/rpc", {
         method: "POST",
-        headers: { origin: "https://bunkermode.io", "x-real-ip": ip },
+        headers: { origin: "https://qsafemode.io", "x-real-ip": ip },
         body: JSON.stringify(write),
       });
     vi.stubGlobal("fetch", vi.fn().mockImplementation(() => Promise.resolve(Response.json({ result: MAINNET_GENESIS }))));
@@ -67,7 +67,7 @@ describe("RPC boundary", () => {
     expect(fetcher).toHaveBeenCalledTimes(1);
   });
   it("forwards only the read methods the app uses and refuses everything else", async () => {
-    vi.stubEnv("BUNKER_ENABLE_TEST_CUSTODY", "false");
+    vi.stubEnv("QSAFE_ENABLE_TEST_CUSTODY", "false");
     const fetcher = vi
       .fn()
       .mockImplementation(() =>
@@ -106,7 +106,7 @@ describe("RPC boundary", () => {
     expect(fetcher).toHaveBeenCalledTimes(5);
   });
   it("rejects batches, invalid JSON, cross-origin calls and oversized request bytes", async () => {
-    vi.stubEnv("BUNKER_ENABLE_TEST_CUSTODY", "false");
+    vi.stubEnv("QSAFE_ENABLE_TEST_CUSTODY", "false");
     expect((await POST(request([read]))).status).toBe(400);
     expect((await POST(request("{"))).status).toBe(400);
     expect(
@@ -115,14 +115,14 @@ describe("RPC boundary", () => {
     expect((await POST(request("é".repeat(10000)))).status).toBe(413);
   });
   it("rejects unexpected or mainnet genesis before forwarding test writes", async () => {
-    vi.stubEnv("BUNKER_ENABLE_TEST_CUSTODY", "true");
-    vi.stubEnv("BUNKER_TEST_NETWORK", "localnet");
-    vi.stubEnv("BUNKER_TEST_PROGRAM_ID", "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn");
+    vi.stubEnv("QSAFE_ENABLE_TEST_CUSTODY", "true");
+    vi.stubEnv("QSAFE_TEST_NETWORK", "localnet");
+    vi.stubEnv("QSAFE_TEST_PROGRAM_ID", "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn");
     for (const [expected, actual] of [
       ["local", "wrong"],
       [MAINNET_GENESIS, MAINNET_GENESIS],
     ]) {
-      vi.stubEnv("BUNKER_LOCAL_GENESIS", expected);
+      vi.stubEnv("QSAFE_LOCAL_GENESIS", expected);
       const fetch = vi
         .fn()
         .mockResolvedValue(Response.json({ result: actual }));
@@ -132,10 +132,10 @@ describe("RPC boundary", () => {
     }
   });
   it("forwards test writes only after a pinned local genesis match", async () => {
-    vi.stubEnv("BUNKER_ENABLE_TEST_CUSTODY", "true");
-    vi.stubEnv("BUNKER_TEST_NETWORK", "localnet");
-    vi.stubEnv("BUNKER_TEST_PROGRAM_ID", "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn");
-    vi.stubEnv("BUNKER_LOCAL_GENESIS", "local");
+    vi.stubEnv("QSAFE_ENABLE_TEST_CUSTODY", "true");
+    vi.stubEnv("QSAFE_TEST_NETWORK", "localnet");
+    vi.stubEnv("QSAFE_TEST_PROGRAM_ID", "k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn");
+    vi.stubEnv("QSAFE_LOCAL_GENESIS", "local");
     const fetch = vi
       .fn()
       .mockResolvedValueOnce(Response.json({ result: "local" }))
@@ -147,7 +147,7 @@ describe("RPC boundary", () => {
     expect(fetch).toHaveBeenCalledTimes(2);
   });
   it("caps upstream response bytes", async () => {
-    vi.stubEnv("BUNKER_ENABLE_TEST_CUSTODY", "false");
+    vi.stubEnv("QSAFE_ENABLE_TEST_CUSTODY", "false");
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue(new Response("x".repeat(3000001))),
@@ -172,9 +172,9 @@ describe("RPC request limits", () => {
   const ok = () => vi.fn().mockImplementation(async () => Response.json({ jsonrpc: "2.0", id: 1, result: [] }));
   const call = (method: string, params: unknown[], headers: Record<string, string> = {}) =>
     POST(
-      new Request("https://bunkermode.io/api/rpc", {
+      new Request("https://qsafemode.io/api/rpc", {
         method: "POST",
-        headers: { origin: "https://bunkermode.io", ...headers },
+        headers: { origin: "https://qsafemode.io", ...headers },
         body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
       }),
     );
@@ -202,7 +202,7 @@ describe("RPC request limits", () => {
 describe("Client identity for rate limiting", () => {
   it("prefers the platform's address, groups an IPv6 subscriber, and cannot be reset by filling the table", async () => {
     const { clientOf, rateLimiter } = await import("../lib/rate-limit");
-    const req = (h: Record<string, string>) => new Request("https://bunkermode.io/api/rpc", { headers: h });
+    const req = (h: Record<string, string>) => new Request("https://qsafemode.io/api/rpc", { headers: h });
     expect(clientOf(req({ "x-real-ip": "203.0.113.9", "x-forwarded-for": "198.51.100.1" }))).toBe("203.0.113.9");
     expect(clientOf(req({ "x-forwarded-for": "198.51.100.1, 10.0.0.1" }))).toBe("198.51.100.1");
     expect(clientOf(req({}))).toBeNull();

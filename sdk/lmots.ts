@@ -4,7 +4,7 @@
  *
  * Every hash input follows the RFC byte for byte; `tests/lmots.test.ts` checks
  * this file against the RFC's Appendix F. The program's verifier is
- * `crates/bunker-lmots`, written separately against the same text.
+ * `crates/qsafe-lmots`, written separately against the same text.
  *
  * Unreviewed. A key signs ONE message; a second, different message under the
  * same key lets anyone forge. Callers enforce that, not this file. */

@@ -248,7 +248,7 @@ describe("Protocol 3 key files", () => {
     await expect(decryptDayKey(a, password)).rejects.toThrow("not a day key");
     await expect(decryptArchival(k, password)).rejects.toThrow("not an archival");
     await expect(decryptArchival(a, "wrong password here")).rejects.toThrow("Incorrect password");
-    await expect(decryptArchival("{}", password)).rejects.toThrow("not a Bunker key file");
+    await expect(decryptArchival("{}", password)).rejects.toThrow("not a Quantum Safe key file");
   });
   it("rejects a file whose vault address does not match its identity", async () => {
     const other = vaultAddress(program, new Uint8Array(32).fill(8)).toBase58();
@@ -274,9 +274,9 @@ describe("Protocol 3 key files", () => {
   });
   it("derives the file key with scrypt and holds the recovery kit to a higher floor", async () => {
     const e = JSON.parse(await encryptFile(archival, password));
-    expect([e.format, e.kdf, e.N, e.r, e.p, e.kind]).toEqual(["bunker3-encrypted-v3", "scrypt", 131072, 8, 1, "archival"]);
+    expect([e.format, e.kdf, e.N, e.r, e.p, e.kind]).toEqual(["qsafe3-encrypted-v3", "scrypt", 131072, 8, 1, "archival"]);
     // Weakening the cost in the file does not make it open faster: the cost is fixed.
-    await expect(decryptArchival(JSON.stringify({ ...e, N: 1024 }), password)).rejects.toThrow("not a Bunker key file");
+    await expect(decryptArchival(JSON.stringify({ ...e, N: 1024 }), password)).rejects.toThrow("not a Quantum Safe key file");
     // Fourteen characters is enough for a day key and not for the kit.
     await expect(encryptFile(archival, "fourteen chars")).rejects.toThrow("at least 16");
     expect(typeof (await encryptFile(day, "fourteen chars"))).toBe("string");

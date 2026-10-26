@@ -15,7 +15,7 @@ import {
   vaultAddressBytes,
 } from "./core";
 import { genesisVault } from "./master";
-import { labelMatchesGenesis } from "../../lib/bunker-config";
+import { labelMatchesGenesis } from "../../lib/qsafe-config";
 import type { Descriptor } from "./derive";
 const hex32 = z.string().regex(/^[0-9a-f]{64}$/);
 const base = {
@@ -25,7 +25,7 @@ const base = {
   program: z.string().min(32).max(44),
   /** Random, chosen when the kit is made. Every key is derived under it. */
   salt: hex32,
-  /** Wallets this Bunker pays without waiting. Fixed when it is built. */
+  /** Wallets this Quantum Safe pays without waiting. Fixed when it is built. */
   trusted: z.array(z.string().min(32).max(44)).max(TRUSTED_SLOTS),
   vaultId: hex32,
   vault: z.string().min(32).max(44),
@@ -54,7 +54,7 @@ export const dayKeySchema = z
 export type ArchivalKit = z.infer<typeof archivalSchema>;
 export type DayKey = z.infer<typeof dayKeySchema>;
 type Identity = Pick<ArchivalKit, "genesis" | "program" | "vaultId" | "vault">;
-/** The public identity any Bunker file names. The chain tag is the cluster's
+/** The public identity any Quantum Safe file names. The chain tag is the cluster's
  * genesis hash; the vault address must be the address of its own identity. */
 export function identityOf(k: Identity) {
   const d = {
@@ -104,7 +104,7 @@ export function validateDayKey(input: unknown): DayKey {
 const SCRYPT = { N: 131072, r: 8, p: 1 } as const;
 const envelopeSchema = z
   .object({
-    format: z.literal("bunker3-encrypted-v3"),
+    format: z.literal("qsafe3-encrypted-v3"),
     /** In the clear and authenticated, so a page that expects a day key can
      * refuse a recovery kit without ever deriving a key from its password. */
     kind: z.enum(["archival", "day-key"]),
@@ -121,7 +121,7 @@ const envelopeSchema = z
 type Kind = "archival" | "day-key";
 const header = (kind: Kind, salt: string, iv: string) =>
   ({
-    format: "bunker3-encrypted-v3",
+    format: "qsafe3-encrypted-v3",
     kind,
     aead: "AES-256-GCM",
     kdf: "scrypt",
@@ -130,7 +130,7 @@ const header = (kind: Kind, salt: string, iv: string) =>
     iv,
   }) as const;
 const aad = (kind: Kind, salt: string, iv: string) =>
-  new TextEncoder().encode("BUNKER3_KIT_TEST_V3:" + JSON.stringify(header(kind, salt, iv)));
+  new TextEncoder().encode("QSAFE3_KIT_TEST_V3:" + JSON.stringify(header(kind, salt, iv)));
 /** The same password typed on another keyboard or system must give the same
  * bytes, or a file with no reset could never be opened again. */
 const normalize = (password: string) => password.normalize("NFKC");
@@ -194,7 +194,7 @@ async function decrypt(raw: string, password: string, expected: Kind): Promise<u
   try {
     e = envelopeSchema.parse(JSON.parse(raw));
   } catch {
-    throw new Error("That is not a Bunker key file");
+    throw new Error("That is not a Quantum Safe key file");
   }
   // Before the password is used for anything.
   if (e.kind !== expected) throw wrongKind(NAME[expected]);
@@ -226,7 +226,7 @@ export async function decryptDayKey(raw: string, password: string) {
   return validateDayKey(v);
 }
 /** Files for a test network say so in their name. Files for mainnet do not. */
-export const filePrefix = (k: { network: string }) => (k.network === "mainnet-beta" ? "bunker-" : "bunker-test-");
+export const filePrefix = (k: { network: string }) => (k.network === "mainnet-beta" ? "qsafe-" : "qsafe-test-");
 export const fileName = (k: ArchivalKit | DayKey) =>
   k.kind === "archival"
     ? `${filePrefix(k)}RECOVERY-KIT-${k.vault.slice(0, 8)}.json`

@@ -3,7 +3,7 @@
 export const AUDIT = {
   by: "CertiK",
   /** CertiK's public page for the project, with the report. */
-  url: "https://skynet.certik.com/projects/bunker-mode",
+  url: "https://skynet.certik.com/projects/qsafe",
   published: "20 October 2026",
   /** What was reviewed: the on-chain program and its signature verifier. */
   commit: "f6a37ce",
