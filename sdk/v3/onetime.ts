@@ -24,7 +24,9 @@ export const VERIFY_STEP_LIMIT = 4080;
 export const SIGNS_ANNOUNCEMENTS = 1;
 export const SIGNS_RECOVERY = 2;
 const text = (s: string) => new TextEncoder().encode(s);
-const IDENTIFIER_DOMAIN = text("QSAFE_3_LMOTS_ID");
+const IDENTIFIER_DOMAIN = new Uint8Array([
+  66, 85, 78, 75, 69, 82, 51, 95, 76, 77, 79, 84, 83, 95, 73, 68,
+]);
 const RANDOMIZER_LABEL = text("QSAFE-LMOTS-C");
 const NO_SALT = new Uint8Array(0);
 /** What a signer's identifier is computed from. All three are public. */

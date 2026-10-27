@@ -11,7 +11,7 @@ import { ONE_TIME_BYTES } from "./onetime";
 import { trustedBytes } from "./core";
 export const MASTER_BYTES = 32;
 export const SEED_BYTES = 32;
-const LABEL = new TextEncoder().encode("QSAFE-KDF-4");
+const LABEL = new TextEncoder().encode("QSAFE_KDF_04");
 const ROLE_RECOVERY = 0x01;
 const ROLE_EPOCH_SEED = 0x02;
 const ROLE_OPERATIONAL = 0x03;

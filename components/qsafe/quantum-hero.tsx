@@ -142,7 +142,9 @@ function createGeodesicMesh() {
  * Full-Screen Pure Titanium & Glacial Ice Launch Stage
  * Features a 3D Floating Brushed-Metal Geodesic Quantum Sphere + Sweeping Orbital Rings
  */
-export function QuantumLaunchIntro({ ca = "DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSuLKm2nJJ" }: { ca?: string }) {
+export function QuantumLaunchIntro({ ca }: { ca?: string }) {
+  const displayAddress = ca || "DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSuLKm2nJJ";
+  const pillLabel = ca ? "$QSAFE CA" : "PROGRAM ID";
   const [exited, setExited] = useState(false);
   const [entering, setEntering] = useState(false);
   const [viewMode, setViewMode] = useState<"spin" | "orbit" | "vault">("spin");
@@ -190,7 +192,7 @@ export function QuantumLaunchIntro({ ca = "DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSu
   };
 
   const handleCopyCa = () => {
-    navigator.clipboard?.writeText(ca).catch(() => {});
+    navigator.clipboard?.writeText(displayAddress).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
   };
@@ -530,8 +532,8 @@ export function QuantumLaunchIntro({ ca = "DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSu
 
         {/* CA / Program Bar */}
         <div className="qs-ucl-ca-bar">
-          <span className="qs-ca-pill">$QSAFE CA</span>
-          <span className="qs-ca-text">{ca}</span>
+          <span className="qs-ca-pill">{pillLabel}</span>
+          <span className="qs-ca-text">{displayAddress}</span>
           <button type="button" onClick={handleCopyCa} className="qs-ca-copy">
             {copied ? "COPIED" : "COPY"}
           </button>

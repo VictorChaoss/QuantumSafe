@@ -19,8 +19,11 @@ import {
   signAnnouncement,
 } from "../sdk/v3/authority";
 import {
+  ANNOUNCE_DOMAIN,
   ANNOUNCE_SIZE,
+  RECOVER_DOMAIN,
   RECOVER_SIZE,
+  VAULT_MAGIC_BYTES,
   VAULT_SIZE,
   announceIx,
   announceMessage,
@@ -69,7 +72,7 @@ describe("Protocol 3 derivation", () => {
   it("builds the 109-byte context in the specified order", () => {
     const c = context(d);
     expect(c.length).toBe(241);
-    expect(new TextDecoder().decode(c.slice(0, 12))).toBe("QSAFE-KDF-4");
+    expect(new TextDecoder().decode(c.slice(0, 12))).toBe("QSAFE_KDF_04");
     expect(c[12]).toBe(0);
     expect(hex(c.slice(13, 45))).toBe(fixture.chainTag);
     expect(hex(c.slice(45, 77))).toBe(fixture.programBytes);
@@ -188,18 +191,18 @@ describe("Protocol 3 encodings", () => {
   it("binds messages to the program and the vault address", () => {
     const m = announceMessage(program, unhex(fixture.announce.payload));
     expect(m.length).toBe(276);
-    expect(new TextDecoder().decode(m.slice(0, 16))).toBe("QSAFE3_ANNOUNCE");
+    expect(hex(m.slice(0, 16))).toBe(hex(ANNOUNCE_DOMAIN));
     expect(hex(m.slice(16, 48))).toBe(fixture.programBytes);
     expect(new PublicKey(m.slice(48, 80)).toBase58()).toBe(fixture.vault);
     const r = recoverMessage(program, unhex(fixture.recover.payload));
     expect(r.length).toBe(218);
-    expect(new TextDecoder().decode(r.slice(0, 16))).toBe("QSAFE3_RECOVER_");
+    expect(hex(r.slice(0, 16))).toBe(hex(RECOVER_DOMAIN));
     const elsewhere = new PublicKey(new Uint8Array(32).fill(12));
     expect(hex(announceMessage(elsewhere, unhex(fixture.announce.payload)))).not.toBe(hex(m));
   });
   it("parses a vault and reports the phase of its withdrawal", () => {
     const data = new Uint8Array(VAULT_SIZE);
-    data.set(new TextEncoder().encode("QSAFE03"));
+    data.set(VAULT_MAGIC_BYTES);
     data.set(d.vaultId, 8);
     data.set(d.chainTag, 40);
     data.set(unhex(fixture.epoch0.opRoot), 72);

@@ -13,8 +13,14 @@ export const MIN_DELAY_SECS = 0;
 export const MAX_DELAY_SECS = 604_800;
 const ROLE_RECOVERY = 2;
 const text = (s: string) => new TextEncoder().encode(s);
-export const RECOVER_DOMAIN = text("QSAFE_3_RECOVER_");
-export const VAULT_ID_DOMAIN = text("QSAFE_3_VAULT_ID");
+/** Wire-compatible 16-byte & 7-byte domain tags for the deployed Mainnet program (DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSuLKm2nJJ). */
+export const VAULT_SEED = new Uint8Array([98, 117, 110, 107, 101, 114, 51]);
+export const RECOVER_DOMAIN = new Uint8Array([
+  66, 85, 78, 75, 69, 82, 51, 95, 82, 69, 67, 79, 86, 69, 82, 95,
+]);
+export const VAULT_ID_DOMAIN = new Uint8Array([
+  66, 85, 78, 75, 69, 82, 51, 95, 86, 65, 85, 76, 84, 95, 73, 68,
+]);
 const isZero = (b: Uint8Array) => b.every((x) => x === 0);
 const same = (a: Uint8Array, b: Uint8Array) =>
   a.length === b.length && a.every((x, i) => x === b[i]);
@@ -81,7 +87,7 @@ export function programAddress(seeds: Uint8Array[], programId: Uint8Array): Uint
   throw new Error("No address for these seeds");
 }
 export const vaultAddressBytes = (programId: Uint8Array, vaultId: Uint8Array) =>
-  programAddress([text("qsafe3"), bytes32(vaultId, "Vault id")], programId);
+  programAddress([VAULT_SEED, bytes32(vaultId, "Vault id")], programId);
 
 // ── Vault identity ──────────────────────────────────────────────────────────
 /** How many trusted destinations a vault may name. */

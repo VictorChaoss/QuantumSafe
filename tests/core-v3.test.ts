@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { PublicKey } from "@solana/web3.js";
 import { hex, unhex } from "../sdk/bytes";
-import { address, base58, programAddress, recoverMessageBytes, vaultAddressBytes } from "../sdk/v3/core";
+import { address, base58, programAddress, recoverMessageBytes, vaultAddressBytes, VAULT_SEED } from "../sdk/v3/core";
 import { proofAddress, recoverMessage, spentAddress, vaultAddress } from "../sdk/v3/protocol";
 
 /** `sdk/v3/core.ts` derives addresses with no Solana library, for the offline
@@ -73,7 +73,7 @@ describe("Addresses without a Solana library", () => {
     for (let i = 0; i < 400; i++) {
       const programId = new PublicKey(random32());
       const id = random32();
-      const [expected, bump] = PublicKey.findProgramAddressSync([Buffer.from("qsafe3"), id], programId);
+      const [expected, bump] = PublicKey.findProgramAddressSync([Buffer.from(VAULT_SEED), id], programId);
       if (bump < 255) lowBumps++;
       expect(base58(vaultAddressBytes(programId.toBytes(), id))).toBe(expected.toBase58());
       expect(vaultAddress(programId, id).toBase58()).toBe(expected.toBase58());
