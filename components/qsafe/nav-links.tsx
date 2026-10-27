@@ -7,7 +7,7 @@ export const NAV = [
   ["/docs", "How it works"],
   ["/security", "Security"],
   ["/bounty", "Bounty"],
-  ["/roadmap", "Roadmap"],
+  ["/roadmap", "Vision & Roadmap"],
 ] as const;
 export function NavLinks({ extra = [] }: { extra?: [string, string][] }) {
   const path = usePathname();

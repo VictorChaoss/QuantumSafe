@@ -903,6 +903,125 @@ export function QuantumVisualizer({
     );
   }
 
+  if (name === "stage-01-core" || name === "door-03-the-report") {
+    return (
+      <div className={`qs-viz-card qs-stage-viz ${className}`}>
+        <div className="qs-viz-top">
+          <span className="qs-badge-gold">STAGE 01 · RFC 8554 ENGINE</span>
+          <span className="qs-badge-live">34 × 256-BIT CHAINS</span>
+        </div>
+        <div className="qs-chains-grid">
+          {Array.from({ length: 34 }, (_, i) => (
+            <span
+              key={i}
+              className={`qs-chain-cell ${i <= step ? "verified" : ""}`}
+            >
+              {i + 1}
+            </span>
+          ))}
+        </div>
+        <div className="qs-sig-seal">
+          <CheckCircle2 size={13} /> LM-OTS_SHA256_N32_W8 · ZERO CURVES
+        </div>
+      </div>
+    );
+  }
+
+  if (name === "stage-02-airlock") {
+    return (
+      <div className={`qs-viz-card qs-stage-viz ${className}`}>
+        <div className="qs-viz-top">
+          <span className="qs-badge-gold">STAGE 02 · SOLANA AIRLOCK</span>
+          <span className="qs-badge-live">MAINNET PDA</span>
+        </div>
+        <div className="qs-payload-box">
+          <div><span>PROGRAM ID</span><strong>DGXACB…m2nJJ</strong></div>
+          <div><span>UPGRADE AUTH</span><strong>RENOUNCED (NONE)</strong></div>
+          <div><span>DEPOSIT VALVE</span><strong>ANY WALLET → PDA</strong></div>
+          <div><span>WITHDRAW GATE</span><strong>1,124B LM-OTS ONLY</strong></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (name === "stage-03-recovery") {
+    return (
+      <div className={`qs-viz-card qs-stage-viz ${className}`}>
+        <div className="qs-viz-top">
+          <span className="qs-badge-gold">STAGE 03 · OFFLINE KEYGEN</span>
+          <span className="qs-badge-live">AIR-GAPPED KIT</span>
+        </div>
+        <div className="qs-payload-box">
+          <div><span>KDF ENGINE</span><strong>scrypt (N=32768)</strong></div>
+          <div><span>CIPHER</span><strong>AES-256-GCM</strong></div>
+          <div><span>STOP FILE</span><strong>PRE-SIGNED CANCEL</strong></div>
+          <div><span>CLI RUNTIME</span><strong>qsafe-cli.mjs</strong></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (name === "door-01-watch" || name === "stage-04-watch") {
+    return (
+      <div className={`qs-viz-card qs-stage-viz ${className}`}>
+        <div className="qs-viz-top">
+          <span className="qs-badge-gold">STAGE 04 · QUANTUM WATCH</span>
+          <span className="qs-badge-live">SLOT #{318492000 + step * 2}</span>
+        </div>
+        <div className="qs-hash-stream">
+          <div className="qs-hash-row active">
+            <span>VAULT PDA MONITOR</span>
+            <code>0 KEYS HELD · READ-ONLY</code>
+            <span className="qs-tag-ok">SEALED</span>
+          </div>
+          <div className="qs-hash-row">
+            <span>ANNOUNCE WATCHER</span>
+            <code>24H COUNTDOWN HOOK</code>
+            <span className="qs-tag-ok">ARMED</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (name === "door-05-build-on-qsafe" || name === "stage-05-terminals") {
+    return (
+      <div className={`qs-viz-card qs-stage-viz ${className}`}>
+        <div className="qs-viz-top">
+          <span className="qs-badge-gold">STAGE 05 · TERMINAL SWEEP</span>
+          <span className="qs-badge-live">AUTO-AIRLOCK</span>
+        </div>
+        <div className="qs-payload-box">
+          <div><span>TRADE PNL</span><strong>+{(12.5 + (step % 8) * 4.2).toFixed(1)} SOL</strong></div>
+          <div><span>SWEEP HOOK</span><strong>1-CLICK / AUTO CPI</strong></div>
+          <div><span>DESTINATION</span><strong>QuantumSafe PDA</strong></div>
+          <div className="qs-sig-seal">
+            <CheckCircle2 size={13} /> ZERO PRIVATE KEY EXPOSURE
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (name === "door-02-signer-drawn" || name === "door-04-signer-built" || name === "stage-06-hardware") {
+    return (
+      <div className={`qs-viz-card qs-stage-viz ${className}`}>
+        <div className="qs-viz-top">
+          <span className="qs-badge-gold">STAGE 06 · HARDWARE SIGNER</span>
+          <span className="qs-badge-live">STATELESS QR / USB-C</span>
+        </div>
+        <div className="qs-payload-box">
+          <div><span>SECURE ELEMENT</span><strong>SHA-256 HASH CORE</strong></div>
+          <div><span>TRANSPORT</span><strong>OPTICAL QR / RAW HID</strong></div>
+          <div><span>EPOCH TREE</span><strong>HSS / LMS HIERARCHY</strong></div>
+          <div className="qs-sig-seal">
+            <CheckCircle2 size={13} /> AIR-GAPPED SILICON ENCLAVE
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`qs-plate-backdrop ${className}`} aria-hidden="true">
       <div className="qs-plate-glow" />

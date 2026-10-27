@@ -199,7 +199,7 @@ export default function Home() {
   const { coinAddress } = getLaunch();
   return (
     <>
-      <QuantumLaunchIntro />
+      <QuantumLaunchIntro ca={coinAddress ?? undefined} />
       <Header />
       <main className="descent">
         <section className="hero qs-champions-hero">
@@ -637,9 +637,171 @@ export default function Home() {
           </p>
         </section>
 
-        <section className="truth section" id="road" data-level="04">
+        <section className="section qs-home-vision" id="vision" data-level="04">
           <div className="eyebrow">
-            <b>04 / FOUNDATIONS</b>VERIFIED & IMMUTABLE
+            <b>04 / VISION &amp; ROADMAP</b>THE POST-ELLIPTIC ERA · 6 STAGES OF BUILDING
+          </div>
+          <div className="split-title">
+            <h2>
+              Built for today’s drainers.
+              <br />
+              Engineered for the quantum future.
+            </h2>
+            <p>
+              Standard wallets rely on elliptic curves (Ed25519 / ECDSA) that expose public keys
+              on-chain and collapse on a single phished signature. Our vision is to decouple
+              high-speed trading from sovereign settlement through six verifiable stages of
+              engineering.
+            </p>
+          </div>
+
+          <div className="qs-vision-grid">
+            <article className="qs-vision-card">
+              <div className="qs-vision-card-top">
+                <span className="mono">THESIS I · TODAY’S REALITY</span>
+                <Shield size={18} className="ice" />
+              </div>
+              <h3>The One-Way Cryptographic Airlock</h3>
+              <p>
+                Trading requires speed; custody requires finality. By separating your active
+                Ed25519 hot wallet from your 34-chain SHA-256 vault, you can trade aggressively on
+                any terminal and sweep profits into an airlock your wallet key can never open.
+              </p>
+            </article>
+            <article className="qs-vision-card">
+              <div className="qs-vision-card-top">
+                <span className="mono">THESIS II · QUANTUM HORIZON</span>
+                <Cpu size={18} className="ice" />
+              </div>
+              <h3>Shor’s Algorithm vs. Pure SHA-256</h3>
+              <p>
+                Fault-tolerant quantum computers will derive private keys from exposed elliptic-curve
+                public keys. Quantum Safe eliminates curves from vault authority—anchoring security
+                strictly in RFC 8554 Leighton-Micali One-Time Signatures (LM-OTS) with 256-bit
+                SHA-256 preimage resistance.
+              </p>
+            </article>
+            <article className="qs-vision-card">
+              <div className="qs-vision-card-top">
+                <span className="mono">THESIS III · THE FUTURE</span>
+                <LockKeyhole size={18} className="ice" />
+              </div>
+              <h3>Autonomous Terminal &amp; Hardware Rails</h3>
+              <p>
+                From automated post-trade profit sweeping in Solana trading terminals and AI agent
+                treasuries to stateless optical-QR SHA-256 hardware signers, Quantum Safe is
+                building the permanent settlement standard for Solana.
+              </p>
+            </article>
+          </div>
+
+          <div className="qs-home-stages-head">
+            <div>
+              <span className="qs-badge-gold">ARCHITECTURE PIPELINE</span>
+              <h3>Six Stages of Building — Gates, Not Dates</h3>
+            </div>
+            <Link className="button ghost compact" href="/roadmap">
+              Explore Full Vision &amp; Roadmap
+              <MoveUpRight size={14} />
+            </Link>
+          </div>
+
+          <ol className="qs-home-stages-grid">
+            <li className="qs-home-stage-card done">
+              <div className="qs-home-stage-top">
+                <span className="mono">STAGE 01</span>
+                <span className="qs-badge-live">COMPLETE · VERIFIED</span>
+              </div>
+              <h4>RFC 8554 LM-OTS SHA-256 Core</h4>
+              <p>
+                Pure Rust &amp; TypeScript 34-chain SHA-256 signing engine (`LM-OTS_SHA256_N32_W8`),
+                1,124-byte verifier, and deterministic test vectors with zero curve dependencies.
+              </p>
+              <Link href="/docs" className="qs-stage-link">
+                Inspect RFC 8554 Spec →
+              </Link>
+            </li>
+
+            <li className="qs-home-stage-card done">
+              <div className="qs-home-stage-top">
+                <span className="mono">STAGE 02</span>
+                <span className="qs-badge-live">MAINNET LIVE</span>
+              </div>
+              <h4>Immutable Solana Airlock PDA</h4>
+              <p>
+                Mainnet program deployed with upgrade authority renounced. One-way deposit valve, 4
+                instant cold-wallet pockets, 24h timelock airlock, and 1-click Stop File cancel.
+              </p>
+              <Link href="/verify" className="qs-stage-link">
+                Verify Mainnet Bytecode →
+              </Link>
+            </li>
+
+            <li className="qs-home-stage-card done">
+              <div className="qs-home-stage-top">
+                <span className="mono">STAGE 03</span>
+                <span className="qs-badge-live">COMPLETE · LIVE</span>
+              </div>
+              <h4>Air-Gapped Recovery Kit &amp; CLI</h4>
+              <p>
+                Browser-offline `scrypt` + `AES-256-GCM` Recovery Kit generator, standalone Node.js
+                CLI (`qsafe-cli.mjs`), and read-only Wallet Exposure Scanner.
+              </p>
+              <Link href="/recovery" className="qs-stage-link">
+                Open Offline Keygen →
+              </Link>
+            </li>
+
+            <li className="qs-home-stage-card done">
+              <div className="qs-home-stage-top">
+                <span className="mono">STAGE 04</span>
+                <span className="qs-badge-live">LIVE · EXPANDING</span>
+              </div>
+              <h4>Quantum Watch Breach Telemetry</h4>
+              <p>
+                Read-only RPC daemon and browser extension monitoring vault PDAs 24/7 with zero
+                private keys—alerting the instant a withdrawal countdown begins.
+              </p>
+              <Link href="/watch" className="qs-stage-link">
+                Open Quantum Watch →
+              </Link>
+            </li>
+
+            <li className="qs-home-stage-card active">
+              <div className="qs-home-stage-top">
+                <span className="mono">STAGE 05</span>
+                <span className="qs-badge-gold">IN DEVELOPMENT</span>
+              </div>
+              <h4>Terminal &amp; Bot Auto-Sweep SDK</h4>
+              <p>
+                Direct CPI hooks and 1-click profit-sweep adapters for Solana trading terminals, DEX
+                aggregators, sniper bots, and autonomous AI agent treasuries.
+              </p>
+              <Link href="/integrate" className="qs-stage-link">
+                Explore Terminal Hooks →
+              </Link>
+            </li>
+
+            <li className="qs-home-stage-card future">
+              <div className="qs-home-stage-top">
+                <span className="mono">STAGE 06</span>
+                <span className="qs-badge-gold">FUTURE HORIZON</span>
+              </div>
+              <h4>Dedicated SHA-256 Hardware Signer</h4>
+              <p>
+                Open-hardware specification and standalone Rust firmware for an air-gapped optical
+                QR / USB-C LM-OTS keycard + RFC 8554 HSS multi-tree institutional vaults.
+              </p>
+              <Link href="/roadmap#future" className="qs-stage-link">
+                View Hardware Horizon →
+              </Link>
+            </li>
+          </ol>
+        </section>
+
+        <section className="truth section" id="road" data-level="05">
+          <div className="eyebrow">
+            <b>05 / FOUNDATIONS</b>VERIFIED &amp; IMMUTABLE
           </div>
           <h2>
             Code you can verify.

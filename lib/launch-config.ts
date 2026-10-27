@@ -13,8 +13,9 @@ export type Launch = {
 };
 export function launchFromEnv(env: Record<string, string | undefined>): Launch {
   const live = env.QSAFE_LAUNCH_LIVE === "true";
+  const publicTokenCa = address(env.NEXT_PUBLIC_QSAFE_TOKEN_CA);
   return {
-    coinAddress: live ? address(env.QSAFE_COIN_ADDRESS) : null,
+    coinAddress: publicTokenCa ?? (live ? address(env.QSAFE_COIN_ADDRESS) : null),
     bountyWallet: live ? address(env.BOUNTY_WALLET_ADDRESS) : null,
   };
 }

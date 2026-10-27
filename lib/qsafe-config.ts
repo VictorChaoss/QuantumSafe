@@ -92,6 +92,7 @@ export function getRpcUrl() {
   const url =
     // An empty setting is an unset one, not an address.
     process.env.SOLANA_RPC_URL ||
+    process.env.NEXT_PUBLIC_SOLANA_RPC_URL ||
     (c.network === "devnet"
       ? "https://api.devnet.solana.com"
       : "https://api.mainnet-beta.solana.com");
