@@ -76,17 +76,19 @@ export default function FilmPlayer({ film = "main" }: { film?: Mode }) {
 
   return (
     <div
-      className="film-frame"
+      className="film-frame qs-film-telemetry"
       style={{
         background:
           "radial-gradient(circle at 50% 0%, rgba(169, 222, 255, 0.12), rgba(8, 11, 14, 0.98) 70%)",
         border: "1px solid rgba(200, 216, 228, 0.18)",
         borderRadius: "12px",
-        padding: "28px",
+        padding: "clamp(16px, 4vw, 28px)",
         color: "#f4f8fb",
         display: "flex",
         flexDirection: "column",
-        gap: "20px",
+        gap: "18px",
+        aspectRatio: "auto",
+        height: "auto",
       }}
     >
       <div
@@ -95,7 +97,7 @@ export default function FilmPlayer({ film = "main" }: { film?: Mode }) {
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
-          gap: "12px",
+          gap: "10px",
           borderBottom: "1px solid rgba(200, 216, 228, 0.12)",
           paddingBottom: "14px",
         }}
@@ -103,8 +105,8 @@ export default function FilmPlayer({ film = "main" }: { film?: Mode }) {
         <span
           className="mono"
           style={{
-            fontSize: "11px",
-            letterSpacing: "0.14em",
+            fontSize: "10.5px",
+            letterSpacing: "0.12em",
             color: "#a9deff",
             display: "inline-flex",
             alignItems: "center",
@@ -118,7 +120,7 @@ export default function FilmPlayer({ film = "main" }: { film?: Mode }) {
           type="button"
           onClick={() => setStep((s) => (s + 1) % data.chains.length)}
           className="button ghost compact"
-          style={{ fontSize: "11px", padding: "6px 12px" }}
+          style={{ fontSize: "11px", padding: "6px 12px", minHeight: "34px" }}
         >
           <RefreshCw size={12} />
           Cycle Hash State ({step + 1}/{data.chains.length})
@@ -126,10 +128,10 @@ export default function FilmPlayer({ film = "main" }: { film?: Mode }) {
       </div>
 
       <div>
-        <h3 style={{ fontSize: "22px", fontWeight: 600, margin: "0 0 6px", color: "#ffffff" }}>
+        <h3 style={{ fontSize: "clamp(18px, 3.5vw, 22px)", fontWeight: 600, margin: "0 0 6px", color: "#ffffff" }}>
           {data.title}
         </h3>
-        <p style={{ margin: 0, fontSize: "14px", color: "#9cb0c0", lineHeight: 1.55 }}>
+        <p style={{ margin: 0, fontSize: "13.5px", color: "#9cb0c0", lineHeight: 1.55 }}>
           {data.subtitle}
         </p>
       </div>
@@ -137,8 +139,8 @@ export default function FilmPlayer({ film = "main" }: { film?: Mode }) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-          gap: "12px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(132px, 1fr))",
+          gap: "10px",
         }}
       >
         {data.metrics.map(([k, v]) => (
@@ -148,16 +150,25 @@ export default function FilmPlayer({ film = "main" }: { film?: Mode }) {
               background: "rgba(15, 22, 29, 0.85)",
               border: "1px solid rgba(169, 222, 255, 0.16)",
               borderRadius: "8px",
-              padding: "12px 14px",
+              padding: "10px 12px",
+              minWidth: 0,
             }}
           >
             <div
               className="mono"
-              style={{ fontSize: "10px", letterSpacing: "0.1em", color: "#7f95a6", marginBottom: "4px" }}
+              style={{ fontSize: "9.5px", letterSpacing: "0.08em", color: "#7f95a6", marginBottom: "4px" }}
             >
               {k}
             </div>
-            <div className="mono" style={{ fontSize: "13px", fontWeight: 600, color: "#e6f1f8" }}>
+            <div
+              className="mono"
+              style={{
+                fontSize: "12px",
+                fontWeight: 600,
+                color: "#e6f1f8",
+                overflowWrap: "anywhere",
+              }}
+            >
               {v}
             </div>
           </div>
@@ -170,11 +181,12 @@ export default function FilmPlayer({ film = "main" }: { film?: Mode }) {
           background: "#05080b",
           border: "1px solid rgba(200, 216, 228, 0.14)",
           borderRadius: "8px",
-          padding: "14px 16px",
-          fontSize: "12px",
-          lineHeight: 1.7,
+          padding: "12px 14px",
+          fontSize: "11px",
+          lineHeight: 1.65,
           color: "#c8d8e4",
           overflowX: "auto",
+          maxWidth: "100%",
         }}
       >
         {data.chains.map((line, idx) => (
@@ -186,6 +198,7 @@ export default function FilmPlayer({ film = "main" }: { film?: Mode }) {
               display: "flex",
               alignItems: "center",
               gap: "8px",
+              whiteSpace: "nowrap",
             }}
           >
             {idx === step ? <CheckCircle2 size={13} color="#a9deff" /> : <Lock size={13} />}

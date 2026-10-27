@@ -283,9 +283,15 @@ export function QuantumLaunchIntro({ ca = "DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSu
       ctx.restore();
 
       // 4. Central 3D Floating Brushed-Metal Geodesic Sphere above Title
+      const isMobile = w <= 640;
+      const isShort = h <= 720;
       const cx = w * 0.5;
-      const cy = Math.min(h * 0.26, 242);
-      const radius = Math.min(w, h) * 0.088;
+      const cy = isMobile
+        ? Math.max(128, Math.min(h * (isShort ? 0.22 : 0.24), 196))
+        : Math.min(h * 0.26, 242);
+      const radius = isMobile
+        ? Math.max(40, Math.min(w * 0.125, h * 0.072, 56))
+        : Math.min(w, h) * 0.088;
 
       // Ambient Glacial Ice Halo behind Sphere
       const coreGlow = ctx.createRadialGradient(cx, cy, 4, cx, cy, radius * 2.5);
@@ -299,13 +305,14 @@ export function QuantumLaunchIntro({ ca = "DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSu
 
       // Sweeping Orbital Swoosh Rings around the 3D Sphere
       const orbitCount = viewMode === "orbit" ? 4 : 2;
+      const orbitScale = isMobile ? 1.56 : 1.78;
       for (let r = 0; r < orbitCount; r++) {
         ctx.save();
         ctx.translate(cx, cy + radius * 0.36);
         ctx.rotate((r % 2 === 0 ? -0.24 : 0.22) + (viewMode === "orbit" ? Math.sin(t + r) * 0.15 : 0));
         ctx.scale(1, 0.32);
 
-        const orbitR = radius * (1.78 + r * 0.28);
+        const orbitR = radius * (orbitScale + r * (isMobile ? 0.22 : 0.28));
         ctx.beginPath();
         ctx.arc(0, 0, orbitR, 0, Math.PI * 2);
         ctx.strokeStyle = "rgba(169, 222, 255, 0.22)";
@@ -319,7 +326,7 @@ export function QuantumLaunchIntro({ ca = "DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSu
         ctx.arc(0, 0, orbitR, startA, startA + 1.85);
         ctx.strokeStyle =
           r % 2 === 0 ? "rgba(244, 248, 251, 0.9)" : "rgba(169, 222, 255, 0.88)";
-        ctx.lineWidth = 1.9;
+        ctx.lineWidth = isMobile ? 1.6 : 1.9;
         ctx.stroke();
         ctx.restore();
       }
@@ -423,7 +430,7 @@ export function QuantumLaunchIntro({ ca = "DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSu
       // 5. Arching "SOLANA" Crest Curve above Title (matching screenshot composition)
       ctx.save();
       ctx.beginPath();
-      ctx.arc(cx, cy + radius * 1.95, radius * 0.82, Math.PI * 1.18, Math.PI * 1.82);
+      ctx.arc(cx, cy + radius * (isMobile ? 1.82 : 1.95), radius * (isMobile ? 0.74 : 0.82), Math.PI * 1.18, Math.PI * 1.82);
       ctx.strokeStyle = "rgba(210, 232, 248, 0.68)";
       ctx.lineWidth = 1.6;
       ctx.stroke();
@@ -643,9 +650,10 @@ export function ChampionsStarballCanvas() {
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, w, h);
 
+      const isMobile = w <= 640;
       const cx = w > 960 ? w * 0.71 : w * 0.5;
-      const cy = w > 960 ? h * 0.5 : h * 0.62;
-      const sphereR = Math.min(w, h) * (w > 960 ? 0.22 : 0.18);
+      const cy = w > 960 ? h * 0.5 : isMobile ? h * 0.54 : h * 0.62;
+      const sphereR = Math.min(w, h) * (w > 960 ? 0.22 : isMobile ? 0.23 : 0.18);
 
       // Orbital Swoosh Rings
       for (let ring = 0; ring < 3; ring++) {
@@ -718,17 +726,19 @@ export function ChampionsStarballCanvas() {
       }
 
       // Orbiting Hash Nodes
-      nodes.forEach((n) => {
+      const nodeOrbitScale = isMobile ? 0.56 : 1;
+      nodes.forEach((n, idx) => {
+        if (isMobile && idx % 2 !== 0) return;
         n.angle += n.speed * (overdrive ? 2.6 : 1);
-        const bx = cx + Math.cos(n.angle) * n.radius;
+        const bx = cx + Math.cos(n.angle) * (n.radius * nodeOrbitScale);
         const bz = Math.sin(n.angle);
-        const by = cy + n.yOffset + bz * 28;
-        const alpha = 0.24 + (bz + 1) * 0.32;
+        const by = cy + n.yOffset * nodeOrbitScale + bz * (isMobile ? 16 : 28);
+        const alpha = (isMobile ? 0.16 : 0.24) + (bz + 1) * (isMobile ? 0.24 : 0.32);
 
         ctx.save();
         ctx.translate(bx, by);
-        const bw = 62;
-        const bh = 22;
+        const bw = isMobile ? 52 : 62;
+        const bh = isMobile ? 19 : 22;
         ctx.fillStyle = `rgba(12, 22, 30, ${alpha})`;
         ctx.strokeStyle = n.ice
           ? `rgba(169, 222, 255, ${alpha + 0.2})`
@@ -740,7 +750,9 @@ export function ChampionsStarballCanvas() {
         ctx.stroke();
 
         ctx.fillStyle = `rgba(244, 248, 251, ${Math.min(1, alpha + 0.3)})`;
-        ctx.font = "600 8.5px 'JetBrains Mono', monospace";
+        ctx.font = isMobile
+          ? "600 7.5px 'JetBrains Mono', monospace"
+          : "600 8.5px 'JetBrains Mono', monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(n.label, 0, 0.5);
