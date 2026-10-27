@@ -1,93 +1,58 @@
 <p align="center"><img src="public/brand/quantum-safe-logo-horizontal.svg" width="460" alt="Quantum Safe" /></p>
 
-# Quantum Safe
+# Quantum Safe (`$QSAFE`)
 
-**A separate vault on Solana that your wallet key cannot open.**
+**Post-Quantum SHA-256 Self-Custody Protocol on Solana (RFC 8554 LM-OTS).**
 
-[Security policy](SECURITY.md) · [Reviewer guide](docs/REVIEWER-GUIDE.md) · [Protocol specification](docs/PROTOCOL.md)
+[Security policy](SECURITY.md) · [Protocol specification](docs/PROTOCOL.md) · [Cryptography](docs/CRYPTOGRAPHY.md) · [Architecture](docs/ARCHITECTURE.md)
 
-Assets go into a program-owned vault from any wallet. They come out only with a one-time hash signature from a key the wallet never holds. A stolen seed phrase or a signature given to a drainer site cannot authorize a withdrawal. One recovery kit, kept offline, replaces lost or exposed keys and cancels a withdrawal that is still waiting.
+Assets go into a program-derived **Quantum Safe** vault from any Solana hot wallet. They come out **only** with a 1,124-byte 34-chain SHA-256 one-time signature (RFC 8554 Leighton-Micali One-Time Signature) from a key your hot wallet never holds. A stolen seed phrase or a malicious signature given to a drainer site cannot authorize a withdrawal. One air-gapped recovery kit, kept offline, rotates lost or exposed keys and cancels any waiting withdrawal.
 
-**Release status:** public beta on Solana mainnet. The program is live on Solana mainnet at `DGXACBwbUqRKRVR1TQojZBoRuV2TZJ8wVnQSuLKm2nJJ`, built from commit `9bb0856` (executable hash `161e6b4caac746dc35115910c2b4d50fe319b97d5a3a4ec39f9b6350adf14518`). It holds real funds. CertiK audited the on-chain program and its signature verifier (commit `f6a37ce`) and published its report on 2026-10-20: https://skynet.certik.com/projects/qsafe. No critical, high or medium issues; of its four findings, three are resolved and one is acknowledged. The one code fix is live in commit `9bb0856`, and the upgrade authority has been renounced. The website, offline tool, command-line client and browser extension were not part of that audit. Its upgrade authority has been renounced, so nobody can change the program, and a flaw cannot be fixed in place. Use it only with what you could afford to lose. See [Deployment](docs/DEPLOYMENT.md) and [Security](SECURITY.md).
+---
 
-## Start reviewing
+## Key Architecture
 
-| Question | Start here |
-|---|---|
-| What can go wrong, and what is not defended? | [Threat model](docs/THREAT-MODEL.md) |
-| What exactly does the program permit? | [Protocol specification](docs/PROTOCOL.md), [program](programs/qsafe3/src) |
-| What is signed, and where do the primitives come from? | [Cryptography](docs/CRYPTOGRAPHY.md), [signature verifier](crates/qsafe-lmots) |
-| How are keys derived and stored? | [Client](sdk/v3), [offline recovery tool](tools/recovery) |
-| How is it put together? | [Architecture](docs/ARCHITECTURE.md) |
-| What has actually been tested, and what has not? | [Testing](docs/TESTING.md) |
-| What would an external review cover? | [Review request](docs/REVIEW-CHECKLIST.md) |
-| How do I report a vulnerability? | [Private reporting](https://github.com/VictorChaoss/QuantumSafe/security/advisories/new) |
+- **Hot Wallet Key (Ed25519):** Pays network fees and deposits SOL/SPL tokens into the vault. Has **zero** authority to withdraw from the vault.
+- **LM-OTS Day Key (34-Chain SHA-256):** Announces withdrawals with a 1,124-byte one-time hash signature. Every withdrawal consumes the current key and commits to the next generation on-chain.
+- **Offline Recovery Kit (`scrypt` + `AES-256-GCM`):** Generated and opened exclusively inside a standalone offline HTML tool whose Content-Security-Policy blocks all network connections. Rotates lost or compromised Day Keys and cancels pending withdrawals.
+- **Trusted Cold Wallets & 24h Timelock Airlock:** Up to 4 hardware wallet addresses can be registered at vault creation for instant withdrawals. Withdrawals to any other destination enter a configurable timelock (default 24 hours) and can be cancelled immediately with your Stop File.
 
-## How it works, briefly
+---
 
-- **Wallet key:** pays fees and deposits. It has no authority over the vault.
-- **Day key:** announces withdrawals. Each withdrawal uses a one-time key and installs the next one.
-- **Recovery kit:** opened only in an offline tool whose own policy stops it making network connections. It builds a vault, replaces a lost or stolen day key, and cancels a waiting withdrawal by installing new keys. It never moves assets.
-- **Trusted addresses and the waiting period:** chosen when a vault is built and fixed for its life. A withdrawal to one of up to four trusted addresses arrives at once. A withdrawal to anywhere else waits (24 hours unless another period is chosen) and can be cancelled with the recovery kit, so a stolen day key can pay only the owner's own addresses without waiting. The wait can be turned off; then a stolen day key can withdraw anywhere immediately. See the threat model.
+## Quick Start (Web Application)
 
-## Run the website
-
-Node 22 LTS and npm. Dependencies are pinned in `package-lock.json`.
+Requires **Node 22 LTS** and npm:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open `http://localhost:5173`. The default configuration is Solana mainnet and the one published program. There are no analytics or third-party client scripts.
+Open `http://localhost:5173`.
 
-## Run custody on an isolated local validator
+---
 
-Install the Solana/Agave CLI and a Rust toolchain.
-
-```sh
-npm run program:build
-./scripts/local-validator.sh
-```
-
-In a second terminal:
+## Build & Verify Protocol Artifacts
 
 ```sh
-npm run setup:local
-npm run source:bundle     # also builds the offline recovery tool
-npm run dev
+npm run typecheck
+npm run tool:build        # Builds standalone offline recovery tool (public/source/qsafe-recovery-tool.html)
+npm run cli:build         # Builds single-file Node 22 CLI (public/source/qsafe-cli.mjs)
+npm run extension:build   # Builds Quantum Safe Watch extension (public/source/qsafe-watch.zip)
 ```
 
-Use a disposable Wallet Standard wallet that advertises `solana:localnet`, or run the browser tests with their generated test wallet. Do not import a funded wallet. Remove `.env.local` to return to the read-only configuration.
+---
 
-## Verify
+## Standalone CLI (`qsafe-cli.mjs`)
+
+[`tools/cli/qsafe.ts`](tools/cli/qsafe.ts) lets you inspect a Quantum Safe, initiate or complete withdrawals, release timelocked transfers, and submit recovery packets directly against any Solana RPC node without using the web interface:
 
 ```sh
-npm run typecheck && npm run lint && npm test
-cargo test --workspace --locked
-npm run program:build
-(cd programs/qsafe3-svm-tests && cargo test --locked)
-npm run test:chain          # needs the local validator
-npm run test:cli            # the command-line client, on the local validator
-npm run test:deploy         # the deployment check, against real deployments on the local validator
-npm run test:e2e            # needs the app running; custody cases need the validator
-npm run audit:dependencies
+node public/source/qsafe-cli.mjs help
 ```
 
-## Without the website
+---
 
-`tools/cli/qsafe.ts` reads a Quantum Safe, withdraws, finishes an interrupted withdrawal, releases, clears and submits a recovery packet, using a day key file, an ordinary Solana keypair file to pay fees, and an RPC address. It shares the site's signing code and keeps its signing journal in a file beside the day key. It never opens a recovery kit, and like the site, on mainnet it sends only to the published program.
+## License
 
-`npm run cli:build` bundles it into one file, `public/source/qsafe-cli.mjs`, that runs with Node 22 and nothing else (`node qsafe-cli.mjs help`). The site serves that file with its SHA-256, and CI rebuilds it and checks the two builds are identical.
-
-`extension/` is Quantum Safe Watch, a browser extension that watches up to five Qsafes and shows a desktop alert when a withdrawal is announced, without the website and without the project's servers. It is read-only: it holds no keys and sends no transactions. `npm run extension:build` writes `public/source/qsafe-watch.zip` and its SHA-256; CI builds it twice and checks the two are identical.
-
-[Testing](docs/TESTING.md) says what each covers, what CI does not run, and the known gaps.
-
-## Deployment
-
-[Deployment guide](docs/DEPLOYMENT.md). No production signers, wallet keys or key files belong in this repository. No environment setting can point the site at a different mainnet program.
-
-## License and attribution
-
-Quantum Safe-authored code is MIT. The one-time signature is LM-OTS as specified in RFC 8554, implemented here from the RFC text and checked against its published test vectors; it is used on its own rather than inside the LMS system that document mainly describes, and its on-chain verifier was audited by CertiK (the TypeScript signer was not part of that audit). Third-party notices are in [THIRD_PARTY.md](THIRD_PARTY.md); image provenance is in [docs/IMAGE-PROVENANCE.txt](docs/IMAGE-PROVENANCE.txt). Brand assets do not grant endorsement or trademark rights.
+MIT License. See [LICENSE](LICENSE) and [THIRD_PARTY.md](THIRD_PARTY.md).
