@@ -2,7 +2,7 @@
   "name": "quantum-safe",
   "version": "0.1.0",
   "private": true,
-  "description": "Quantum Safe — Hash-authorized Solana custody. Public beta on mainnet; program audited by CertiK.",
+  "description": "Quantum Safe — Post-Quantum SHA-256 Custody Protocol on Solana (RFC 8554 LM-OTS).",
   "license": "MIT",
   "repository": {
     "type": "git",

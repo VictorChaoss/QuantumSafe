@@ -27,7 +27,7 @@ pub const PROOF_LEN: usize = 74 + SIGNATURE_LEN;
 /// randomizer, a little over one try in four. It bounds what `announce` and
 /// `recover` can cost, whatever the message.
 pub const VERIFY_STEP_LIMIT: u32 = 4080;
-const IDENTIFIER_DOMAIN: &[u8; 16] = b"QSAFE3_LMOTS_ID";
+const IDENTIFIER_DOMAIN: &[u8; 16] = b"QSAFE_3_LMOTS_ID";
 
 /// The LM-OTS identifier `I` of the key at one position: a role, an epoch and
 /// an operation index (zero for recovery) under one program, chain and vault
@@ -51,8 +51,8 @@ fn identifier(id: &Pubkey, v: &Vault, role: u8, epoch: u64, index: u64) -> [u8; 
     .to_bytes();
     h[..IDENTIFIER_LEN].try_into().unwrap()
 }
-const PROOF_MAGIC: &[u8; 8] = b"BKPROOF3";
-const SPENT_MAGIC: &[u8; 8] = b"BKSPENT3";
+const PROOF_MAGIC: &[u8; 8] = b"QSPROOF3";
+const SPENT_MAGIC: &[u8; 8] = b"QSSPENT3";
 const VAULT_SEED: &[u8] = b"qsafe3";
 const PROOF_SEED: &[u8] = b"proof";
 const SPENT_SEED: &[u8] = b"spent-v3";

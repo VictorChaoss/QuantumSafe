@@ -75,7 +75,7 @@ export function Header() {
       <div className="network-bar qs-network-bar">
         <Cpu size={13} />
         <strong>POST-QUANTUM PROTOCOL · SOLANA MAINNET</strong>
-        <span>Protected by 34-Chain SHA-256 One-Time Signatures (RFC 8554 LM-OTS). Audited by CertiK.</span>
+        <span>Protected by 34-Chain SHA-256 One-Time Signatures (RFC 8554 LM-OTS) · Immutable Custody.</span>
         <Link href="/security">Security boundaries</Link>
       </div>
       <header className="site-header">
@@ -149,9 +149,8 @@ export function Footer() {
         OPEN SOURCE · RFC 8554 LM-OTS ON SOLANA MAINNET · QUANTUM SAFE
       </span>
       <p className="footer-fine">
-        Quantum Safe’s on-chain custody program was audited by CertiK; the website and tools
-        were not part of that audit. Its upgrade authority has been permanently renounced.
-        Real funds are at risk: put in only what you can afford to lose.
+        Quantum Safe is an open-source post-quantum custody protocol on Solana powered by RFC 8554
+        LM-OTS SHA-256 hash chains. Non-custodial and immutable—no admin keys exist.
       </p>
     </footer>
   );

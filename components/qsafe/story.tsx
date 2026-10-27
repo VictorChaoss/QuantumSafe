@@ -71,9 +71,9 @@ function Coin({ at, from, delay = 0, safe = false }: { at: Point; from?: Point; 
     <g className={`story-coin ${safe ? "safe" : ""}`} style={style}>
       <g>
         <g>
-          <circle r="9" fill="#e2bb55" stroke="#8f6d1f" strokeWidth="1.5" />
-          <circle r="5.4" fill="none" stroke="#f6dc8a" strokeWidth="1.3" />
-          <path d="M-4.6 -3.4a6 6 0 0 1 4-2.6" fill="none" stroke="#fff6d2" strokeWidth="1.6" strokeLinecap="round" />
+          <circle r="9" fill="#c8d8e4" stroke="#5e7688" strokeWidth="1.5" />
+          <circle r="5.4" fill="none" stroke="#a9deff" strokeWidth="1.3" />
+          <path d="M-4.6 -3.4a6 6 0 0 1 4-2.6" fill="none" stroke="#f4f8fb" strokeWidth="1.6" strokeLinecap="round" />
         </g>
       </g>
     </g>

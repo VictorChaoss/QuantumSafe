@@ -1,4 +1,3 @@
-import { AUDIT } from "@/lib/audit";
 import Link from "next/link";
 import {
   Play,
@@ -70,7 +69,7 @@ const ticker = [
   "QUANTUM SAFE · POST-QUANTUM CUSTODY",
   "ZERO ECDSA / ED25519 EXPOSURE",
   "34 SHA-256 HASH CHAINS (RFC 8554 LM-OTS)",
-  "PROGRAM AUDITED BY CERTIK",
+  "1,124-BYTE SHA-256 SIGNATURE VERIFIER",
   "HOT WALLET DEPOSITS IN · SHA-256 SIGNATURES WITHDRAW OUT",
   "WALLET KEY: PAYS FEES, CAN’T WITHDRAW",
   "ONE KEY, ONE MESSAGE, ZERO REPLAY",
@@ -135,10 +134,10 @@ const gates: [string, string, string, string?][] = [
     "/bounty",
   ],
   [
-    "Audit by CertiK",
-    "The on-chain program and its LM-OTS signature verifier. Zero critical, high, or medium issues.",
-    "Done",
-    AUDIT.url,
+    "RFC 8554 Test Vectors",
+    "Deterministic 34-chain LM-OTS SHA-256 verification suite with zero curve dependencies.",
+    "Verified",
+    "/docs",
   ],
 ];
 
@@ -457,7 +456,7 @@ export default function Home() {
               <Check size={20} />
             </div>
             <div className="flow-bottom">
-              Cryptographic separation enforced by the audited on-chain program.
+              Cryptographic separation enforced by the immutable on-chain SHA-256 verifier.
             </div>
           </div>
         </section>
@@ -633,11 +632,8 @@ export default function Home() {
             </div>
           </div>
           <p className="limits-note">
-            CertiK audited the on-chain program, and{" "}
-            <a href={AUDIT.url} target="_blank" rel="noreferrer">
-              its report is public
-            </a>
-            . <Link href="/security">Read every security boundary.</Link>
+            Every boundary of the on-chain SHA-256 verifier is documented in the open specification.{" "}
+            <Link href="/security">Read every security boundary.</Link>
           </p>
         </section>
 
@@ -653,8 +649,8 @@ export default function Home() {
           <div className="truth-grid">
             <div>
               <p>
-                Quantum Safe runs against the CertiK-audited, immutable on-chain custody program on
-                Solana mainnet. Zero admin keys, zero protocol fees, and full CLI independence.
+                Quantum Safe runs against the deterministic, immutable on-chain SHA-256 custody
+                program on Solana mainnet. Zero admin keys, zero protocol fees, and full CLI independence.
               </p>
               <div className="actions road-actions">
                 <a

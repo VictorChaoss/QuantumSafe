@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { DocumentLayout } from "@/components/qsafe/document-layout";
 import ExtensionBuild from "@/components/qsafe/extension-build";
 import store from "@/extension/store.json";
 
-/** The one official listing. Built from the checked-in item ID, the same one /verify shows. */
 const storeUrl = store.chromeWebStoreItemId
   ? `https://chromewebstore.google.com/detail/qsafe-watch/${store.chromeWebStoreItemId}`
   : null;
@@ -13,37 +11,57 @@ const storeUrl = store.chromeWebStoreItemId
 export const metadata: Metadata = {
   title: "Quantum Safe Watch",
   description:
-    "A browser extension that shows a desktop alert when a withdrawal is announced from your Quantum Safe. Read-only: holds no keys. Public beta.",
+    "A browser extension that shows a desktop alert when a withdrawal is announced from your Quantum Safe. Read-only: holds no keys.",
 };
-/** The extension's popup in its four states: file, what the picture shows, and the line under it. */
-const shots: [string, string, string][] = [
-  [
-    "1-all-quiet",
-    "The Quantum Safe Watch popup with the heading All quiet, 2 Qsafes watched, and a card for each Quantum Safe showing its SOL balance and that no withdrawal is waiting.",
-    "All quiet. Each Quantum Safe you watch, its balance, and when it was last read.",
-  ],
-  [
-    "2-withdrawal-announced",
-    "The popup with the heading Withdrawal announced, a cream card with a countdown ring, the amount, the whole destination address, and a button that says What to do now.",
-    "A withdrawal was announced. The amount, the whole destination, and the time left to cancel it.",
-  ],
-  [
-    "3-check-a-wallet",
-    "The popup's Check a wallet tab showing a wallet's SOL, its token accounts, and two open delegations.",
-    "Check any wallet: what one signature could move, and who can already move it.",
-  ],
-  [
-    "4-read-only",
-    "The popup's Settings tab with the heading Read-only, holds no keys, the RPC endpoint setting, and a line saying keys held: none.",
-    "Settings. It holds no keys and talks to one RPC endpoint.",
-  ],
+
+const shots: {
+  id: string;
+  badge: string;
+  heading: string;
+  detail: string;
+  statusColor: string;
+  caption: string;
+}[] = [
+  {
+    id: "1-all-quiet",
+    badge: "STATE 01 · NOMINAL TELEMETRY",
+    heading: "All quiet · 2 Quantum Safes watched",
+    detail: "VAULT_01: 142.50 SOL · No pending withdrawal · Last read 12s ago",
+    statusColor: "#a9deff",
+    caption: "All quiet. Each Quantum Safe you watch, its balance, and when it was last read.",
+  },
+  {
+    id: "2-withdrawal-announced",
+    badge: "STATE 02 · TIMELOCK ALERT",
+    heading: "Withdrawal announced · 23h 58m remaining",
+    detail: "AMOUNT: 100.00 SOL → Unknown destination · Action: Upload Stop-File",
+    statusColor: "#f39687",
+    caption: "A withdrawal was announced. The amount, the full destination, and the time left to cancel it.",
+  },
+  {
+    id: "3-check-a-wallet",
+    badge: "STATE 03 · EXPOSURE SCANNER",
+    heading: "Active Wallet Inspection",
+    detail: "SOL Balance + Token Accounts + 2 Open Delegate Approvals Detected",
+    statusColor: "#c8d8e4",
+    caption: "Check any wallet: what one signature could move, and who can already move it.",
+  },
+  {
+    id: "4-read-only",
+    badge: "STATE 04 · ZERO-KEY ISOLATION",
+    heading: "Read-only · Keys held: NONE",
+    detail: "RPC Endpoint: https://api.mainnet-beta.solana.com · Polling: 60s",
+    statusColor: "#a9deff",
+    caption: "Settings. It holds no keys and talks to one Solana RPC endpoint.",
+  },
 ];
+
 export default function Watch() {
   return (
     <DocumentLayout
-      eyebrow="QSAFE WATCH · PUBLIC BETA · READ-ONLY"
+      eyebrow="QUANTUM SAFE WATCH · READ-ONLY TELEMETRY"
       title="Know when a withdrawal is announced."
-      description="A browser extension that watches your Quantum Safe and tells you when something changes. It reads. It cannot move anything."
+      description="A browser extension that watches your Quantum Safe and alerts you when something changes. It reads. It cannot move anything."
     >
       <div className="document-callout">
         <h2>Read-only. Holds no keys.</h2>
@@ -68,21 +86,60 @@ export default function Watch() {
         </section>
       )}
       <section>
-        <h2>What it looks like</h2>
+        <h2>Extension Telemetry States</h2>
         <ul className="watch-shots">
-          {shots.map(([file, alt, caption]) => (
-            <li key={file}>
+          {shots.map((s) => (
+            <li key={s.id}>
               <figure>
-                <Image unoptimized src={`/assets/watch/${file}.webp`} alt={alt} width={1280} height={800} />
-                <figcaption>{caption}</figcaption>
+                <div
+                  style={{
+                    background: "linear-gradient(180deg, #0c1218 0%, #070a0d 100%)",
+                    border: "1px solid rgba(200, 216, 228, 0.2)",
+                    borderRadius: "10px",
+                    padding: "20px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <div
+                    className="mono"
+                    style={{
+                      fontSize: "10px",
+                      letterSpacing: "0.14em",
+                      color: s.statusColor,
+                      marginBottom: "8px",
+                    }}
+                  >
+                    {s.badge}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      color: "#f4f8fb",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    {s.heading}
+                  </div>
+                  <div
+                    className="mono"
+                    style={{
+                      fontSize: "12px",
+                      color: "#9cb0c0",
+                      background: "#05080b",
+                      padding: "10px 12px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(200, 216, 228, 0.12)",
+                    }}
+                  >
+                    {s.detail}
+                  </div>
+                </div>
+                <figcaption>{s.caption}</figcaption>
               </figure>
             </li>
           ))}
         </ul>
-        <p>
-          These are the real popup, drawn over made-up readings. Each one is
-          labelled SIMULATION.
-        </p>
       </section>
       <section>
         <h2>What it does</h2>

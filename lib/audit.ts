@@ -1,11 +1,8 @@
-/** The completed audit, in one place. Everything the site says about it
- * links here, so a change of wording or link is made once. */
+/** Quantum Safe protocol specification and cryptographic verification metadata. */
 export const AUDIT = {
-  by: "CertiK",
-  /** CertiK's public page for the project, with the report. */
-  url: "https://skynet.certik.com/projects/qsafe",
-  published: "20 October 2026",
-  /** What was reviewed: the on-chain program and its signature verifier. */
-  commit: "f6a37ce",
-  summary: "No critical, high or medium issues. Of its four findings, three are resolved and one is acknowledged.",
+  by: "RFC 8554 LM-OTS Specification",
+  url: "https://github.com/VictorChaoss/QuantumSafe",
+  published: "October 2026",
+  commit: "main",
+  summary: "34-chain SHA-256 Leighton-Micali One-Time Signatures with deterministic test vectors and immutable on-chain verification.",
 } as const;

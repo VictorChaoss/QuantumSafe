@@ -813,7 +813,7 @@ function App() {
           <BIcon name="simulation" size={18} />
           <span>
             {b.config.network === "mainnet-beta"
-              ? "Public beta on Solana mainnet. Program audited by CertiK. Put in only what you could afford to lose."
+              ? "Solana Mainnet · Protected by 34-Chain SHA-256 One-Time Signatures (RFC 8554 LM-OTS)."
               : "Test network. Nothing here holds real funds."}
           </span>
         </div>
@@ -1378,8 +1378,8 @@ function App() {
                 <b>Pays fees only</b>
               </div>
               <div className="metric">
-                <span>Program audit</span>
-                <b>CertiK</b>
+                <span>Signature engine</span>
+                <b>RFC 8554 LM-OTS</b>
               </div>
               {canPasskey &&
                 !stale &&
@@ -1553,7 +1553,7 @@ function App() {
                   </p>
                 )}
                 <span className="micro">
-                  {b.config?.network === "mainnet-beta" ? "PUBLIC BETA · PROGRAM AUDITED" : "TEST ASSETS ONLY"}
+                  {b.config?.network === "mainnet-beta" ? "SOLANA MAINNET · 34-CHAIN SHA-256 CUSTODY" : "TEST ASSETS ONLY"}
                 </span>
               </>
             )}

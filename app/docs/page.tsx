@@ -1,4 +1,3 @@
-import { AUDIT } from "@/lib/audit";
 import Link from "next/link";
 import { DocumentLayout } from "@/components/qsafe/document-layout";
 export const metadata = { title: "How Quantum Safe works" };
@@ -7,7 +6,7 @@ export default function Page() {
     <DocumentLayout
       eyebrow="THE OPERATOR’S MANUAL"
       title="A small vault. An explicit process."
-      description="What each key does, what leaves your device, and what happens at every step. Public beta; program audited by CertiK."
+      description="What each key does, what leaves your device, and what happens at every step."
     >
       <section>
         <h2>Three keys, three jobs</h2>
@@ -182,10 +181,8 @@ export default function Page() {
         <h2>Run and review the implementation</h2>
         <p>
           The repository holds the program, the client, the offline tool, the
-          byte-level specification, the tests and what they do not cover. No
-          wallet credentials are shipped. It runs on Solana mainnet as a public
-          beta. Its on-chain program was audited by CertiK;{" "}
-          <a href={AUDIT.url} target="_blank" rel="noreferrer">read the report</a>.
+          byte-level specification, and the RFC 8554 LM-OTS test vectors. No
+          wallet credentials are shipped.
         </p>
         <a href="https://github.com/VictorChaoss/QuantumSafe" className="button light">
           Get the working repository

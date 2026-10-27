@@ -1,1 +1,1 @@
-Quantum Safe. One bad click shouldn’t cost you everything. Open source, public beta on Solana mainnet.
+Quantum Safe — Post-Quantum SHA-256 Custody Protocol on Solana (RFC 8554 LM-OTS)

@@ -12,10 +12,10 @@ pub const TRUSTED_SLOTS: usize = 4;
 pub const VERSION: u8 = 3;
 pub const ROLE_OPERATIONAL: u8 = 1;
 pub const ROLE_RECOVERY: u8 = 2;
-pub const VAULT_MAGIC: &[u8; 8] = b"QSAFE03";
-pub const ANNOUNCE_DOMAIN: &[u8; 16] = b"QSAFE3_ANNOUNCE";
-pub const RECOVER_DOMAIN: &[u8; 16] = b"QSAFE3_RECOVER_";
-pub const VAULT_ID_DOMAIN: &[u8; 16] = b"QSAFE3_VAULT_ID";
+pub const VAULT_MAGIC: &[u8; 8] = b"QSAFE_03";
+pub const ANNOUNCE_DOMAIN: &[u8; 16] = b"QSAFE_3_ANNOUNCE";
+pub const RECOVER_DOMAIN: &[u8; 16] = b"QSAFE_3_RECOVER_";
+pub const VAULT_ID_DOMAIN: &[u8; 16] = b"QSAFE_3_VAULT_ID";
 /// A vault may be created with no waiting period. Zero means an announced
 /// withdrawal can execute immediately, including in the same transaction.
 pub const MAX_DELAY_SECS: u32 = 604_800;

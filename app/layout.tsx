@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     siteName: "Quantum Safe",
     title: "Quantum Safe — Post-Quantum SHA-256 Custody on Solana",
     description:
-      "A separate hash-locked vault for the Solana you can’t afford to lose. Open source, audited by CertiK, live on Solana mainnet.",
+      "A separate SHA-256 hash-locked vault for the Solana you can’t afford to lose. Powered by RFC 8554 LM-OTS one-time signatures.",
   },
   twitter: { card: "summary_large_image", site: "@QuantumSafe" },
   icons: {

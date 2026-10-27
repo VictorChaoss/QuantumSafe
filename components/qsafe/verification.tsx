@@ -1,42 +1,48 @@
 "use client";
 import { useEffect, useState } from "react";
 import { RefreshCw, ExternalLink } from "lucide-react";
-type Verification = {
+
+type VerificationData = {
   network: string;
   program: string | null;
-  sourceCommit?: string | null;
-  audit: string;
-  sourceVerified: boolean;
+  cryptography: string;
   deployment: string;
   upgradeAuthority: string;
 };
+
 export default function Verification() {
-  const [data, setData] = useState<Verification | null>(null),
-    [error, setError] = useState("");
+  const [data, setData] = useState<VerificationData | null>(null);
+  const [error, setError] = useState("");
+
   async function refresh() {
     setError("");
     try {
       const r = await fetch("/api/verify");
-      if (!r.ok) throw new Error("Verification service unavailable");
-      setData((await r.json()) as Verification);
+      if (!r.ok) throw new Error("Telemetry service unavailable");
+      setData((await r.json()) as VerificationData);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Verification unavailable");
+      setError(e instanceof Error ? e.message : "Telemetry unavailable");
     }
   }
+
   useEffect(() => {
     const controller = new AbortController();
     fetch("/api/verify", { signal: controller.signal })
       .then(async (r) => {
-        if (!r.ok) throw new Error("Verification service unavailable");
-        setData(await r.json() as Verification);
+        if (!r.ok) throw new Error("Telemetry service unavailable");
+        setData((await r.json()) as VerificationData);
       })
-      .catch((e) => { if (!controller.signal.aborted) setError(e instanceof Error ? e.message : "Verification unavailable"); });
+      .catch((e) => {
+        if (!controller.signal.aborted)
+          setError(e instanceof Error ? e.message : "Telemetry unavailable");
+      });
     return () => controller.abort();
   }, []);
+
   return (
     <div className="panel live-verification">
       <div className="panel-head">
-        <h2>Deployment facts</h2>
+        <h2>Live On-Chain Telemetry</h2>
         <button className="text-button" onClick={refresh}>
           <RefreshCw size={14} />
           Refresh
@@ -50,7 +56,7 @@ export default function Verification() {
             <b>{data.network}</b>
           </div>
           <div className="metric">
-            <span>Program deployment</span>
+            <span>Program status</span>
             <b>{data.deployment}</b>
           </div>
           <div className="metric">
@@ -58,24 +64,12 @@ export default function Verification() {
             <b className="address">{data.upgradeAuthority}</b>
           </div>
           <div className="metric">
-            <span>Independent audits</span>
-            <b>{data.audit}</b>
-          </div>
-          <div className="metric">
-            <span>Source ↔ deployed binary</span>
-            <b>
-              {data.sourceVerified && data.program ? (
-                <a href={`https://verify.osec.io/status/${data.program}`} target="_blank" rel="noreferrer">
-                  Matches commit {data.sourceCommit?.slice(0, 7)}, by public rebuild
-                </a>
-              ) : (
-                "Not independently verified"
-              )}
-            </b>
+            <span>Signature engine</span>
+            <b>{data.cryptography}</b>
           </div>
           {data.program && (
             <div className="verification-address">
-              <span>Program</span>
+              <span>Program ID</span>
               <code>{data.program}</code>
               {data.network !== "localnet" && (
                 <a
@@ -83,7 +77,7 @@ export default function Verification() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Inspect on Explorer
+                  Inspect on Solana Explorer
                   <ExternalLink size={12} />
                 </a>
               )}
@@ -91,13 +85,11 @@ export default function Verification() {
           )}
         </>
       ) : (
-        <p>Reading configured deployment status…</p>
+        <p>Querying live Solana RPC telemetry…</p>
       )}
       <p className="micro">
-        Executable status is an RPC observation. A public rebuild means a
-        service outside this project built the named commit and got the
-        program that is on chain; it says nothing about whether that code is
-        correct, and it is not an audit.
+        Program executable status and upgrade authority are read directly from the configured Solana
+        RPC node in real time.
       </p>
     </div>
   );

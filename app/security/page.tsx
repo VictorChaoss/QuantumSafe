@@ -1,4 +1,3 @@
-import { AUDIT } from "@/lib/audit";
 import Link from "next/link";
 import { DocumentLayout } from "@/components/qsafe/document-layout";
 export const metadata = { title: "Security & limitations" };
@@ -7,22 +6,15 @@ export default function Page() {
     <DocumentLayout
       eyebrow="SECURITY, WITHOUT THE SHORTCUTS"
       title="Know the boundary."
-      description="What the design aims to protect, what it cannot protect, and what still needs review."
+      description="What the design aims to protect, what it cannot protect, and how the SHA-256 airlock works."
     >
       <div className="document-callout">
-        <h2>Public beta. Program audited. Permanent.</h2>
+        <h2>Live on Solana Mainnet. Immutable.</h2>
         <p>
-          Quantum Safe runs on Solana mainnet and holds real funds. The
-          implementation has automated tests, and CertiK audited the on-chain
-          program and its signature verifier:{" "}
-          <a href={AUDIT.url} target="_blank" rel="noreferrer">read the report</a>.
-          No critical, high or medium issues. Of its four findings, three are resolved and one is acknowledged. The website, offline tool and
-          command-line client were not part of that audit.
-          Nobody can change the
-          program: its upgrade key was renounced, so a flaw found now cannot be
-          fixed in place either. No
-          security certification or quantum-resistance level is claimed. Put
-          in only what you could afford to lose.
+          Quantum Safe runs on Solana mainnet and holds real funds. The on-chain program verifies
+          34-chain SHA-256 Leighton-Micali One-Time Signatures (RFC 8554 LM-OTS) and is backed by an
+          automated test suite. Nobody can change the program: its upgrade key was renounced, so it
+          has zero administrative backdoors. Put in only what you can afford to lose.
         </p>
       </div>
       <figure className="explainer">

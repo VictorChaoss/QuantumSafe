@@ -13,10 +13,10 @@ export default function Page() {
       description="A trading wallet has to be fast, so its key lives somewhere exposed. A Quantum Safe is where the money goes when it is no longer in play."
     >
       <div className="document-callout">
-        <h2>Public beta. Program audited.</h2>
+        <h2>Live on Solana Mainnet.</h2>
         <p>
           This page describes how Quantum Safe sits beside a trading setup. The
-          program is live on Solana mainnet and was audited by CertiK. Send
+          program is live and immutable on Solana mainnet. Send
           assets only to a Quantum Safe you built yourself, never to an address
           someone gives you.
         </p>

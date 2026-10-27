@@ -12,13 +12,12 @@ export default function Page() {
       description="Plain-language terms for the public beta. They have not been reviewed by a lawyer."
     >
       <div className="document-callout">
-        <h2>This is beta software.</h2>
+        <h2>Self-custody software disclaimer.</h2>
         <p>
-          Quantum Safe runs on Solana mainnet and holds real funds. Its on-chain
-          program was audited by CertiK; the website and tools were not part
-          of that audit, and no audit is a guarantee. Anything you do with this software or its
-          source code is at your own risk. Put in only what you could afford
-          to lose.
+          Quantum Safe runs on Solana mainnet and holds real funds. It is
+          provided as open-source software without warranty of any kind.
+          Anything you do with this software or its source code is at your own
+          risk. Put in only what you can afford to lose.
         </p>
       </div>
       <section>

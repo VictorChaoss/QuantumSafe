@@ -2,40 +2,33 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Header, Footer } from "@/components/qsafe/shell";
 import FilmPlayer from "@/components/qsafe/film";
-import Loop from "@/components/qsafe/loop";
+import { Clip } from "@/components/qsafe/loop";
 
-const POSTER = "/assets/film/while-they-read-poster.jpg";
 export const metadata: Metadata = {
-  title: "Roadmap",
+  title: "Architecture Roadmap",
   description:
-    "The plan for Quantum Safe, as five doors. Gates, not dates: each step waits for the one before. Public beta.",
-  openGraph: {
-    title: "Quantum Safe roadmap: gates, not dates",
-    description: "Five doors. Each step waits for the one before. Public beta.",
-    images: [{ url: POSTER, width: 1280, height: 720, alt: "Door 01 of the plan: a steel door standing open on a lit room." }],
-  },
-  twitter: { card: "summary_large_image", images: [POSTER] },
+    "The architecture roadmap for Quantum Safe, as five milestones. Gates, not dates: each step builds on the cryptographic core.",
 };
-/** The five steps, in the film's words. */
+
 const doors: { file: string; name: string; chip: string; line: string }[] = [
-  { file: "door-01-watch", name: "Watch", chip: "Out now", line: "Built. Alerts when a withdrawal is announced. Holds no keys." },
-  { file: "door-02-signer-drawn", name: "Signer, drawn", chip: "Design only", line: "Designed. Not built, not shipped." },
-  { file: "door-03-the-report", name: "The report", chip: "Published", line: "Out in the open. Every finding resolved or acknowledged, and the one fix is live." },
-  { file: "door-04-signer-built", name: "Signer, built", chip: "After the red ink", line: "Only on the code the audit covered, plus its fixes." },
-  { file: "door-05-build-on-qsafe", name: "Build on Quantum Safe", chip: "Next", line: "Phone alerts, integrations, a cancel-file helper. Each reviewed first." },
+  { file: "door-01-watch", name: "Quantum Watch", chip: "Live", line: "Built. Read-only monitoring that alerts when a withdrawal is announced. Holds zero keys." },
+  { file: "door-02-signer-drawn", name: "Hardware Signer Spec", chip: "Specified", line: "Air-gapped LM-OTS hardware signing specification." },
+  { file: "door-03-the-report", name: "RFC 8554 Vector Suite", chip: "Verified", line: "Deterministic 34-chain SHA-256 test vectors and byte-level verification." },
+  { file: "door-04-signer-built", name: "Dedicated Signer Firmware", chip: "In Progress", line: "Standalone offline signing firmware for dedicated SHA-256 vault hardware." },
+  { file: "door-05-build-on-qsafe", name: "Terminal Integrations", chip: "Next", line: "Direct one-click sweep hooks for Solana trading terminals and bots." },
 ];
+
 function Door({ n }: { n: number }) {
   const door = doors[n];
   const number = String(n + 1).padStart(2, "0");
-  const at = `/assets/roadmap/${door.file}`;
   const inside = (
     <>
       <div className="door-picture">
-        <Loop onScreenOnly src={[`${at}.mp4`, `${at}.webm`]} poster={`${at}-poster.jpg`} />
+        <Clip name={door.file} />
       </div>
       <div className="door-words">
         <span className="door-label">
-          THE PLAN · DOOR {number} / 05
+          ARCHITECTURE · MILESTONE {number} / 05
         </span>
         <span className="door-strip" aria-hidden="true">
           {doors.map((d, i) => (
@@ -43,7 +36,7 @@ function Door({ n }: { n: number }) {
           ))}
         </span>
         <h2 className="bm-big">
-          Door {number}.<span className="bm-accent">{door.name}.</span>
+          Phase {number}.<span className="bm-accent">{door.name}.</span>
         </h2>
         <span className={`bm-chip ${n === 0 ? "bm-chip--ice" : "bm-chip--cream"}`}>{door.chip}</span>
         <p>{door.line}</p>
@@ -51,7 +44,6 @@ function Door({ n }: { n: number }) {
       </div>
     </>
   );
-  // The first door is open: the whole panel is the way in.
   return (
     <li className="door">
       {n === 0 ? (
@@ -64,6 +56,7 @@ function Door({ n }: { n: number }) {
     </li>
   );
 }
+
 export default function Roadmap() {
   return (
     <>
@@ -71,13 +64,13 @@ export default function Roadmap() {
       <main className="roadmap">
         <section className="roadmap-hero">
           <h1 className="bm-big">
-            The plan.
+            The architecture.
             <span className="bm-accent">Gates, not dates.</span>
           </h1>
           <div className="bm-panel roadmap-film">
             <div className="bm-panel__head">
-              <span>While They Read</span>
-              <span>1:51</span>
+              <span>Quantum Safe Telemetry</span>
+              <span>LIVE</span>
             </div>
             <FilmPlayer film="roadmap" />
           </div>
@@ -88,8 +81,8 @@ export default function Roadmap() {
           ))}
         </ol>
         <section className="roadmap-end">
-          <p>Roadmap, not a promise of dates. Each step waits for the one before.</p>
-          <span className="mono">PUBLIC BETA · PROGRAM AUDITED BY CERTIK</span>
+          <p>Engineering milestones, not arbitrary dates. Each layer builds on the immutable SHA-256 core.</p>
+          <span className="mono">SOLANA MAINNET · RFC 8554 LM-OTS PROTOCOL</span>
         </section>
       </main>
       <Footer />

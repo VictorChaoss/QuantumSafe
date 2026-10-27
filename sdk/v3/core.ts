@@ -13,8 +13,8 @@ export const MIN_DELAY_SECS = 0;
 export const MAX_DELAY_SECS = 604_800;
 const ROLE_RECOVERY = 2;
 const text = (s: string) => new TextEncoder().encode(s);
-export const RECOVER_DOMAIN = text("QSAFE3_RECOVER_");
-export const VAULT_ID_DOMAIN = text("QSAFE3_VAULT_ID");
+export const RECOVER_DOMAIN = text("QSAFE_3_RECOVER_");
+export const VAULT_ID_DOMAIN = text("QSAFE_3_VAULT_ID");
 const isZero = (b: Uint8Array) => b.every((x) => x === 0);
 const same = (a: Uint8Array, b: Uint8Array) =>
   a.length === b.length && a.every((x, i) => x === b[i]);

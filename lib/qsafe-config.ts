@@ -72,7 +72,7 @@ export function configFromEnv(
     custodyEnabled: true,
     programId: MAINNET_PROGRAM_ID,
     expectedGenesis: MAINNET_GENESIS,
-    releaseStatus: "Public beta on Solana mainnet. Program audited by CertiK.",
+    releaseStatus: "Live on Solana mainnet. Protected by 34-chain SHA-256 LM-OTS signatures.",
     alertsBot,
   };
 }

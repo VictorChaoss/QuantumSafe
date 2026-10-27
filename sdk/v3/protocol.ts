@@ -48,7 +48,7 @@ export const PROOF_SIZE = 74 + SIGNATURE_SIZE;
 export const executeWindowSecs = (delaySecs: number) => BigInt(Math.max(delaySecs, 86_400));
 const ROLE_OPERATIONAL = 1;
 const text = (s: string) => new TextEncoder().encode(s);
-export const ANNOUNCE_DOMAIN = text("QSAFE3_ANNOUNCE");
+export const ANNOUNCE_DOMAIN = text("QSAFE_3_ANNOUNCE");
 /** How far ahead of the chain clock an announcement's deadline may be. */
 export const MAX_ANNOUNCE_AHEAD_SECS = 86_400n;
 const ZERO = new Uint8Array(32);

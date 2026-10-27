@@ -15,9 +15,9 @@ import paymentLabels from "@/lib/payment-labels.json";
 export const metadata: Metadata = {
   title: "Bug bounty",
   description:
-    "Break Quantum Safe, report it privately, and get paid from the bounty vault. Public beta on Solana mainnet; its program is audited by CertiK.",
+    "Break Quantum Safe, report it privately, and get paid from the bounty vault. Live on Solana mainnet.",
 };
-/** Each step, with the clip from the bounty film that shows it. */
+/** Each step, with the clip that illustrates it. */
 const steps: [string, string, string][] = [
   ["Find it", "In the program, the site, the offline tool or the command-line client. All of it is open source.", "testing-the-walls"],
   ["Report it privately", "Through GitHub’s private vulnerability report. Nobody else can read it.", "crack-report-slot"],
@@ -31,14 +31,8 @@ const rules = [
   "Test on your own Quantum Safe, with small amounts.",
   "No public disclosure before the fix ships.",
 ];
-/** The second sentence is a statement about the chain, so it is printed only
- * once the payment it describes is a labeled transaction in the list. */
-const auditPaid = Object.values(paymentLabelsFrom(paymentLabels)).includes("Audit payment");
 const ledgerIntro =
-  "Every transaction in and out of the bounty vault, read from Solana." +
-  (auditPaid
-    ? " The vault paid for the audit; it refills from creator rewards, and the bug bounty stays open."
-    : "");
+  "Every transaction in and out of the bounty vault, read directly from Solana.";
 export default function Bounty() {
   const { bountyWallet } = getLaunch();
   return (
@@ -51,15 +45,15 @@ export default function Bounty() {
           <div>
             <div className="hero-chips">
               <span className="bm-chip bm-chip--ice">Bug bounty</span>
-              <span className="bm-chip bm-chip--cream">Public beta · program audited</span>
+              <span className="bm-chip bm-chip--cream">Solana Mainnet · RFC 8554 LM-OTS</span>
             </div>
             <h1 className="bm-big">
               It’s not a bug.
               <span className="bm-accent">It’s a bounty.</span>
             </h1>
             <p>
-              Quantum Safe holds real funds on Solana mainnet. Its program has been
-              audited, and no audit catches everything. If you can break it,
+              Quantum Safe holds real funds on Solana mainnet. All protocol source code and
+              cryptographic test vectors are open. If you can break any security boundary,
               tell us first and get paid for it.
             </p>
             <div className="actions">
