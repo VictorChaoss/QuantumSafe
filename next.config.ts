@@ -12,6 +12,7 @@ const UNPROXIED = [
   "/sitemap.xml",
   "/robots.txt",
   "/(.*opengraph-image.*)",
+  "/(.*twitter-image.*)",
 ];
 
 const nextConfig: NextConfig = {
