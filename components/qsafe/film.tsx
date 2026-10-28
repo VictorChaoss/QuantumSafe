@@ -52,20 +52,20 @@ const TELEMETRY: Record<
   },
   roadmap: {
     badge: "QUANTUM SAFE · ARCHITECTURE PIPELINE",
-    title: "five-Stage Custody Architecture",
+    title: "Six-Stage Custody Architecture",
     subtitle:
-      "From read-only withdrawal monitoring to air-gapped offline SHA-256 key generation and terminal sweep hooks.",
+      "From Mainnet SHA-256 airlocks and air-gapped keygen to our Chrome & Brave Browser Extension launching in the next few days.",
     metrics: [
-      ["STAGE 01", "QUANTUM WATCH (LIVE)"],
-      ["STAGE 02", "OFFLINE KEYGEN (LIVE)"],
-      ["STAGE 03", "RFC 8554 VECTORS (VERIFIED)"],
-      ["STAGE 04", "HARDWARE SIGNER SPEC"],
+      ["STAGE 01–03", "CORE + MAINNET + CLI (LIVE)"],
+      ["STAGE 04", "BROWSER EXTENSION (IN DAYS)"],
+      ["STAGE 05", "TERMINAL AUTO-SWEEP SDK"],
+      ["STAGE 06", "HARDWARE SIGNER SPEC"],
     ],
     chains: [
-      "PHASE_01 :: Read-only RPC withdrawal monitor & desktop alert daemon",
-      "PHASE_02 :: Air-gapped scrypt + AES-256-GCM recovery kit generator",
-      "PHASE_03 :: Full 34-chain SHA-256 on-chain verification engine",
-      "PHASE_04 :: Dedicated offline LM-OTS hardware signing firmware",
+      "STAGE_01_03 :: RFC 8554 LM-OTS Core + Mainnet Airlock PDA + Offline Keygen (LIVE)",
+      "STAGE_04    :: Chrome & Brave Browser Extension — Launching in the Next Few Days",
+      "STAGE_05    :: Trading Terminal & Sniper Bot 1-Click Profit-Sweep CPI Hooks",
+      "STAGE_06    :: Dedicated Air-Gapped Optical QR / USB-C LM-OTS Hardware Signer",
     ],
   },
 };

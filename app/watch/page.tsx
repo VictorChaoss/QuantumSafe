@@ -59,10 +59,38 @@ const shots: {
 export default function Watch() {
   return (
     <DocumentLayout
-      eyebrow="QUANTUM SAFE WATCH · READ-ONLY TELEMETRY"
-      title="Know when a withdrawal is announced."
-      description="A browser extension that watches your Quantum Safe and alerts you when something changes. It reads. It cannot move anything."
+      eyebrow="QUANTUM SAFE WATCH · CHROME & BRAVE EXTENSION · LAUNCHING IN DAYS"
+      title="Know the second a withdrawal is announced."
+      description="Our read-only Chrome & Brave browser extension is rolling out publicly in the next few days. It watches your Quantum Safe 24/7 from your browser toolbar and alerts you the instant anything changes—while holding zero private keys."
     >
+      <div
+        className="document-callout"
+        style={{
+          border: "1px solid rgba(169, 222, 255, 0.38)",
+          background:
+            "radial-gradient(circle at 90% 10%, rgba(169, 222, 255, 0.14), rgba(10, 15, 20, 0.96) 70%)",
+          marginBottom: "24px",
+        }}
+      >
+        <div
+          className="mono"
+          style={{
+            fontSize: "11px",
+            letterSpacing: "0.14em",
+            color: "#a9deff",
+            marginBottom: "8px",
+          }}
+        >
+          ◈ RELEASE STATUS · LAUNCHING IN THE NEXT FEW DAYS
+        </div>
+        <h2>Chrome &amp; Brave Web Store Rollout in Days · Developer Preview Live</h2>
+        <p>
+          The packaged 1-click Chrome &amp; Brave Browser Extension is in final release staging and
+          launches in the next few days. Ahead of the store listing, you can inspect all four live
+          telemetry states below, verify the deterministic SHA-256 build manifest, or load the
+          unpacked extension directly from our reproducible build right now.
+        </p>
+      </div>
       <div className="document-callout">
         <h2>Read-only. Holds no keys.</h2>
         <p>

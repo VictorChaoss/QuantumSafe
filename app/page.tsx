@@ -67,6 +67,7 @@ const limits: [string, string][] = [
 
 const ticker = [
   "QUANTUM SAFE · POST-QUANTUM CUSTODY",
+  "CHROME & BRAVE EXTENSION · LAUNCHING IN DAYS",
   "ZERO ECDSA / ED25519 EXPOSURE",
   "34 SHA-256 HASH CHAINS (RFC 8554 LM-OTS)",
   "1,124-BYTE SHA-256 SIGNATURE VERIFIER",
@@ -128,10 +129,10 @@ const gates: [string, string, string, string?][] = [
     "Live",
   ],
   [
-    "Bug bounties",
-    "Rewards for breaking the vault rules. Open to all security researchers.",
-    "Open",
-    "/bounty",
+    "Browser Extension (Quantum Watch)",
+    "Read-only Chrome & Brave extension for 24/7 vault telemetry and instant timelock breach alerts. Launching in the next few days.",
+    "In Days",
+    "/watch",
   ],
   [
     "RFC 8554 Test Vectors",
@@ -217,6 +218,17 @@ export default function Home() {
                   <Shield size={13} style={{ display: "inline", marginRight: 5, verticalAlign: "-2px" }} />
                   RFC 8554 LM-OTS
                 </span>
+                <Link
+                  href="/watch"
+                  className="bm-chip qs-chip-gold"
+                  style={{
+                    textDecoration: "none",
+                    borderColor: "rgba(169, 222, 255, 0.48)",
+                    color: "#e8f6ff",
+                  }}
+                >
+                  ◈ BROWSER EXTENSION · COMING IN DAYS →
+                </Link>
               </div>
             </div>
             <h1 className="qs-hero-title">
@@ -752,18 +764,19 @@ export default function Home() {
               </Link>
             </li>
 
-            <li className="qs-home-stage-card done">
+            <li className="qs-home-stage-card active">
               <div className="qs-home-stage-top">
                 <span className="mono">STAGE 04</span>
-                <span className="qs-badge-live">LIVE · EXPANDING</span>
+                <span className="qs-badge-live">LAUNCHING IN DAYS</span>
               </div>
-              <h4>Quantum Watch Breach Telemetry</h4>
+              <h4>Quantum Watch Browser Extension</h4>
               <p>
-                Read-only RPC daemon and browser extension monitoring vault PDAs 24/7 with zero
-                private keys—alerting the instant a withdrawal countdown begins.
+                Chrome &amp; Brave browser extension rolling out in the next few days. Watches vault
+                PDAs 24/7 with zero private keys and fires instant desktop alerts the second a
+                24-hour withdrawal countdown begins.
               </p>
               <Link href="/watch" className="qs-stage-link">
-                Open Quantum Watch →
+                Preview Extension &amp; Telemetry →
               </Link>
             </li>
 
@@ -797,6 +810,88 @@ export default function Home() {
               </Link>
             </li>
           </ol>
+
+          <div
+            className="qs-extension-spotlight"
+            style={{
+              marginTop: "28px",
+              padding: "clamp(20px, 3.5vw, 32px)",
+              borderRadius: "16px",
+              border: "1px solid rgba(169, 222, 255, 0.32)",
+              background:
+                "radial-gradient(circle at 90% 10%, rgba(169, 222, 255, 0.14), rgba(11, 16, 22, 0.96) 65%)",
+              boxShadow: "0 20px 48px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.12)",
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "24px",
+            }}
+          >
+            <div style={{ flex: "1 1 480px", maxWidth: "740px" }}>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "5px 12px",
+                  borderRadius: "999px",
+                  background: "rgba(169, 222, 255, 0.12)",
+                  border: "1px solid rgba(169, 222, 255, 0.36)",
+                  color: "#d8f0ff",
+                  fontSize: "10.5px",
+                  fontFamily: "var(--font-mono), monospace",
+                  letterSpacing: "0.14em",
+                  marginBottom: "14px",
+                }}
+              >
+                <span
+                  style={{
+                    width: "7px",
+                    height: "7px",
+                    borderRadius: "50%",
+                    background: "#a9deff",
+                    boxShadow: "0 0 10px #a9deff",
+                  }}
+                />
+                NEXT RELEASE · DROPPING IN THE NEXT FEW DAYS
+              </div>
+              <h3
+                style={{
+                  fontSize: "clamp(22px, 3.2vw, 30px)",
+                  fontWeight: 600,
+                  letterSpacing: "-0.02em",
+                  color: "#ffffff",
+                  margin: "0 0 10px",
+                }}
+              >
+                Quantum Safe Watch — Chrome &amp; Brave Browser Extension
+              </h3>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "14.5px",
+                  lineHeight: 1.65,
+                  color: "#b4c5d4",
+                }}
+              >
+                Launching publicly in the next few days: a zero-key, read-only browser extension that
+                pins your Quantum Safe vaults directly to your browser toolbar. Get instant desktop
+                alerts the second a 24-hour withdrawal countdown begins, inspect any hot wallet’s
+                live drainer exposure in one click, and trigger emergency Stop File protection—all
+                without ever exposing a private key.
+              </p>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center" }}>
+              <Link href="/watch" className="button light qs-gold-cta">
+                Preview Extension &amp; States
+                <MoveUpRight size={15} />
+              </Link>
+              <Link href="/roadmap" className="button ghost">
+                Full Release Roadmap
+              </Link>
+            </div>
+          </div>
         </section>
 
         <section className="truth section" id="road" data-level="05">
