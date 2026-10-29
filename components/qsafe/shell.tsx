@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Cpu, Menu } from "lucide-react";
 import { NavLinks } from "./nav-links";
+import { getLaunch } from "@/lib/launch-config";
 
 export function Mark({ small = false }: { small?: boolean }) {
   const size = small ? 28 : 32;
@@ -72,12 +73,19 @@ export function Mark({ small = false }: { small?: boolean }) {
 export const OFFICIAL_X_URL = "https://x.com/TheQuantumSafe";
 
 export function Header() {
+  const { coinAddress } = getLaunch();
   return (
     <>
       <div className="network-bar qs-network-bar">
         <Cpu size={13} />
         <strong>POST-QUANTUM PROTOCOL · SOLANA MAINNET</strong>
-        <span>Protected by 34-Chain SHA-256 One-Time Signatures (RFC 8554 LM-OTS) · Immutable Custody.</span>
+        {coinAddress ? (
+          <span className="mono" style={{ color: "#d8f0ff" }}>
+            $QSAFE CA: <strong>{coinAddress}</strong>
+          </span>
+        ) : (
+          <span>Protected by 34-Chain SHA-256 One-Time Signatures (RFC 8554 LM-OTS) · Immutable Custody.</span>
+        )}
         <Link href="/security">Security boundaries</Link>
         <a
           href={OFFICIAL_X_URL}
