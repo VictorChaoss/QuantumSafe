@@ -7,7 +7,7 @@ const ADDRESS = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
 const address = (value: string | undefined) => (value && ADDRESS.test(value) ? value : null);
 
 /** Paste the live J7 $QSAFE mint address here at launch for instant global display: */
-export const LIVE_TOKEN_CA: string | undefined = undefined;
+export const LIVE_TOKEN_CA: string | undefined = "EL12ZQ4DSg6b4iMRppNxrVoDxTXXCS8cZU1dPDBGpump";
 
 export type Launch = {
   /** The Quantum Safe Mode coin's mint address. */
