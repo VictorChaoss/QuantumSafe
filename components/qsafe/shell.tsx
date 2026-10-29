@@ -69,6 +69,8 @@ export function Mark({ small = false }: { small?: boolean }) {
   );
 }
 
+export const OFFICIAL_X_URL = "https://x.com/TheQuantumSafe";
+
 export function Header() {
   return (
     <>
@@ -77,6 +79,14 @@ export function Header() {
         <strong>POST-QUANTUM PROTOCOL · SOLANA MAINNET</strong>
         <span>Protected by 34-Chain SHA-256 One-Time Signatures (RFC 8554 LM-OTS) · Immutable Custody.</span>
         <Link href="/security">Security boundaries</Link>
+        <a
+          href={OFFICIAL_X_URL}
+          target="_blank"
+          rel="noreferrer"
+          style={{ marginLeft: "6px", color: "#d8f0ff", fontWeight: 600 }}
+        >
+          𝕏 @TheQuantumSafe ↗
+        </a>
       </div>
       <header className="site-header">
         <Link href="/" aria-label="Quantum Safe home">
@@ -86,6 +96,15 @@ export function Header() {
           <NavLinks />
         </nav>
         <div className="header-actions">
+          <a
+            className="button compact ghost"
+            href={OFFICIAL_X_URL}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Quantum Safe on X (@TheQuantumSafe)"
+          >
+            𝕏 @TheQuantumSafe
+          </a>
           <Link className="button compact light qs-gold-cta" href="/vault">
             Initialize Vault
           </Link>
@@ -95,6 +114,9 @@ export function Header() {
             </summary>
             <nav aria-label="Mobile navigation">
               <NavLinks extra={[["/verify", "Verify"]]} />
+              <a href={OFFICIAL_X_URL} target="_blank" rel="noreferrer">
+                𝕏 @TheQuantumSafe ↗
+              </a>
             </nav>
           </details>
         </div>
@@ -139,14 +161,17 @@ export function Footer() {
           <Link href="/privacy">Privacy</Link>
         </div>
         <div>
-          <span className="mono">SOURCE</span>
+          <span className="mono">COMMUNITY &amp; SOURCE</span>
+          <a href={OFFICIAL_X_URL} target="_blank" rel="noreferrer">
+            𝕏 (@TheQuantumSafe)
+          </a>
           <a href="https://github.com/VictorChaoss/QuantumSafe" target="_blank" rel="noreferrer">
             GitHub Repository
           </a>
         </div>
       </div>
       <span className="mono footer-status">
-        OPEN SOURCE · RFC 8554 LM-OTS ON SOLANA MAINNET · QUANTUM SAFE
+        OPEN SOURCE · RFC 8554 LM-OTS ON SOLANA MAINNET · QUANTUM SAFE · @TheQuantumSafe
       </span>
       <p className="footer-fine">
         Quantum Safe is an open-source post-quantum custody protocol on Solana powered by RFC 8554

@@ -369,6 +369,15 @@ export default function Roadmap() {
               <Shield size={15} />
               Initialize Your Vault
             </Link>
+            <a
+              href="https://x.com/TheQuantumSafe"
+              target="_blank"
+              rel="noreferrer"
+              className="button ghost"
+            >
+              Follow @TheQuantumSafe on 𝕏
+              <ArrowUpRight size={15} />
+            </a>
             <Link href="/verify" className="button ghost">
               Verify On-Chain Bytecode
               <ArrowUpRight size={15} />

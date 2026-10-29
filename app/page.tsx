@@ -43,7 +43,7 @@ function Plate({
 }
 
 const REPO = "https://github.com/VictorChaoss/QuantumSafe";
-const X_URL = "https://github.com/VictorChaoss/QuantumSafe";
+const X_URL = "https://x.com/TheQuantumSafe";
 
 const stops: [string, string][] = [
   ["A bad click while trading.", "Tricking your hot wallet does not open your Quantum Safe."],
@@ -68,6 +68,7 @@ const limits: [string, string][] = [
 const ticker = [
   "QUANTUM SAFE · POST-QUANTUM CUSTODY",
   "CHROME & BRAVE EXTENSION · LAUNCHING IN DAYS",
+  "OFFICIAL 𝕏 · @TheQuantumSafe",
   "ZERO ECDSA / ED25519 EXPOSURE",
   "34 SHA-256 HASH CHAINS (RFC 8554 LM-OTS)",
   "1,124-BYTE SHA-256 SIGNATURE VERIFIER",
@@ -252,9 +253,14 @@ export default function Home() {
                 <Play size={15} fill="currentColor" />
                 Breach Stress-Test
               </Link>
-              <Link href="/demo" className="button ghost">
-                Live Drainer Demo
-              </Link>
+              <a
+                href={X_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="button ghost"
+              >
+                𝕏 @TheQuantumSafe ↗
+              </a>
             </div>
             <div className="hero-more">
               <div className="hero-note qs-hero-note">
@@ -916,6 +922,14 @@ export default function Home() {
                   target="_blank"
                   rel="noreferrer"
                 >
+                  Follow @TheQuantumSafe on 𝕏
+                </a>
+                <a
+                  className="button ghost"
+                  href={REPO}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   View GitHub Repository
                 </a>
                 <Link className="button ghost" href="/verify">
@@ -964,6 +978,14 @@ export default function Home() {
             <Link href="/vault" className="button light qs-gold-cta">
               Launch Quantum Safe
             </Link>
+            <a
+              href={X_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="button ghost"
+            >
+              𝕏 @TheQuantumSafe ↗
+            </a>
             <Link href="/demo" className="button ghost">
               Run the Drainer Demo
             </Link>

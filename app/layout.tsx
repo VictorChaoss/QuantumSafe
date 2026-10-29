@@ -17,7 +17,11 @@ export const metadata: Metadata = {
     description:
       "A separate SHA-256 hash-locked vault for the Solana you can’t afford to lose. Powered by RFC 8554 LM-OTS one-time signatures.",
   },
-  twitter: { card: "summary_large_image", site: "@QuantumSafe" },
+  twitter: {
+    card: "summary_large_image",
+    site: "@TheQuantumSafe",
+    creator: "@TheQuantumSafe",
+  },
   icons: {
     icon: [
       { url: "/brand/quantum-safe-icon.svg", type: "image/svg+xml" },

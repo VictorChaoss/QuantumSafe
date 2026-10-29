@@ -547,6 +547,14 @@ export function QuantumLaunchIntro({ ca }: { ca?: string }) {
           >
             LAUNCH APP ↗
           </a>
+          <a
+            href="https://x.com/TheQuantumSafe"
+            target="_blank"
+            rel="noreferrer"
+            className="qs-ca-launch"
+          >
+            𝕏 @TheQuantumSafe ↗
+          </a>
         </div>
 
         <div className="qs-ucl-subline">
